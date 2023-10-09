@@ -1,0 +1,1 @@
+This is going to be a lightweight library for creating SPDX-conform SBOMs.
