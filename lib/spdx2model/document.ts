@@ -1,33 +1,8 @@
 import type { Package } from './package'
 import { Relationship } from './relationship'
 import { writeSBOM } from '../writer/writer'
-
-interface DocumentCreationInfoOptions {
-  spdxVersion: string
-  spdxId: string
-  documentNamespace: string
-  created: string
-}
-
-// TODO: Could live in a separate file
-export class DocumentCreationInfo {
-  spdxVersion: string
-  spdxId: string
-  name: string
-  documentNamespace: string
-  created: string
-  creator: string
-  dataLicense: string = 'CC0-1.0'
-
-  constructor (name: string, creator: string, documentCreationInfo: Partial<DocumentCreationInfoOptions>) {
-    this.spdxVersion = documentCreationInfo.spdxVersion ?? 'SPDX-2.3'
-    this.spdxId = documentCreationInfo.spdxId ?? 'SPDXRef-DOCUMENT'
-    this.created = documentCreationInfo.created ?? new Date().toISOString()
-    this.creator = creator
-    this.documentNamespace = documentCreationInfo.documentNamespace ?? 'https://my.namespace'
-    this.name = name
-  }
-}
+import { DocumentCreationInfo } from './document-creation-info'
+import type { DocumentCreationInfoOptions } from './document-creation-info'
 
 interface DocumentOptions {
   packages: Package[]
@@ -46,26 +21,14 @@ export class Document {
   }
 }
 
-export interface CreateDocumentOptions {
-  spdxVersion: string
-  spdxId: string
-  documentNamespace: string
-  creator: string
-  created: string
-}
-
 // TODO: Could be part of Document instead of inheriting from it.
 export class SPDXDocument extends Document {
-  static createDocument (name: string, creator: string, options?: Partial<CreateDocumentOptions>): SPDXDocument {
+  static createDocument (name: string, namespace: string, creator: string, options?: Partial<DocumentCreationInfoOptions>): SPDXDocument {
     const creationInfo = new DocumentCreationInfo(
       name,
+      namespace,
       creator,
-      {
-        spdxVersion: options?.spdxVersion,
-        spdxId: options?.spdxId,
-        documentNamespace: options?.documentNamespace,
-        created: options?.created
-      })
+      options)
     return new SPDXDocument(creationInfo)
   }
 
