@@ -1,4 +1,4 @@
-name: CI
+name: Write sample sbom and verify
 
 on:
   push:
@@ -21,11 +21,11 @@ jobs:
       - name: Install node modules
         run: npm ci
 
-      - name: Check linter
-        run: npm run lint-check
+      - name: Create sample SBOM
+        run: npm run test-e2e
 
-      - name: Run tests
-        run: npm run test
+      - name: Install spdx-tools-java
+        run: .github/workflows/scripts/spdx-tools-java-wrapper.sh bootstrap
 
-      - name: Build
-        run: npm run build
+      - name: Verify SBOM
+        run: .github/workflows/scripts/verify.sh lib/e2e-tests/resources/sample.sbom.json
