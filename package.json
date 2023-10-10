@@ -12,14 +12,20 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
+    "compile": "tsc -p ./",
+    "compile-no-emit": "tsc --noEmit -p ./",
+    "lint-check": "eslint -c .eslintrc.js \"lib/**/*.{ts}\"",
+    "lint-fix": "eslint -c .eslintrc.js \"lib/**/*.{ts}\" --fix",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "test": "jest"
   },
   "lint-staged": {
     "**/*.{ts}": [
-      "eslint",
-      "tsc -p ./"
+      "echo 'Linting...'",
+      "npm run lint-fix",
+      "echo 'Compiling...",
+      "npm run compile"
     ]
   }
 }
