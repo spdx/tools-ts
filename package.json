@@ -7,10 +7,14 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.0",
+    "lint-staged": "^14.0.1",
     "typescript": "^5.2.2"
   },
   "scripts": {
     "prepare": "husky install",
-    "test": ""
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "**/*.{ts}": ["eslint", "tsc -p ./"]
   }
 }
