@@ -1,0 +1,33 @@
+{
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "eslint": "^8.51.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.0",
+    "jest": "^29.7.0",
+    "lint-staged": "^14.0.1",
+    "rollup": "^4.0.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "rollup --config rollup.config.ts --configPlugin typescript",
+    "lint-check": "eslint -c .eslintrc.js \"lib/**/*.ts\"",
+    "lint-fix": "eslint -c .eslintrc.js \"lib/**/*.ts\" --fix",
+    "prepare": "husky install && npm run build",
+    "pre-commit": "lint-staged",
+    "test": "jest --passWithNoTests"
+  },
+  "lint-staged": {
+    "**/*.{ts}": [
+      "echo 'Linting...'",
+      "npm run lint-fix",
+      "echo 'Compiling...",
+      "npm run build"
+    ]
+  }
+}
