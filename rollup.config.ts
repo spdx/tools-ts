@@ -1,14 +1,13 @@
-import { RollupOptions } from 'rollup'
+import { defineConfig } from 'rollup'
 import typescript from '@rollup/plugin-typescript'
 
-const bundle: RollupOptions = {
-  input: 'lib/index.ts',
+export default defineConfig({
+  input: 'lib/spdx-tools.ts',
   plugins: [typescript({ sourceMap: true })],
+  external: ['fs'],
   output: {
-    file: './build/bundle.js',
+    dir: './dist',
     format: 'es',
     sourcemap: true
   }
-}
-
-export default bundle
+})

@@ -4,10 +4,9 @@
     "lib": ["esnext"],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "resolveJsonModule": true,
     "allowJs": true,
-    "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -20,6 +19,7 @@
   "include": [
     "lib/**/*",
     ".eslintrc.js",
+    "jest.config.js",
     "rollup.config.ts"
   ]
 }
