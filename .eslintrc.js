@@ -23,5 +23,6 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    '@typescript-eslint/no-extraneous-class': 0
   }
 }

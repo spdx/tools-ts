@@ -1,7 +1,7 @@
 import sbom from '../spdx-tools'
 import * as fs from 'fs'
 import mock from 'mock-fs'
-import { Package } from '../model/package'
+import { Package } from '../spdx2model/package'
 
 afterEach(() => {
   mock.restore()
@@ -11,7 +11,7 @@ test('Creates and writes minimal document', () => {
   mock({ 'root/dir': { 'existingFile.txt': '' } })
   const testfile = 'root/dir/sbom.spdx.json'
 
-  const document = sbom.createDocument('test document', 'test creator', { created: '2023-10-12T06:03:13.274Z' })
+  const document = sbom.createDocument('2.3', 'test document', 'test creator', { created: '2023-10-12T06:03:13.274Z' })
   document.addPackages([new Package('test-package')])
   document.write(testfile)
 
