@@ -1,4 +1,4 @@
-import type { Document } from '../model/document'
+import type { Document } from '../spdx2model/document'
 import * as fs from 'fs'
 
 export function writeSBOM (document: Document, location: string): void {

@@ -1,46 +1,20 @@
-import { Document, DocumentCreationInfo } from './model/document'
-import { writeSBOM } from './writer/writer'
-import type { Package } from './model/package'
-import { Relationship } from './model/relationship'
+import { SPDXDocument as SPDX2Document } from './spdx2model/document'
+import type { CreateDocumentOptions } from './spdx2model/document'
 
-interface CreateDocumentOptions {
-  spdxVersion: string
-  spdxId: string
-  documentNamespace: string
-  creator: string
-  created: string
+function parseMajorVersion (spdxVersion: string): number {
+  return parseInt(spdxVersion.split('.')[0])
 }
 
-class SPDXDocument extends Document {
-  static createDocument (name: string, creator: string, options?: Partial<CreateDocumentOptions>): SPDXDocument {
-    const creationInfo = new DocumentCreationInfo(
-      name,
-      creator,
-      {
-        spdxVersion: options?.spdxVersion,
-        spdxId: options?.spdxId,
-        documentNamespace: options?.documentNamespace,
-        created: options?.created
-      })
-    return new SPDXDocument(creationInfo)
-  }
-
-  addRelationships (relationships: Relationship[]): void {
-    this.relationships = this.relationships.concat(relationships)
-  }
-
-  addPackages (packages: Package[]): void {
-    this.packages = this.packages.concat(packages)
-    packages.forEach((pkg: Package) => {
-      this.addRelationships([new Relationship(this.creationInfo.spdxId, 'DESCRIBES', pkg.spdxId)])
-    })
-  }
-
-  write (location: string): void {
-    writeSBOM(this, location)
+class SPDXProject {
+  public static createDocument (spdxVersion: string, name: string, creator: string, options?: Partial<CreateDocumentOptions>): SPDX2Document {
+    if (parseMajorVersion(spdxVersion) === 2) {
+      return SPDX2Document.createDocument(name, creator, options)
+    } else {
+      throw new Error('Unsupported SPDX version')
+    }
   }
 }
 
-const sbom = SPDXDocument
+const spdx = SPDXProject
 
-export default sbom
+export default spdx
