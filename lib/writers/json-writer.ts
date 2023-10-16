@@ -1,6 +1,6 @@
 import type { Document } from "../spdx2model/document";
 import * as fs from "fs";
-import { JsonDocument } from "../converters/json/schema";
+import { JsonDocument } from "../converters/json/document";
 
 export function writeSBOM(document: Document, location: string): void {
   // TODO: Validate document
