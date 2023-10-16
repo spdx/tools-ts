@@ -1,13 +1,13 @@
-import { defineConfig } from 'rollup'
-import typescript from '@rollup/plugin-typescript'
+import { defineConfig } from "rollup";
+import typescript from "@rollup/plugin-typescript";
 
 export default defineConfig({
-  input: 'lib/examples/create-sample-sbom.ts',
+  input: "lib/examples/create-sample-sbom.ts",
   plugins: [typescript({ sourceMap: true })],
-  external: ['fs'],
+  external: ["fs"],
   output: {
-    dir: 'lib/examples/build',
-    format: 'es',
-    sourcemap: true
-  }
-})
+    dir: "lib/examples/build",
+    format: "es",
+    sourcemap: true,
+  },
+});
