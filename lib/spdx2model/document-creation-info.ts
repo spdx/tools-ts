@@ -1,3 +1,5 @@
+import type { Actor } from "./actor";
+
 export interface DocumentCreationInfoOptions {
   spdxVersion: string;
   created: Date;
@@ -15,7 +17,7 @@ export class DocumentCreationInfo {
   documentNamespace: string;
   created: Date;
   // TODO: Add creatorType as constructor argument and  assemble creators with that
-  creators: string[];
+  creators: Actor[];
   dataLicense: string;
   externalDocumentRefs: string[];
   creatorComment?: string;
@@ -25,12 +27,12 @@ export class DocumentCreationInfo {
   constructor(
     name: string,
     documentNamespace: string,
-    creators: string | string[],
+    creators: Actor | Actor[],
     options?: Partial<DocumentCreationInfoOptions>,
   ) {
     this.name = name;
     this.documentNamespace = documentNamespace;
-    this.creators = typeof creators === "string" ? [creators] : creators;
+    this.creators = Array.isArray(creators) ? creators : [creators];
     this.spdxVersion = "SPDX-" + (options?.spdxVersion ?? "2.3");
     this.created = options?.created ?? new Date();
     this.dataLicense = options?.dataLicense ?? "CC0-1.0";

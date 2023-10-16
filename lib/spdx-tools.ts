@@ -1,4 +1,5 @@
 import { SPDXDocument as SPDX2Document } from "./spdx2model/document";
+import type { Creator } from "./spdx2model/document";
 import type { DocumentCreationInfoOptions } from "./spdx2model/document-creation-info";
 
 function parseMajorVersion(spdxVersion: string): number {
@@ -9,7 +10,7 @@ class SPDXProject {
   public static createDocument(
     name: string,
     namespace: string,
-    creators: string,
+    creators: Creator | Creator[],
     options?: Partial<DocumentCreationInfoOptions>,
   ): SPDX2Document {
     const spdxVersion = options?.spdxVersion;

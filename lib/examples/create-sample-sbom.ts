@@ -10,7 +10,7 @@ const sampleSbom = "./lib/examples/resources/sample.sbom.json";
 const document = sbom.createDocument(
   "first-document",
   "test namespace",
-  "Person: test creator",
+  { name: "test creator", type: "Person" },
   { spdxVersion: "2.3" },
 );
 document.addPackages([

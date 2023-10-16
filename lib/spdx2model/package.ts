@@ -1,3 +1,7 @@
+import type { spdxNoAssertion, spdxNone } from "./spdxTypes";
+import type { Actor } from "./actor";
+import type { Checksum } from "./checksum";
+
 interface PackageOptions {
   spdxId: string;
   version: string;
@@ -23,54 +27,6 @@ interface PackageOptions {
   releaseDate: Date;
   builtDate: Date;
   validUntilDate: Date;
-}
-
-export class Checksum {
-  algorithm: string;
-  value: string;
-
-  constructor(algorithm: string, value: string) {
-    this.algorithm = algorithm;
-    this.value = value;
-  }
-
-  toString(): string {
-    return this.algorithm + ": " + this.value;
-  }
-}
-
-export class spdxNoAssertion {
-  toString(): string {
-    return "NOASSERTION";
-  }
-}
-
-export class spdxNone {
-  toString(): string {
-    return "NONE";
-  }
-}
-
-enum ActorType {
-  Person = "Person",
-  Organization = "Organization",
-  Tool = "Tool",
-}
-
-export class Actor {
-  type: ActorType;
-  name: string;
-  email?: string;
-
-  constructor(name: string, type: ActorType, email?: string) {
-    this.name = name;
-    this.email = email ?? undefined;
-    this.type = type;
-  }
-
-  toString(): string {
-    return this.name + (this.email ? " (" + this.email + ")" : "");
-  }
 }
 
 enum PackagePurpose {
