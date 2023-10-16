@@ -23,11 +23,11 @@ export class Document {
 
 // TODO: Could be part of Document instead of inheriting from it.
 export class SPDXDocument extends Document {
-  static createDocument (name: string, namespace: string, creator: string, options?: Partial<DocumentCreationInfoOptions>): SPDXDocument {
+  static createDocument (name: string, namespace: string, creators: string, options?: Partial<DocumentCreationInfoOptions>): SPDXDocument {
     const creationInfo = new DocumentCreationInfo(
       name,
       namespace,
-      creator,
+      creators,
       options)
     return new SPDXDocument(creationInfo)
   }
@@ -39,7 +39,7 @@ export class SPDXDocument extends Document {
   addPackages (packages: Package[]): void {
     this.packages = this.packages.concat(packages)
     packages.forEach((pkg: Package) => {
-      this.addRelationships([new Relationship(this.creationInfo.spdxId, 'DESCRIBES', pkg.spdxId)])
+      this.addRelationships([new Relationship(this.creationInfo.spdxId, pkg.spdxId, 'DESCRIBES')])
     })
   }
 

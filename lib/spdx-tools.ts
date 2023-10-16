@@ -6,10 +6,10 @@ function parseMajorVersion (spdxVersion: string): number {
 }
 
 class SPDXProject {
-  public static createDocument (name: string, namespace: string, creator: string, options?: Partial<DocumentCreationInfoOptions>): SPDX2Document {
+  public static createDocument (name: string, namespace: string, creators: string, options?: Partial<DocumentCreationInfoOptions>): SPDX2Document {
     const spdxVersion = options?.spdxVersion
     if (spdxVersion && parseMajorVersion(spdxVersion) === 2) {
-      return SPDX2Document.createDocument(name, namespace, creator, options)
+      return SPDX2Document.createDocument(name, namespace, creators, options)
     } else {
       throw new Error('Unsupported SPDX version')
     }

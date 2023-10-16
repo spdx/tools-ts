@@ -1,1 +1,30 @@
-{"creationInfo":{"dataLicense":"CC0-1.0","spdxVersion":"SPDX-2.3","spdxId":"SPDXRef-DOCUMENT","created":"2023-10-12T06:03:13.274Z","creator":"test creator","documentNamespace":"https://my.namespace","name":"first document"},"packages":[{"name":"first-package","spdxId":"SPDXRef-first-package"}],"relationships":[{"spdxElementId":"SPDXRef-DOCUMENT","relatedSpdxElementId":"DESCRIBES","relationshipType":"SPDXRef-first-package"}]}
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "name": "first-document",
+  "documentNamespace": "test namespace",
+  "dataLicense": "CC0-1.0",
+  "creationInfo": {
+    "created": "2023-10-16T08:25:22.556Z",
+    "creators": "test creator"
+  },
+  "packages": [
+    {
+      "name": "first-package",
+      "downloadLocation": "first/download/location",
+      "SPDXID": "SPDXRef-first-package",
+      "filesAnalyzed": true,
+      "checksums": [],
+      "licenseInfoFromFiles": [],
+      "externalRefs": [],
+      "attributionTexts": []
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-first-package",
+      "relationshipType": "DESCRIBES"
+    }
+  ]
+}
