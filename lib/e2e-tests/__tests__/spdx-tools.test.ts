@@ -1,7 +1,7 @@
-import sbom from '../spdx-tools'
+import sbom from '../../spdx-tools'
 import * as fs from 'fs'
 import mock from 'mock-fs'
-import { Package } from '../spdx2model/package'
+import { Package } from '../../spdx2model/package'
 
 afterEach(() => {
   mock.restore()

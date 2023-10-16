@@ -21,11 +21,14 @@ jobs:
       - name: Install node modules
         run: npm ci
 
+      - name: Build example workflow
+        run: npm run build-examples
+
       - name: Create sample SBOM
-        run: npm run test-e2e
+        run: npm run create-sample-sbom
 
       - name: Install spdx-tools-java
         run: .github/workflows/scripts/spdx-tools-java-wrapper.sh bootstrap
 
       - name: Verify SBOM
-        run: .github/workflows/scripts/verify.sh lib/e2e-tests/resources/sample.sbom.json
+        run: .github/workflows/scripts/verify.sh lib/examples/resources/sample.sbom.json

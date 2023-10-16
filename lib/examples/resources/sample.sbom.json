@@ -5,15 +5,17 @@
   "documentNamespace": "test namespace",
   "dataLicense": "CC0-1.0",
   "creationInfo": {
-    "created": "2023-10-16T08:25:22.556Z",
-    "creators": "test creator"
+    "created": "2023-10-16T12:13:34.032Z",
+    "creators": [
+      "Person: test creator"
+    ]
   },
   "packages": [
     {
       "name": "first-package",
-      "downloadLocation": "first/download/location",
+      "downloadLocation": "https://download-location.com",
       "SPDXID": "SPDXRef-first-package",
-      "filesAnalyzed": true,
+      "filesAnalyzed": false,
       "checksums": [],
       "licenseInfoFromFiles": [],
       "externalRefs": [],
