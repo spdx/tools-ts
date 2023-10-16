@@ -22,6 +22,8 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
+    "build-examples": "rollup --config lib/examples/rollup.config.ts --configPlugin typescript",
+    "create-sample-sbom": "node lib/examples/build/create-sample-sbom.js",
     "lint-check": "eslint -c .eslintrc.js --ext .ts,.js .",
     "lint-fix": "eslint -c .eslintrc.js --fix --ext .ts,.js .",
     "prepare": "husky install && npm run build",
