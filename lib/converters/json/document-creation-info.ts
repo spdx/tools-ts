@@ -22,7 +22,7 @@ export class JsonDocumentCreationInfo {
   static fromDocument(document: Document): JsonDocumentCreationInfo {
     return new JsonDocumentCreationInfo(
       formatDatetime(document.creationInfo.created),
-      document.creationInfo.creators,
+      document.creationInfo.creators.map((creator) => creator.toString()),
     );
   }
 }

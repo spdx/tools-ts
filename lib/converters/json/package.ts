@@ -1,4 +1,5 @@
-import type { Checksum, Package } from "../../spdx2model/package";
+import type { Package } from "../../spdx2model/package";
+import type { Checksum } from "../../spdx2model/checksum";
 
 export class JsonChecksum {
   algorithm: string;

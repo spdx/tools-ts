@@ -3,6 +3,7 @@ import { Relationship } from "./relationship";
 import { DocumentCreationInfo } from "./document-creation-info";
 import type { DocumentCreationInfoOptions } from "./document-creation-info";
 import { writeSBOM } from "../writers/json-writer";
+import { Actor } from "./actor";
 
 interface DocumentOptions {
   packages: Package[];
@@ -24,18 +25,28 @@ export class Document {
   }
 }
 
-// TODO: Could be part of Document instead of inheriting from it.
+// TODO: Where should the following (user-facing) part live?
+export interface Creator {
+  name: string;
+  type: string;
+  email?: string;
+}
+
 export class SPDXDocument extends Document {
   static createDocument(
     name: string,
     namespace: string,
-    creators: string,
+    creators: Creator | Creator[],
     options?: Partial<DocumentCreationInfoOptions>,
   ): SPDXDocument {
+    const formattedCreators = Array.isArray(creators)
+      ? creators.map((creator) => Actor.fromCreator(creator))
+      : [Actor.fromCreator(creators)];
+
     const creationInfo = new DocumentCreationInfo(
       name,
       namespace,
-      creators,
+      formattedCreators,
       options,
     );
     return new SPDXDocument(creationInfo);

@@ -14,7 +14,7 @@ test("Creates and writes minimal document", () => {
   const document = sbom.createDocument(
     "test document",
     "https:test/namespace",
-    "Person: test creator",
+    { name: "test creator", type: "Person" },
     { spdxVersion: "2.3" },
   );
   document.addPackages([

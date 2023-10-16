@@ -1,10 +1,11 @@
 import { DocumentCreationInfo } from "../document-creation-info";
+import { Actor, ActorType } from "../actor";
 
 test("Add data license to document when initiating", () => {
   const documentCreationInfo = new DocumentCreationInfo(
     "my name",
     "my namespace",
-    "the creator",
+    new Actor("the creator", ActorType.Person),
     {
       spdxVersion: "2.3",
       created: new Date(),
