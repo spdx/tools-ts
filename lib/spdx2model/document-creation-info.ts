@@ -13,8 +13,7 @@ export class DocumentCreationInfo {
   spdxId: string = "SPDXRef-DOCUMENT";
   name: string;
   documentNamespace: string;
-  // TODO: Make created a Date object and handle the conversion later.
-  created: string;
+  created: Date;
   // TODO: Add creatorType as constructor argument and  assemble creators with that
   creators: string[];
   dataLicense: string;
@@ -33,7 +32,7 @@ export class DocumentCreationInfo {
     this.documentNamespace = documentNamespace;
     this.creators = typeof creators === "string" ? [creators] : creators;
     this.spdxVersion = "SPDX-" + (options?.spdxVersion ?? "2.3");
-    this.created = options?.created?.toISOString() ?? new Date().toISOString();
+    this.created = options?.created ?? new Date();
     this.dataLicense = options?.dataLicense ?? "CC0-1.0";
     this.externalDocumentRefs = options?.externalDocumentRefs ?? [];
     this.creatorComment = options?.creatorComment ?? undefined;

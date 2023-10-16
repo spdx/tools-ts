@@ -1,6 +1,7 @@
 import type { Document } from "../../spdx2model/document";
 import type { Checksum, Package } from "../../spdx2model/package";
 import type { Relationship } from "../../spdx2model/relationship";
+import { formatDatetime } from "./utils";
 
 export class JsonDocument {
   SPDXID: string;
@@ -81,7 +82,7 @@ export class JsonDocumentCreationInfo {
 
   static fromDocument(document: Document): JsonDocumentCreationInfo {
     return new JsonDocumentCreationInfo(
-      document.creationInfo.created,
+      formatDatetime(document.creationInfo.created),
       document.creationInfo.creators,
     );
   }
