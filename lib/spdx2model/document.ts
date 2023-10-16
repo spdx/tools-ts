@@ -1,8 +1,8 @@
 import type { Package } from "./package";
 import { Relationship } from "./relationship";
-import { writeSBOM } from "../writer/writer";
 import { DocumentCreationInfo } from "./document-creation-info";
 import type { DocumentCreationInfoOptions } from "./document-creation-info";
+import { writeSBOM } from "../writers/json-writer";
 
 interface DocumentOptions {
   packages: Package[];
