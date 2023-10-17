@@ -1,19 +1,5 @@
 import type { Package } from "../../spdx2model/package";
-import type { Checksum } from "../../spdx2model/checksum";
-
-export class JsonChecksum {
-  algorithm: string;
-  checksumValue: string;
-
-  constructor(algorithm: string, checksumValue: string) {
-    this.algorithm = algorithm;
-    this.checksumValue = checksumValue;
-  }
-
-  static fromChecksum(checksum: Checksum): JsonChecksum {
-    return new JsonChecksum(checksum.algorithm, checksum.value);
-  }
-}
+import { JsonChecksum } from "./checksum";
 
 export class JsonPackage {
   name: string;
