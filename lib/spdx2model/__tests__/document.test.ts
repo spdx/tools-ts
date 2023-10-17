@@ -6,7 +6,8 @@ test("Add data license to document when initiating", () => {
     "SPDX-2.3",
     "my name",
     "my namespace",
-    new Actor("the creator", ActorType.Person),
+    [new Actor("the creator", ActorType.Person)],
+    new Date(),
     {
       created: new Date(),
     },

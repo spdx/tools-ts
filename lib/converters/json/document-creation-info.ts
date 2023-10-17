@@ -23,6 +23,8 @@ export class JsonDocumentCreationInfo {
     return new JsonDocumentCreationInfo(
       formatDatetime(document.creationInfo.created),
       document.creationInfo.creators.map((creator) => creator.toString()),
+      document.creationInfo.creatorComment ?? undefined,
+      document.creationInfo.licenseListVersion ?? undefined,
     );
   }
 }
