@@ -54,7 +54,7 @@ In addition, it takes an object with the following optional parameters:
 | created | Date | current moment | Date of creation of the document |
 | namespace | string | "https://\<documentName\>-\<UUID\>" | Namespace of the document |
 | dataLicense | string | "CC0-1.0" | License of the document |
-| externalDocumentRefs | TBD | - | External documents referenced by the document |
+| externalDocumentRefs | {documentRefId: string, documentUri: string, checksum_value: string, checksum_algorithm: string} | - | External documents referenced by the document |
 | creatorComment | string | - | Comment on the creator |
 | licenseListVersion | string | - | Version of the license list used |
 | documentComment | string | - | Comment on the document |
