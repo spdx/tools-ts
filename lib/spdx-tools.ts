@@ -1,6 +1,5 @@
-import { SPDXDocument as SPDX2Document } from "./spdx2model/document";
-import type { Creator } from "./spdx2model/document";
-import type { DocumentCreationInfoOptions } from "./spdx2model/document-creation-info";
+import { SPDXDocument as SPDX2Document } from "./api/spdx-document";
+import type { CreateDocumentOptions, Creator } from "./api/spdx-document";
 
 function parseMajorVersion(spdxVersion: string): number {
   return parseInt(spdxVersion.split(".")[0]);
@@ -9,13 +8,12 @@ function parseMajorVersion(spdxVersion: string): number {
 class SPDXProject {
   public static createDocument(
     name: string,
-    namespace: string,
     creators: Creator | Creator[],
-    options?: Partial<DocumentCreationInfoOptions>,
+    options?: Partial<CreateDocumentOptions>,
   ): SPDX2Document {
     const spdxVersion = options?.spdxVersion;
     if (spdxVersion && parseMajorVersion(spdxVersion) === 2) {
-      return SPDX2Document.createDocument(name, namespace, creators, options);
+      return SPDX2Document.createDocument(name, creators, options);
     } else {
       throw new Error("Unsupported SPDX version");
     }

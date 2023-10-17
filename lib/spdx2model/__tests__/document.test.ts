@@ -3,11 +3,11 @@ import { Actor, ActorType } from "../actor";
 
 test("Add data license to document when initiating", () => {
   const documentCreationInfo = new DocumentCreationInfo(
+    "SPDX-2.3",
     "my name",
     "my namespace",
     new Actor("the creator", ActorType.Person),
     {
-      spdxVersion: "2.3",
       created: new Date(),
     },
   );

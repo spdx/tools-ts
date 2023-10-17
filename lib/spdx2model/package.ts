@@ -1,6 +1,6 @@
-import type { spdxNoAssertion, spdxNone } from "./spdxTypes";
 import type { Actor } from "./actor";
 import type { Checksum } from "./checksum";
+import type { spdxNoAssertion, spdxNone } from "./spdx-types";
 
 interface PackageOptions {
   spdxId: string;
