@@ -1,10 +1,5 @@
 import sbom from "../spdx-tools";
 import { Package } from "../spdx2model/package";
-/*
-TODO:
-The compiled version of this script could be run in the ci to create and validate a sample sbom.
-To do that, add a separate rollup.config.ts and use it in package.json.
- */
 
 const sampleSbom = "./lib/examples/resources/sample.sbom.json";
 const document = sbom.createDocument(

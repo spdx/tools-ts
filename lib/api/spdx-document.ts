@@ -5,6 +5,7 @@ import { writeSBOM } from "../writers/json-writer";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import * as crypto from "crypto";
+import type { ExternalDocumentRef } from "../spdx2model/external-document-ref";
 
 export interface Creator {
   name: string;
@@ -17,7 +18,7 @@ export interface CreateDocumentOptions {
   created: Date;
   namespace: string;
   dataLicense: string;
-  externalDocumentRefs: string[];
+  externalDocumentRefs: ExternalDocumentRef[];
   creatorComment: string;
   licenseListVersion: string;
   documentComment: string;
@@ -60,6 +61,7 @@ export class SPDXDocument extends Document {
       name,
       options?.namespace ?? this.generateNamespace(name),
       this.formatCreators(creators),
+      options?.created ?? new Date(),
       options,
     );
 

@@ -6,8 +6,4 @@ export class Checksum {
     this.algorithm = algorithm;
     this.value = value;
   }
-
-  toString(): string {
-    return this.algorithm + ": " + this.value;
-  }
 }

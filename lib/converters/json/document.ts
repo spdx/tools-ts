@@ -2,21 +2,30 @@ import type { Document } from "../../spdx2model/document";
 import { JsonDocumentCreationInfo } from "./document-creation-info";
 import { JsonPackage } from "./package";
 import { JsonRelationship } from "./relationship";
+import { JsonExternalDocumentRef } from "./external-document-ref";
 
 export class JsonDocument {
   SPDXID: string;
-  spdxVersion: string;
-  name: string;
-  documentNamespace: string;
-  dataLicense: string;
-  creationInfo: JsonDocumentCreationInfo;
-  packages: JsonPackage[];
-  relationships: JsonRelationship[];
-  externalDocumentRefs?: string;
+  // TODO: Implement
+  // annotations
   comment?: string;
+  creationInfo: JsonDocumentCreationInfo;
+  dataLicense: string;
+  externalDocumentRefs?: JsonExternalDocumentRef[];
+  // TODO: Implement
+  // hasExtractedLicenseInfos
+  name: string;
+  spdxVersion: string;
+  documentNamespace: string;
+  packages: JsonPackage[];
+  // TODO: Implement
+  // files;
+  // TODO: Implement
+  // snippets;
+  relationships: JsonRelationship[];
 
   constructor(
-    spdxID: string,
+    spdxId: string,
     spdxVersion: string,
     name: string,
     documentNamespace: string,
@@ -24,19 +33,19 @@ export class JsonDocument {
     creationInfo: JsonDocumentCreationInfo,
     packages: JsonPackage[],
     relationships: JsonRelationship[],
-    externalDocumentRefs?: string,
+    externalDocumentRefs?: JsonExternalDocumentRef[],
     comment?: string,
   ) {
-    this.SPDXID = spdxID;
+    this.SPDXID = spdxId;
     this.spdxVersion = spdxVersion;
     this.name = name;
     this.documentNamespace = documentNamespace;
     this.dataLicense = dataLicense;
-    this.externalDocumentRefs = externalDocumentRefs;
-    this.comment = comment;
     this.creationInfo = creationInfo;
     this.packages = packages;
     this.relationships = relationships;
+    this.externalDocumentRefs = externalDocumentRefs;
+    this.comment = comment;
   }
 
   static fromDocument(document: Document): JsonDocument {
@@ -58,6 +67,12 @@ export class JsonDocument {
       jsonCreationInfo,
       jsonPackages,
       jsonRelationships,
+      document.creationInfo.externalDocumentRefs
+        ? document.creationInfo.externalDocumentRefs.map((ref) =>
+            JsonExternalDocumentRef.fromExternalDocumentRef(ref),
+          )
+        : undefined,
+      document.creationInfo.documentComment,
     );
   }
 }
