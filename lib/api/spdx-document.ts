@@ -5,7 +5,8 @@ import { writeSBOM } from "../writers/json-writer";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import * as crypto from "crypto";
-import type { ExternalDocumentRef } from "../spdx2model/external-document-ref";
+import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
+import { Checksum } from "../spdx2model/checksum";
 
 export interface Creator {
   name: string;
@@ -13,12 +14,19 @@ export interface Creator {
   email?: string;
 }
 
+export interface DocumentRef {
+  documentRefId: string;
+  documentUri: string;
+  checksum_value: string;
+  checksum_algorithm: string;
+}
+
 export interface CreateDocumentOptions {
   spdxVersion: string;
   created: Date;
   namespace: string;
   dataLicense: string;
-  externalDocumentRefs: ExternalDocumentRef[];
+  externalDocumentRefs: DocumentRef[];
   creatorComment: string;
   licenseListVersion: string;
   documentComment: string;
@@ -51,6 +59,21 @@ export class SPDXDocument extends Document {
     return "https://" + documentName + "-" + generateUuidV4();
   }
 
+  private static formatExternalDocumentRefs(
+    refs?: DocumentRef[],
+  ): ExternalDocumentRef[] | undefined {
+    return refs
+      ? refs.map(
+          (ref) =>
+            new ExternalDocumentRef(
+              ref.documentRefId,
+              ref.documentUri,
+              new Checksum(ref.checksum_algorithm, ref.checksum_value),
+            ),
+        )
+      : undefined;
+  }
+
   static createDocument(
     name: string,
     creators: Creator | Creator[],
@@ -62,7 +85,12 @@ export class SPDXDocument extends Document {
       options?.namespace ?? this.generateNamespace(name),
       this.formatCreators(creators),
       options?.created ?? new Date(),
-      options,
+      {
+        ...options,
+        externalDocumentRefs: this.formatExternalDocumentRefs(
+          options?.externalDocumentRefs,
+        ),
+      },
     );
 
     return new SPDXDocument(creationInfo);
