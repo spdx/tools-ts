@@ -1,4 +1,4 @@
-import type { Creator } from "./document";
+import type { Creator } from "../api/spdx-document";
 
 export enum ActorType {
   Person = "Person",

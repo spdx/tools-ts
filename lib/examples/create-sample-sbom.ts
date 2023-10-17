@@ -9,7 +9,6 @@ To do that, add a separate rollup.config.ts and use it in package.json.
 const sampleSbom = "./lib/examples/resources/sample.sbom.json";
 const document = sbom.createDocument(
   "first-document",
-  "test namespace",
   { name: "test creator", type: "Person" },
   { spdxVersion: "2.3" },
 );

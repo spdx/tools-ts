@@ -31,8 +31,9 @@
     "lint-fix": "eslint -c .eslintrc.js --fix --ext .ts,.js .",
     "prepare": "husky install && npm run build",
     "pre-commit": "lint-staged",
-    "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist",
-    "test-e2e": "jest --testMatch=[ \"**/e2e-tests/**/*.test.ts\" ]"
+    "test": "jest --testPathIgnorePatterns=dist",
+    "test-e2e": "jest --testMatch=[ \"**/e2e-tests/**/*.test.ts\" ]",
+    "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist"
   },
   "lint-staged": {
     "**/*.ts": [
