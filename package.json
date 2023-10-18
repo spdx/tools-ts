@@ -26,7 +26,7 @@
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
     "build-examples": "rollup --config lib/examples/rollup.config.ts --configPlugin typescript",
-    "create-sample-sbom": "node lib/examples/build/create-sample-sbom.js",
+    "create-sample-sbom": "node lib/examples/build/create-minimal-sample-sbom.js",
     "lint-check": "eslint -c .eslintrc.js --ext .ts,.js .",
     "lint-fix": "eslint -c .eslintrc.js --fix --ext .ts,.js .",
     "prepare": "husky install && npm run build",
@@ -42,5 +42,6 @@
       "echo 'Building...'",
       "npm run build"
     ]
-  }
+  },
+"exports":  {".": {"require": "./dist/spdx-tools.cjs", "import": "./dist/spdx-tools.mjs"}}
 }

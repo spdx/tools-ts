@@ -1,4 +1,4 @@
-import sbom from "../../spdx-tools";
+import * as sbom from "../../spdx-tools";
 import * as fs from "fs";
 import mock from "mock-fs";
 import { Package } from "../../spdx2model/package";
@@ -7,7 +7,7 @@ afterEach(() => {
   mock.restore();
 });
 
-test("Creates and writes minimal document", () => {
+test("Creates and writes minimal document", async () => {
   mock({ "root/dir": { "existingFile.txt": "" } });
   const testfile = "root/dir/sbom.spdx.json";
 
@@ -21,14 +21,14 @@ test("Creates and writes minimal document", () => {
       spdxId: "package-spdx-id",
     }),
   ]);
-  document.write(testfile);
-
-  expect(fs.lstatSync(testfile).isFile()).toBe(true);
-  const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });
-  const parsedFileContent = JSON.parse(writtenFileContent);
-  expect(parsedFileContent.packages[0].name).toBe("test-package");
-  expect(parsedFileContent.name).toBe("test document");
-  expect(parsedFileContent.creationInfo.creators).toStrictEqual([
-    "Person: test creator",
-  ]);
+  await document.write(testfile).then(() => {
+    expect(fs.lstatSync(testfile).isFile()).toBe(true);
+    const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });
+    const parsedFileContent = JSON.parse(writtenFileContent);
+    expect(parsedFileContent.packages[0].name).toBe("test-package");
+    expect(parsedFileContent.name).toBe("test document");
+    expect(parsedFileContent.creationInfo.creators).toStrictEqual([
+      "Person: test creator",
+    ]);
+  });
 });
