@@ -24,6 +24,7 @@
     "mock-fs": "^5.2.0",
     "prettier": "3.0.3",
     "rollup": "^4.0.2",
+    "rollup-plugin-dts": "^6.1.0",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
@@ -50,6 +51,7 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/spdx-tools.d.ts",
       "require": "./dist/spdx-tools.cjs",
       "import": "./dist/spdx-tools.mjs"
     }
