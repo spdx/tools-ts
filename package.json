@@ -1,5 +1,5 @@
 {
-  "name": "spdx-tools-ts",
+  "name": "spdx-tools",
   "version": "0.0.1",
   "description": "A Typescript library for creating SPDX documents",
   "license": "MIT",
