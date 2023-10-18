@@ -4,7 +4,7 @@ import typescript from "@rollup/plugin-typescript";
 export default defineConfig({
   input: { "spdx-tools": "lib/spdx-tools.ts" },
   plugins: [typescript({ sourceMap: true })],
-  external: ["fs"],
+  external: ["fs/promises", "uuid"],
   output: [
     {
       dir: "dist",
