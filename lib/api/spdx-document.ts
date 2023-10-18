@@ -96,20 +96,32 @@ export class SPDXDocument extends Document {
     return new SPDXDocument(creationInfo);
   }
 
-  addRelationships(relationships: Relationship[]): void {
+  addRelationships(relationships: Relationship[]): this {
     this.relationships = this.relationships.concat(relationships);
+    return this;
   }
 
-  addPackages(packages: Package[]): void {
+  addPackages(packages: Package[]): this {
     this.packages = this.packages.concat(packages);
     packages.forEach((pkg: Package) => {
       this.addRelationships([
         new Relationship(this.creationInfo.spdxId, pkg.spdxId, "DESCRIBES"),
       ]);
     });
+    return this;
   }
 
-  write(location: string): void {
-    writeSBOM(this, location);
+  writeSync(location: string): void {
+    writeSBOM(this, location)
+      .then(() => {
+        console.log("Wrote sample SBOM successfully");
+      })
+      .catch((error) => {
+        console.error("Error writing sample SBOM: " + error);
+      });
+  }
+
+  async write(location: string): Promise<void> {
+    await writeSBOM(this, location);
   }
 }
