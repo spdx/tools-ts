@@ -1,5 +1,6 @@
-# SPDXSBOM
-A lightweight library for creating SBOMs in the [SPDX format](https://spdx.github.io/spdx-spec/v2.3/).
+# Typescript library for creating SPDX documents
+
+**Disclaimer**: This repository is work in progress and does not yet support all SPDX features.
 
 ## TL;DR
 
@@ -58,3 +59,10 @@ In addition, it takes an object with the following optional parameters:
 | creatorComment | string | - | Comment on the creator |
 | licenseListVersion | string | - | Version of the license list used |
 | documentComment | string | - | Comment on the document |
+
+# Contributing
+We welcome contributions to this repository.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+
+# License
+[MIT](LICENSE)
