@@ -1,6 +1,6 @@
 # Typescript library for creating SPDX documents
 
-**Disclaimer**: This repository is work in progress and does not yet support all SPDX features.
+**Important:** This repository is in early development state and can not yet be used in production.
 
 ## TL;DR
 

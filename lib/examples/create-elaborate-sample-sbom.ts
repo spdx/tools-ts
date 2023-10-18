@@ -9,7 +9,6 @@ const document = sbom.createDocument(
     created: new Date(),
     namespace:
       "https://my-website.com/paths-to-spdx-document/my-document-21b3f009-ac30-4da3-a295-7172e0c4ba49",
-    dataLicense: "CC0-1.0",
     externalDocumentRefs: [
       {
         documentRefId: "DocumentRef-referenced-document-id",
