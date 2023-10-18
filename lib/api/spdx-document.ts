@@ -1,6 +1,7 @@
 import { Actor } from "../spdx2model/actor";
-import { Relationship } from "../spdx2model/relationship";
-import type { Package } from "../spdx2model/package";
+import type { RelationshipOptions } from "../spdx2model/relationship";
+import { Relationship, RelationshipType } from "../spdx2model/relationship";
+import { Package } from "../spdx2model/package";
 import { writeSBOM } from "../writers/json-writer";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
@@ -30,6 +31,12 @@ export interface CreateDocumentOptions {
   creatorComment: string;
   licenseListVersion: string;
   documentComment: string;
+}
+
+// TODO: Add prperties
+export interface AddPackagesOptions {
+  filesAnalyzed: boolean;
+  spdxId: string;
 }
 
 export class SPDXDocument extends Document {
@@ -84,18 +91,38 @@ export class SPDXDocument extends Document {
     return new SPDXDocument(creationInfo);
   }
 
-  addRelationships(relationships: Relationship[]): this {
-    this.relationships = this.relationships.concat(relationships);
+  // TODO: Do we want to allow relationships as argument?
+  addPackage(
+    name: string,
+    downloadLocation: string,
+    options?: Partial<AddPackagesOptions>,
+  ): this {
+    const pkg = new Package(name, downloadLocation, options);
+    const describesRelationship = new Relationship(
+      this.creationInfo.spdxId,
+      pkg.spdxId,
+      RelationshipType.DESCRIBES,
+    );
+
+    this.packages = this.packages.concat(pkg);
+    this.relationships = this.relationships.concat(describesRelationship);
     return this;
   }
 
-  addPackages(packages: Package[]): this {
-    this.packages = this.packages.concat(packages);
-    packages.forEach((pkg: Package) => {
-      this.addRelationships([
-        new Relationship(this.creationInfo.spdxId, pkg.spdxId, "DESCRIBES"),
-      ]);
-    });
+  addRelationship(
+    spdxElementId: string,
+    relatedSpdxElementId: string,
+    relationshipType: string,
+    options?: Partial<RelationshipOptions>,
+  ): this {
+    const relationship = new Relationship(
+      "SPDXRef-" + spdxElementId,
+      "SPDXRef-" + relatedSpdxElementId,
+      relationshipType as RelationshipType,
+      { comment: options?.comment },
+    );
+
+    this.relationships = this.relationships.concat(relationship);
     return this;
   }
 
