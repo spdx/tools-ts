@@ -5,6 +5,7 @@
     "@types/jest": "^29.5.5",
     "@types/mock-fs": "^4.13.2",
     "@types/node": "^20.8.4",
+    "@types/uuid": "^9.0.5",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
@@ -43,5 +44,13 @@
       "npm run build"
     ]
   },
-"exports":  {".": {"require": "./dist/spdx-tools.cjs", "import": "./dist/spdx-tools.mjs"}}
+  "exports": {
+    ".": {
+      "require": "./dist/spdx-tools.cjs",
+      "import": "./dist/spdx-tools.mjs"
+    }
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
 }

@@ -4,9 +4,9 @@ import type { Package } from "../spdx2model/package";
 import { writeSBOM } from "../writers/json-writer";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
-import * as crypto from "crypto";
 import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
 import { Checksum } from "../spdx2model/checksum";
+import { v4 as uuidv4 } from "uuid";
 
 export interface Creator {
   name: string;
@@ -32,18 +32,6 @@ export interface CreateDocumentOptions {
   documentComment: string;
 }
 
-// TODO: This function is based on https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid/2117523#2117523
-// How do deal with this, compliance-wise?
-function generateUuidV4(): string {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (digit) =>
-    (
-      parseInt(digit) ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] &
-        (15 >> (parseInt(digit) / 4)))
-    ).toString(16),
-  );
-}
-
 export class SPDXDocument extends Document {
   private static formatCreators(creators: Creator | Creator[]): Actor[] {
     return Array.isArray(creators)
@@ -56,7 +44,7 @@ export class SPDXDocument extends Document {
   }
 
   private static generateNamespace(documentName: string): string {
-    return "https://" + documentName + "-" + generateUuidV4();
+    return "https://" + documentName + "-" + uuidv4();
   }
 
   private static formatExternalDocumentRefs(
