@@ -1,6 +1,6 @@
 import * as sbom from "../spdx-tools";
 
-const sampleSbom = "./lib/examples/resources/sample.sbom.json";
+const sampleSbom = "./lib/examples/resources/minimal-sample.sbom.json";
 const document = sbom.createDocument(
   "first-document",
   { name: "test creator", type: "Person" },

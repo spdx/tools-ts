@@ -1,4 +1,4 @@
-name: Write sample sbom and verify
+name: Write and verify sample sboms
 
 on:
   push:
@@ -25,10 +25,13 @@ jobs:
         run: npm run build-examples
 
       - name: Create sample SBOM
-        run: npm run create-sample-sbom
+        run: npm run create-sample-sboms
 
       - name: Install spdx-tools-java
         run: .github/workflows/scripts/spdx-tools-java-wrapper.sh bootstrap
 
-      - name: Verify SBOM
-        run: .github/workflows/scripts/verify.sh lib/examples/resources/sample.sbom.json
+      - name: Verify minimal SBOM
+        run: .github/workflows/scripts/verify.sh lib/examples/resources/minimal-sample.sbom.json
+
+      - name: Verify elaborate SBOM
+        run: .github/workflows/scripts/verify.sh lib/examples/resources/elaborate-sample.sbom.json

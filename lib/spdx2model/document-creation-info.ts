@@ -13,6 +13,7 @@ export interface DocumentCreationInfoOptions {
 export class DocumentCreationInfo {
   spdxVersion: string;
   dataLicense: string;
+  // TODO: Verify that this is correct
   spdxId: string = "SPDXRef-DOCUMENT";
   name: string;
   documentNamespace: string;

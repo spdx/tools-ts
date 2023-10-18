@@ -1,7 +1,6 @@
 import * as sbom from "../../spdx-tools";
 import * as fs from "fs";
 import mock from "mock-fs";
-import { Package } from "../../spdx2model/package";
 
 afterEach(() => {
   mock.restore();
@@ -16,11 +15,9 @@ test("Creates and writes minimal document", async () => {
     { name: "test creator", type: "Person" },
     { spdxVersion: "2.3" },
   );
-  document.addPackages([
-    new Package("test-package", "test/download/location", {
-      spdxId: "package-spdx-id",
-    }),
-  ]);
+  document.addPackage("test-package", "test/download/location", {
+    spdxId: "package-spdx-id",
+  });
   await document.write(testfile).then(() => {
     expect(fs.lstatSync(testfile).isFile()).toBe(true);
     const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });

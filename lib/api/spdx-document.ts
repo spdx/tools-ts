@@ -6,6 +6,7 @@ import { writeSBOM } from "../writers/json-writer";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
+import type { ChecksumAlgorithm } from "../spdx2model/checksum";
 import { Checksum } from "../spdx2model/checksum";
 import { v4 as uuidv4 } from "uuid";
 
@@ -63,7 +64,10 @@ export class SPDXDocument extends Document {
             new ExternalDocumentRef(
               ref.documentRefId,
               ref.documentUri,
-              new Checksum(ref.checksum_algorithm, ref.checksum_value),
+              new Checksum(
+                ref.checksum_algorithm as ChecksumAlgorithm,
+                ref.checksum_value,
+              ),
             ),
         )
       : undefined;
