@@ -1,15 +1,16 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
-  "spdxVersion": "SPDX-2.3",
-  "name": "first-document",
-  "documentNamespace": "test namespace",
-  "dataLicense": "CC0-1.0",
   "creationInfo": {
-    "created": "2023-10-16T12:13:34.032Z",
+    "created": "2023-10-18T13:32:20Z",
     "creators": [
       "Person: test creator"
     ]
   },
+  "dataLicense": "CC0-1.0",
+  "externalDocumentRefs": [],
+  "name": "first-document",
+  "spdxVersion": "SPDX-2.3",
+  "documentNamespace": "https://first-document-8078ecaa-7bfd-410c-9888-2cc4af9600a7",
   "packages": [
     {
       "name": "first-package",
