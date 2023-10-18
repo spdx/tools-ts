@@ -12,7 +12,7 @@ export interface DocumentCreationInfoOptions {
 
 export class DocumentCreationInfo {
   spdxVersion: string;
-  dataLicense: string;
+  dataLicense: string = "CC0-1.0";
   // TODO: Verify that this is correct
   spdxId: string = "SPDXRef-DOCUMENT";
   name: string;
@@ -37,7 +37,6 @@ export class DocumentCreationInfo {
     this.documentNamespace = documentNamespace;
     this.creators = creators;
     this.created = created;
-    this.dataLicense = options?.dataLicense ?? "CC0-1.0";
     this.externalDocumentRefs = options?.externalDocumentRefs ?? [];
     this.creatorComment = options?.creatorComment ?? undefined;
     this.licenseListVersion = options?.licenseListVersion ?? undefined;

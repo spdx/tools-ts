@@ -27,7 +27,6 @@ export interface CreateDocumentOptions {
   spdxVersion: string;
   created: Date;
   namespace: string;
-  dataLicense: string;
   externalDocumentRefs: DocumentRef[];
   creatorComment: string;
   licenseListVersion: string;
