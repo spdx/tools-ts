@@ -5,7 +5,9 @@ const document = sbom.createDocument(
   { name: "test creator", type: "Person" },
   { spdxVersion: "2.3" },
 );
-document.addPackage("first-package", "https://download-location.com", {
-  filesAnalyzed: false,
-});
+document
+  .addPackage("first-package", "https://download-location.com", {
+    filesAnalyzed: false,
+  })
+  .addRelationship("DOCUMENT", "first-package", "DESCRIBES");
 document.writeSync("./examples/resources/minimal-sample.spdx.json");

@@ -2,7 +2,7 @@
   "SPDXID": "SPDXRef-DOCUMENT",
   "comment": "This is a document for testing",
   "creationInfo": {
-    "created": "2023-10-19T12:39:09Z",
+    "created": "2023-10-19T12:57:30Z",
     "creators": [
       "Person: test creator"
     ],
@@ -59,11 +59,6 @@
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
       "relatedSpdxElement": "SPDXRef-first-package",
-      "relationshipType": "DESCRIBES"
-    },
-    {
-      "spdxElementId": "SPDXRef-DOCUMENT",
-      "relatedSpdxElement": "SPDXRef-second-package",
       "relationshipType": "DESCRIBES"
     },
     {

@@ -23,6 +23,7 @@ document
     filesAnalyzed: false,
     comment: "This package is added just for testing.",
   })
+  .addRelationship("DOCUMENT", "uuid", "DESCRIBES")
   .addRelationship("uuid", "eslint", "DEPENDS_ON");
 
 document

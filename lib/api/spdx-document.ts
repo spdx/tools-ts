@@ -1,6 +1,9 @@
 import { Actor } from "../spdx2model/actor";
-import type { RelationshipOptions } from "../spdx2model/relationship";
-import { Relationship, RelationshipType } from "../spdx2model/relationship";
+import type {
+  RelationshipOptions,
+  RelationshipType,
+} from "../spdx2model/relationship";
+import { Relationship } from "../spdx2model/relationship";
 import type { PackageVerificationCode } from "../spdx2model/package";
 import { Package } from "../spdx2model/package";
 import { Document } from "../spdx2model/document";
@@ -114,15 +117,9 @@ export class SPDXDocument extends Document {
     downloadLocation: string,
     options?: Partial<AddPackagesOptions>,
   ): this {
-    const pkg = new Package(name, downloadLocation, options);
-    const describesRelationship = new Relationship(
-      this.creationInfo.spdxId,
-      pkg.spdxId,
-      RelationshipType.DESCRIBES,
+    this.packages = this.packages.concat(
+      new Package(name, downloadLocation, options),
     );
-
-    this.packages = this.packages.concat(pkg);
-    this.relationships = this.relationships.concat(describesRelationship);
     return this;
   }
 
