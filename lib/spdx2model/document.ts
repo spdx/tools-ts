@@ -3,22 +3,28 @@ import type { Relationship } from "./relationship";
 import type { DocumentCreationInfo } from "./document-creation-info";
 import { JsonDocument } from "../converters/json/document";
 import fs from "fs/promises";
+import type { File } from "./file";
 
 interface DocumentOptions {
   packages: Package[];
-  files: string[];
+  files: File[];
   snippets: string[];
+  annotations: string[];
   relationships: Relationship[];
+  otherLicensingInfo: string[];
 }
 
 export class Document {
   creationInfo: DocumentCreationInfo;
   packages: Package[];
-  // TODO: Implement
-  files: string[];
+  files: File[];
   // TODO: Implement
   snippets: string[];
+  // TODO: Implement
+  annotations: string[];
   relationships: Relationship[];
+  // TODO: Implement
+  otherLicensingInfo: string[];
 
   constructor(
     creationInfo: DocumentCreationInfo,
@@ -28,7 +34,9 @@ export class Document {
     this.packages = options?.packages ?? [];
     this.files = options?.files ?? [];
     this.snippets = options?.snippets ?? [];
+    this.annotations = options?.annotations ?? [];
     this.relationships = options?.relationships ?? [];
+    this.otherLicensingInfo = options?.otherLicensingInfo ?? [];
   }
 
   private hasMissingDescribesRelationships(): boolean {

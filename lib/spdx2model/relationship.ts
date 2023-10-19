@@ -47,7 +47,7 @@ export enum RelationshipType {
 }
 
 export interface RelationshipOptions {
-  comment?: string;
+  comment: string;
 }
 
 export class Relationship {
