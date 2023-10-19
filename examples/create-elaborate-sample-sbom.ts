@@ -30,6 +30,7 @@ document
       value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
     },
   })
+  .addRelationship("DOCUMENT", "first-package", "DESCRIBES")
   .addPackage("second package", "https://download-location.com", {
     filesAnalyzed: false,
     spdxId: "second-package",
