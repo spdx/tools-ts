@@ -6,6 +6,8 @@ import fs from "fs/promises";
 
 interface DocumentOptions {
   packages: Package[];
+  files: string[];
+  snippets: string[];
   relationships: Relationship[];
 }
 
@@ -24,6 +26,8 @@ export class Document {
   ) {
     this.creationInfo = creationInfo;
     this.packages = options?.packages ?? [];
+    this.files = options?.files ?? [];
+    this.snippets = options?.snippets ?? [];
     this.relationships = options?.relationships ?? [];
   }
 
