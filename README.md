@@ -24,7 +24,7 @@ document.addPackages([
     filesAnalyzed: false,
   }),
 ]);
-document.write("./sample.sbom.json");
+document.write("./sample.spdx.json");
 ```
 
 # API

@@ -1,6 +1,5 @@
 import * as sbom from "../lib/spdx-tools";
 
-const sampleSbom = "./examples/resources/elaborate-sample.sbom.json";
 const document = sbom.createDocument(
   "first-document",
   { name: "test creator", type: "Person" },
@@ -52,4 +51,4 @@ document
     },
   )
   .addRelationship("first-package", "first-file", "CONTAINS");
-document.writeSync(sampleSbom);
+document.writeSync("./examples/resources/elaborate-sample.spdx.json");
