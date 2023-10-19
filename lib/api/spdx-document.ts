@@ -188,7 +188,7 @@ export class SPDXDocument extends Document {
 
     this.writeSBOM(location)
       .then(() => {
-        console.log("Wrote sample SBOM successfully");
+        console.log("Wrote SBOM successfully: " + location);
       })
       .catch((error) => {
         console.error("Error writing sample SBOM: " + error);

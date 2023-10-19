@@ -31,7 +31,7 @@ jobs:
         run: .github/workflows/scripts/spdx-tools-java-wrapper.sh bootstrap
 
       - name: Verify minimal SBOM
-        run: .github/workflows/scripts/verify.sh lib/examples/resources/minimal-sample.sbom.json
+        run: .github/workflows/scripts/verify.sh examples/resources/minimal-sample.sbom.json
 
       - name: Verify elaborate SBOM
-        run: .github/workflows/scripts/verify.sh lib/examples/resources/elaborate-sample.sbom.json
+        run: .github/workflows/scripts/verify.sh examples/resources/elaborate-sample.sbom.json
