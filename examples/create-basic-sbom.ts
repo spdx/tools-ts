@@ -1,6 +1,6 @@
-import * as sbom from "../lib/spdx-tools";
+import * as spdx from "../lib/spdx-tools";
 
-const document = sbom.createDocument(
+const document = spdx.createDocument(
   "SPDX Tools ts SBOM",
   {
     name: "Anton Bauhofer",
@@ -38,4 +38,4 @@ document
   )
   .addRelationship("uuid", "README.md", "CONTAINS");
 
-document.writeSync("./examples/resources/spdx-tools-ts.sbom.json");
+document.writeSync("./examples/resources/spdx-tools-ts.spdx.json");

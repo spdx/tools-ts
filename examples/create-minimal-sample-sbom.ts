@@ -1,6 +1,5 @@
 import * as sbom from "../lib/spdx-tools";
 
-const sampleSbom = "./examples/resources/minimal-sample.sbom.json";
 const document = sbom.createDocument(
   "first-document",
   { name: "test creator", type: "Person" },
@@ -9,4 +8,4 @@ const document = sbom.createDocument(
 document.addPackage("first-package", "https://download-location.com", {
   filesAnalyzed: false,
 });
-document.writeSync(sampleSbom);
+document.writeSync("./examples/resources/minimal-sample.spdx.json");
