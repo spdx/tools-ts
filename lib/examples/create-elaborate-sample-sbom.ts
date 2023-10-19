@@ -33,4 +33,15 @@ document
     spdxId: "second-package",
   })
   .addRelationship("first-package", "second-package", "DEPENDENCY_OF");
+
+document.addFile("first file", {
+  spdxId: "first-file",
+  checksums: [
+    {
+      checksum_value: "6a204bd89f3c8348bff90840990a7ab50fdc30ce",
+      checksum_algorithm: "SHA1",
+    },
+  ],
+  fileTypes: ["TEXT"],
+});
 document.writeSync(sampleSbom);

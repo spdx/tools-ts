@@ -8,6 +8,8 @@ import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
 import type { ChecksumAlgorithm } from "../spdx2model/checksum";
 import { Checksum } from "../spdx2model/checksum";
 import { v4 as uuidv4 } from "uuid";
+import type { FileType } from "../spdx2model/file";
+import { File } from "../spdx2model/file";
 
 export interface Creator {
   name: string;
@@ -36,6 +38,17 @@ export interface CreateDocumentOptions {
 export interface AddPackagesOptions {
   filesAnalyzed: boolean;
   spdxId: string;
+}
+
+export interface AddFileOptions {
+  spdxId: string;
+  checksums: [
+    {
+      checksum_value: string;
+      checksum_algorithm: string;
+    },
+  ];
+  fileTypes: string[];
 }
 
 export class SPDXDocument extends Document {
@@ -108,6 +121,30 @@ export class SPDXDocument extends Document {
 
     this.packages = this.packages.concat(pkg);
     this.relationships = this.relationships.concat(describesRelationship);
+    return this;
+  }
+
+  addFile(name: string, options?: Partial<AddFileOptions>): this {
+    const checksums = options?.checksums
+      ? options.checksums.map(
+          (checksum) =>
+            new Checksum(
+              checksum.checksum_algorithm as ChecksumAlgorithm,
+              checksum.checksum_value,
+            ),
+        )
+      : undefined;
+    const fileTypes = options?.fileTypes
+      ? options.fileTypes.map((fileType) => fileType as FileType)
+      : undefined;
+
+    const file = new File(name, {
+      spdxId: options?.spdxId ?? undefined,
+      checksums,
+      fileTypes,
+    });
+
+    this.files = this.files ? this.files.concat(file) : [file];
     return this;
   }
 

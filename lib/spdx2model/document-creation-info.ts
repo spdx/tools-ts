@@ -17,7 +17,7 @@ export class DocumentCreationInfo {
   spdxId: string = "SPDXRef-DOCUMENT";
   name: string;
   documentNamespace: string;
-  externalDocumentRefs?: ExternalDocumentRef[];
+  externalDocumentRefs: ExternalDocumentRef[];
   licenseListVersion?: string;
   creators: Actor[];
   created: Date;
