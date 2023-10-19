@@ -1,11 +1,13 @@
 import type { Package } from "../../spdx2model/package";
 import { JsonChecksum } from "./checksum";
+import { JsonPackageVerificationCode } from "./package-verification-code";
 
 export class JsonPackage {
   name: string;
   downloadLocation: string;
   SPDXID: string;
   filesAnalyzed: boolean;
+  packageVerificationCode?: JsonPackageVerificationCode;
   checksums: JsonChecksum[];
   licenseInfoFromFiles: string[];
   externalRefs: string[];
@@ -20,11 +22,13 @@ export class JsonPackage {
     licenseInfoFromFiles: string[],
     externalRefs: string[],
     attributionTexts: string[],
+    packageVerificationCode?: JsonPackageVerificationCode,
   ) {
     this.name = name;
     this.downloadLocation = downloadLocation;
     this.SPDXID = SPDXID;
     this.filesAnalyzed = filesAnalyzed;
+    this.packageVerificationCode = packageVerificationCode;
     this.checksums = checksums;
     this.licenseInfoFromFiles = licenseInfoFromFiles;
     this.externalRefs = externalRefs;
@@ -35,6 +39,12 @@ export class JsonPackage {
     const jsonChecksums: JsonChecksum[] = pkg.checksums.map((checksum) =>
       JsonChecksum.fromChecksum(checksum),
     );
+    const jsonPackageVerificationCode: JsonPackageVerificationCode | undefined =
+      pkg.verificationCode
+        ? JsonPackageVerificationCode.fromPackageVerificationCode(
+            pkg.verificationCode,
+          )
+        : undefined;
 
     return new JsonPackage(
       pkg.name,
@@ -46,6 +56,7 @@ export class JsonPackage {
       [],
       [],
       [],
+      jsonPackageVerificationCode,
     );
   }
 }

@@ -5,6 +5,7 @@ export default defineConfig({
   input: [
     "examples/create-minimal-sample-sbom.ts",
     "examples/create-elaborate-sample-sbom.ts",
+    "examples/create-basic-sbom.ts",
   ],
   plugins: [typescript({ sourceMap: true })],
   external: ["fs/promises", "uuid"],

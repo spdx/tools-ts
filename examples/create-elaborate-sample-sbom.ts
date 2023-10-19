@@ -25,8 +25,11 @@ const document = sbom.createDocument(
 );
 document
   .addPackage("first package", "https://download-location.com", {
-    filesAnalyzed: false,
+    filesAnalyzed: true,
     spdxId: "first-package",
+    verificationCode: {
+      value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
+    },
   })
   .addPackage("second package", "https://download-location.com", {
     filesAnalyzed: false,
@@ -34,14 +37,19 @@ document
   })
   .addRelationship("first-package", "second-package", "DEPENDENCY_OF");
 
-document.addFile("first file", {
-  spdxId: "first-file",
-  checksums: [
+document
+  .addFile(
+    "first file",
+    [
+      {
+        checksumValue: "6a204bd89f3c8348bff90840990a7ab50fdc30ce",
+        checksumAlgorithm: "SHA1",
+      },
+    ],
     {
-      checksum_value: "6a204bd89f3c8348bff90840990a7ab50fdc30ce",
-      checksum_algorithm: "SHA1",
+      spdxId: "first-file",
+      fileTypes: ["TEXT"],
     },
-  ],
-  fileTypes: ["TEXT"],
-});
+  )
+  .addRelationship("first-package", "first-file", "CONTAINS");
 document.writeSync(sampleSbom);
