@@ -2,7 +2,7 @@
   "SPDXID": "SPDXRef-DOCUMENT",
   "comment": "This is a document for testing",
   "creationInfo": {
-    "created": "2023-10-19T10:09:21Z",
+    "created": "2023-10-19T12:16:34Z",
     "creators": [
       "Person: test creator"
     ],
@@ -28,21 +28,16 @@
       "name": "first package",
       "downloadLocation": "https://download-location.com",
       "SPDXID": "SPDXRef-first-package",
-      "filesAnalyzed": false,
-      "checksums": [],
-      "licenseInfoFromFiles": [],
-      "externalRefs": [],
-      "attributionTexts": []
+      "filesAnalyzed": true,
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "b65013ce770696a72a0dded749a5058e5f8e2a4d"
+      }
     },
     {
       "name": "second package",
       "downloadLocation": "https://download-location.com",
       "SPDXID": "SPDXRef-second-package",
-      "filesAnalyzed": false,
-      "checksums": [],
-      "licenseInfoFromFiles": [],
-      "externalRefs": [],
-      "attributionTexts": []
+      "filesAnalyzed": false
     }
   ],
   "files": [

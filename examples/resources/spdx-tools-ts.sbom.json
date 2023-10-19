@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2023-10-19T10:09:21Z",
+    "created": "2023-10-19T12:16:34Z",
     "creators": [
       "Person: Anton Bauhofer (anton.bauhofer@tngtech.com)"
     ]
@@ -16,27 +16,27 @@
       "downloadLocation": "https://github.com/uuidjs/uuid",
       "SPDXID": "SPDXRef-uuid",
       "filesAnalyzed": true,
-      "checksums": [],
-      "licenseInfoFromFiles": [],
-      "externalRefs": [],
-      "attributionTexts": []
+      "packageVerificationCode": {
+        "packageVerificationCodeValue": "b65013ce770696a72a0dded749a5058e5f8e2a4d"
+      }
     },
     {
       "name": "eslint",
       "downloadLocation": "https://github.com/eslint/eslint",
       "SPDXID": "SPDXRef-eslint",
-      "filesAnalyzed": false,
-      "checksums": [],
-      "licenseInfoFromFiles": [],
-      "externalRefs": [],
-      "attributionTexts": []
+      "filesAnalyzed": false
     }
   ],
   "files": [
     {
-      "SPDXID": "SPDXRef-./README.md",
-      "fileName": "./README.md",
-      "checksums": [],
+      "SPDXID": "SPDXRef-README.md",
+      "fileName": "README.md",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3"
+        }
+      ],
       "fileTypes": [
         "TEXT"
       ]
@@ -60,7 +60,7 @@
     },
     {
       "spdxElementId": "SPDXRef-uuid",
-      "relatedSpdxElement": "SPDXRef-./README.me",
+      "relatedSpdxElement": "SPDXRef-README.md",
       "relationshipType": "CONTAINS"
     }
   ]

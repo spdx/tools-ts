@@ -8,20 +8,20 @@ export class JsonPackage {
   SPDXID: string;
   filesAnalyzed: boolean;
   packageVerificationCode?: JsonPackageVerificationCode;
-  checksums: JsonChecksum[];
-  licenseInfoFromFiles: string[];
-  externalRefs: string[];
-  attributionTexts: string[];
+  checksums?: JsonChecksum[];
+  licenseInfoFromFiles?: string[];
+  externalRefs?: string[];
+  attributionTexts?: string[];
 
   constructor(
     name: string,
     downloadLocation: string,
     SPDXID: string,
     filesAnalyzed: boolean,
-    checksums: JsonChecksum[],
-    licenseInfoFromFiles: string[],
-    externalRefs: string[],
-    attributionTexts: string[],
+    checksums?: JsonChecksum[],
+    licenseInfoFromFiles?: string[],
+    externalRefs?: string[],
+    attributionTexts?: string[],
     packageVerificationCode?: JsonPackageVerificationCode,
   ) {
     this.name = name;
@@ -36,9 +36,10 @@ export class JsonPackage {
   }
 
   static fromPackage(pkg: Package): JsonPackage {
-    const jsonChecksums: JsonChecksum[] = pkg.checksums.map((checksum) =>
-      JsonChecksum.fromChecksum(checksum),
-    );
+    const jsonChecksums: JsonChecksum[] | undefined =
+      pkg.checksums.length > 0
+        ? pkg.checksums.map((checksum) => JsonChecksum.fromChecksum(checksum))
+        : undefined;
     const jsonPackageVerificationCode: JsonPackageVerificationCode | undefined =
       pkg.verificationCode
         ? JsonPackageVerificationCode.fromPackageVerificationCode(
@@ -53,9 +54,9 @@ export class JsonPackage {
       pkg.filesAnalyzed,
       jsonChecksums,
       // TODO: Fill in licenseInfoFromFiles
-      [],
-      [],
-      [],
+      undefined,
+      undefined,
+      undefined,
       jsonPackageVerificationCode,
     );
   }
