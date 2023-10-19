@@ -4,7 +4,7 @@
 
 ## TL;DR
 
-We provide a number of example workflows in the `lib/examples/` that demonstrate how this library can be used to create SBOMs.
+We provide a number of example workflows in the `examples` directory that demonstrate how this library can be used to create SBOMs.
 
 ## Usage
 `SPDXSBOM` provides an API to compose and write SBOMs in the SPDX format.

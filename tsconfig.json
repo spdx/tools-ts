@@ -19,6 +19,7 @@
   },
   "include": [
     "lib/**/*",
+    "examples/**/*",
     ".eslintrc.js",
     "jest.config.js",
     "rollup.config.ts"
