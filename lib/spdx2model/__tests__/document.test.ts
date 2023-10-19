@@ -12,5 +12,6 @@ test("Add data license to document when initiating", () => {
       created: new Date(),
     },
   );
+
   expect(documentCreationInfo.dataLicense).toBe("CC0-1.0");
 });

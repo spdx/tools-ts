@@ -18,12 +18,12 @@ export class JsonDocument {
   name: string;
   spdxVersion: string;
   documentNamespace: string;
-  packages: JsonPackage[];
+  packages?: JsonPackage[];
   // TODO: Implement
-  files: JsonFile[];
+  files?: JsonFile[];
   // TODO: Implement
   // snippets;
-  relationships: JsonRelationship[];
+  relationships?: JsonRelationship[];
 
   constructor(
     spdxId: string,
@@ -32,9 +32,9 @@ export class JsonDocument {
     documentNamespace: string,
     dataLicense: string,
     creationInfo: JsonDocumentCreationInfo,
-    packages: JsonPackage[],
-    files: JsonFile[],
-    relationships: JsonRelationship[],
+    packages?: JsonPackage[],
+    files?: JsonFile[],
+    relationships?: JsonRelationship[],
     externalDocumentRefs?: JsonExternalDocumentRef[],
     comment?: string,
   ) {
@@ -54,15 +54,26 @@ export class JsonDocument {
   static fromDocument(document: Document): JsonDocument {
     const jsonCreationInfo: JsonDocumentCreationInfo =
       JsonDocumentCreationInfo.fromDocument(document);
-    const jsonPackages: JsonPackage[] = document.packages.map((pkg) =>
-      JsonPackage.fromPackage(pkg),
-    );
-    const jsonFiles: JsonFile[] = document.files.map((file) =>
-      JsonFile.fromFile(file),
-    );
-    const jsonRelationships: JsonRelationship[] = document.relationships.map(
-      (relationship) => JsonRelationship.fromRelationship(relationship),
-    );
+    const jsonPackages: JsonPackage[] | undefined =
+      document.packages.length > 0
+        ? document.packages.map((pkg) => JsonPackage.fromPackage(pkg))
+        : undefined;
+    const jsonFiles: JsonFile[] | undefined =
+      document.files.length > 0
+        ? document.files.map((file) => JsonFile.fromFile(file))
+        : undefined;
+    const jsonRelationships: JsonRelationship[] | undefined =
+      document.relationships.length > 0
+        ? document.relationships.map((relationship) =>
+            JsonRelationship.fromRelationship(relationship),
+          )
+        : undefined;
+    const jsonExternalDocumentRefs: JsonExternalDocumentRef[] | undefined =
+      document.creationInfo.externalDocumentRefs?.length > 0
+        ? document.creationInfo.externalDocumentRefs.map((ref) =>
+            JsonExternalDocumentRef.fromExternalDocumentRef(ref),
+          )
+        : undefined;
 
     return new JsonDocument(
       document.creationInfo.spdxId,
@@ -74,11 +85,7 @@ export class JsonDocument {
       jsonPackages,
       jsonFiles,
       jsonRelationships,
-      document.creationInfo.externalDocumentRefs
-        ? document.creationInfo.externalDocumentRefs.map((ref) =>
-            JsonExternalDocumentRef.fromExternalDocumentRef(ref),
-          )
-        : undefined,
+      jsonExternalDocumentRefs,
       document.creationInfo.documentComment,
     );
   }
