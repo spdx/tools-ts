@@ -33,5 +33,8 @@ jobs:
       - name: Verify minimal SBOM
         run: .github/workflows/scripts/verify.sh examples/resources/minimal-sample.sbom.json
 
+      - name: Verify basic SBOM
+        run: .github/workflows/scripts/verify.sh examples/resources/spdx-tools-ts.sbom.json
+
       - name: Verify elaborate SBOM
         run: .github/workflows/scripts/verify.sh examples/resources/elaborate-sample.sbom.json

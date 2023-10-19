@@ -13,7 +13,7 @@ export function createDocument(
   options?: Partial<CreateDocumentOptions>,
 ): SPDX2Document {
   const spdxVersion = options?.spdxVersion;
-  if (spdxVersion && parseMajorVersion(spdxVersion) === 2) {
+  if (!spdxVersion || parseMajorVersion(spdxVersion) === 2) {
     return SPDX2Document.createDocument(name, creators, options);
   } else {
     throw new Error("Unsupported SPDX version");

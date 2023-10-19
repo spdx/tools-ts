@@ -1,0 +1,67 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "creationInfo": {
+    "created": "2023-10-19T10:09:21Z",
+    "creators": [
+      "Person: Anton Bauhofer (anton.bauhofer@tngtech.com)"
+    ]
+  },
+  "dataLicense": "CC0-1.0",
+  "name": "SPDX Tools ts SBOM",
+  "spdxVersion": "SPDX-2.3",
+  "documentNamespace": "https://github.com/spdx/tools-ts/examples/resources/spdx-tools-ts.sbom.json-21b3f009-ac30-4da3-a295-7172e0c4ba49",
+  "packages": [
+    {
+      "name": "uuid",
+      "downloadLocation": "https://github.com/uuidjs/uuid",
+      "SPDXID": "SPDXRef-uuid",
+      "filesAnalyzed": true,
+      "checksums": [],
+      "licenseInfoFromFiles": [],
+      "externalRefs": [],
+      "attributionTexts": []
+    },
+    {
+      "name": "eslint",
+      "downloadLocation": "https://github.com/eslint/eslint",
+      "SPDXID": "SPDXRef-eslint",
+      "filesAnalyzed": false,
+      "checksums": [],
+      "licenseInfoFromFiles": [],
+      "externalRefs": [],
+      "attributionTexts": []
+    }
+  ],
+  "files": [
+    {
+      "SPDXID": "SPDXRef-./README.md",
+      "fileName": "./README.md",
+      "checksums": [],
+      "fileTypes": [
+        "TEXT"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-uuid",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-eslint",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-uuid",
+      "relatedSpdxElement": "SPDXRef-eslint",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-uuid",
+      "relatedSpdxElement": "SPDXRef-./README.me",
+      "relationshipType": "CONTAINS"
+    }
+  ]
+}

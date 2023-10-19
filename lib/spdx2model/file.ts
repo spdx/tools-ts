@@ -16,7 +16,6 @@ export enum FileType {
 
 export interface FileOptions {
   spdxId: string;
-  checksums: Checksum[];
   fileTypes: FileType[];
 }
 
@@ -27,11 +26,14 @@ export class File {
   checksums: Checksum[];
   fileTypes?: FileType[];
 
-  constructor(name: string, options?: Partial<FileOptions>) {
+  constructor(
+    name: string,
+    checksums: Checksum[],
+    options?: Partial<FileOptions>,
+  ) {
     this.name = name;
     this.spdxId = "SPDXRef-" + (options?.spdxId ?? name);
-    // TODO: Should checksums be required, or calculated here, or is an empty list acceptable?
-    this.checksums = options?.checksums ?? [];
+    this.checksums = checksums;
     this.fileTypes = options?.fileTypes ?? undefined;
   }
 }

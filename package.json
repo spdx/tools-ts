@@ -31,7 +31,7 @@
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
     "build-examples": "rollup --config examples/rollup.config.ts --configPlugin typescript",
-    "create-sample-sboms": "node examples/build/create-minimal-sample-sbom.js && node examples/build/create-elaborate-sample-sbom.js",
+    "create-sample-sboms": "node examples/build/create-minimal-sample-sbom.js && node examples/build/create-elaborate-sample-sbom.js && node examples/build/create-basic-sbom.js",
     "lint-check": "eslint -c .eslintrc.js --ext .ts,.js .",
     "lint-fix": "eslint -c .eslintrc.js --fix --ext .ts,.js .",
     "prepare": "husky install && npm run build",

@@ -9,7 +9,7 @@ interface PackageOptions {
   supplier: Actor | spdxNoAssertion;
   originator: Actor | spdxNoAssertion;
   filesAnalyzed: boolean;
-  verificationCode: string;
+  verificationCode: PackageVerificationCode;
   checksums: Checksum[];
   homepage: string | spdxNoAssertion | spdxNone;
   sourceInfo: string;
@@ -44,6 +44,11 @@ enum PackagePurpose {
   OTHER = "OTHER",
 }
 
+export interface PackageVerificationCode {
+  value: string;
+  excludedFiles?: string[];
+}
+
 export class Package {
   name: string;
   downloadLocation: string | spdxNoAssertion | spdxNone;
@@ -53,8 +58,7 @@ export class Package {
   supplier?: Actor | spdxNoAssertion;
   originator?: Actor | spdxNoAssertion;
   filesAnalyzed: boolean;
-  // TODO: Implement VerificationCode class
-  verificationCode?: string;
+  verificationCode?: PackageVerificationCode;
   checksums: Checksum[];
   homepage?: string | spdxNoAssertion | spdxNone;
   sourceInfo?: string;

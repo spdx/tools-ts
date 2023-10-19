@@ -1,6 +1,7 @@
 import { Actor } from "../spdx2model/actor";
 import type { RelationshipOptions } from "../spdx2model/relationship";
 import { Relationship, RelationshipType } from "../spdx2model/relationship";
+import type { PackageVerificationCode } from "../spdx2model/package";
 import { Package } from "../spdx2model/package";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
@@ -24,6 +25,11 @@ export interface DocumentRef {
   checksum_algorithm: string;
 }
 
+export interface InputChecksum {
+  checksumValue: string;
+  checksumAlgorithm: string;
+}
+
 export interface CreateDocumentOptions {
   spdxVersion: string;
   created: Date;
@@ -38,16 +44,12 @@ export interface CreateDocumentOptions {
 export interface AddPackagesOptions {
   filesAnalyzed: boolean;
   spdxId: string;
+  comment: string;
+  verificationCode: PackageVerificationCode;
 }
 
 export interface AddFileOptions {
   spdxId: string;
-  checksums: [
-    {
-      checksum_value: string;
-      checksum_algorithm: string;
-    },
-  ];
   fileTypes: string[];
 }
 
@@ -124,23 +126,31 @@ export class SPDXDocument extends Document {
     return this;
   }
 
-  addFile(name: string, options?: Partial<AddFileOptions>): this {
-    const checksums = options?.checksums
-      ? options.checksums.map(
+  addFile(
+    name: string,
+    checksums: [InputChecksum] | InputChecksum,
+    options?: Partial<AddFileOptions>,
+  ): this {
+    const formattedChecksums = Array.isArray(checksums)
+      ? checksums.map(
           (checksum) =>
             new Checksum(
-              checksum.checksum_algorithm as ChecksumAlgorithm,
-              checksum.checksum_value,
+              checksum.checksumAlgorithm as ChecksumAlgorithm,
+              checksum.checksumValue,
             ),
         )
-      : undefined;
+      : [
+          new Checksum(
+            checksums.checksumAlgorithm as ChecksumAlgorithm,
+            checksums.checksumValue,
+          ),
+        ];
     const fileTypes = options?.fileTypes
       ? options.fileTypes.map((fileType) => fileType as FileType)
       : undefined;
 
-    const file = new File(name, {
+    const file = new File(name, formattedChecksums, {
       spdxId: options?.spdxId ?? undefined,
-      checksums,
       fileTypes,
     });
 
