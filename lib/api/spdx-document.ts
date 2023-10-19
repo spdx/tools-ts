@@ -2,7 +2,6 @@ import { Actor } from "../spdx2model/actor";
 import type { RelationshipOptions } from "../spdx2model/relationship";
 import { Relationship, RelationshipType } from "../spdx2model/relationship";
 import { Package } from "../spdx2model/package";
-import { writeSBOM } from "../writers/json-writer";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
@@ -129,17 +128,33 @@ export class SPDXDocument extends Document {
     return this;
   }
 
-  writeSync(location: string): void {
-    writeSBOM(this, location)
+  async write(location: string, allowInvalid: boolean = false): Promise<void> {
+    const validationIssues = this.validate();
+    if (validationIssues.length > 0) {
+      console.error(`Document is invalid: ${validationIssues.join("\n")}`);
+      if (!allowInvalid) {
+        return;
+      }
+    }
+
+    await this.writeSBOM(location);
+  }
+
+  writeSync(location: string, allowInvalid: boolean = false): void {
+    const validationIssues = this.validate();
+    if (validationIssues.length > 0) {
+      console.error(`Document is invalid: ${validationIssues.join("\n")}`);
+      if (!allowInvalid) {
+        return;
+      }
+    }
+
+    this.writeSBOM(location)
       .then(() => {
         console.log("Wrote sample SBOM successfully");
       })
       .catch((error) => {
         console.error("Error writing sample SBOM: " + error);
       });
-  }
-
-  async write(location: string): Promise<void> {
-    await writeSBOM(this, location);
   }
 }
