@@ -46,32 +46,38 @@ test("Creates and writes basic document", async () => {
     },
   );
 
-  document
-    .addPackage("uuid", "https://github.com/uuidjs/uuid", {
+  const uuidPackage = document.addPackage(
+    "uuid",
+    "https://github.com/uuidjs/uuid",
+    {
       verificationCode: {
         value: "b65013ce770696a72a0dded749a5058e5f8e2a4e",
       },
-    })
-    .addPackage("eslint", "https://github.com/eslint/eslint", {
+    },
+  );
+  const eslintPackage = document.addPackage(
+    "eslint",
+    "https://github.com/eslint/eslint",
+    {
       filesAnalyzed: false,
       comment: "This package is added for testing.",
-    })
-    .addRelationship("uuid", "eslint", "DEPENDS_ON");
+    },
+  );
+
+  const readmeFile = document.addFile(
+    "README.md",
+    {
+      checksumValue: "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b4",
+      checksumAlgorithm: "SHA1",
+    },
+    {
+      fileTypes: ["TEXT"],
+    },
+  );
 
   document
-    .addFile(
-      "README.md",
-      {
-        checksumValue: "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b4",
-        checksumAlgorithm: "SHA1",
-      },
-      {
-        fileTypes: ["TEXT"],
-      },
-    )
-    .addRelationship("uuid", "README.md", "CONTAINS");
-
-  document.writeSync("./examples/resources/spdx-tools-ts.spdx.json");
+    .addRelationship(uuidPackage, eslintPackage, "DEPENDS_ON")
+    .addRelationship(uuidPackage, readmeFile, "CONTAINS");
 
   await document.write(testfile).then(() => {
     expect(fs.lstatSync(testfile).isFile()).toBe(true);

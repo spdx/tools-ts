@@ -1,6 +1,7 @@
 import type { Actor } from "./actor";
 import type { Checksum } from "./checksum";
 import type { spdxNoAssertion, spdxNone } from "./spdx-types";
+import { v4 as uuidv4 } from "uuid";
 
 interface PackageOptions {
   spdxId: string;
@@ -86,7 +87,7 @@ export class Package {
   ) {
     this.name = name;
     this.downloadLocation = downloadLocation;
-    this.spdxId = "SPDXRef-" + (options?.spdxId ?? name);
+    this.spdxId = "SPDXRef-" + uuidv4();
     this.version = options?.version ?? undefined;
     this.fileName = options?.fileName ?? undefined;
     this.supplier = options?.supplier ?? undefined;

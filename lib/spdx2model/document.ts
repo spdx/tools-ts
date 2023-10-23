@@ -111,7 +111,7 @@ export class Document {
     return validationIssues;
   }
 
-  async writeSBOM(location: string): Promise<void> {
+  async writeFile(location: string): Promise<void> {
     const convertedDocument = JsonDocument.fromDocument(this);
     const content = JSON.stringify(convertedDocument, null, 2);
     await fs.writeFile(location, content);
