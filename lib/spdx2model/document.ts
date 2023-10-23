@@ -51,11 +51,10 @@ export class Document {
       (relationship) => relationship.relationshipType === "DESCRIBED_BY",
     );
 
-    return (
-      !hasOnlyOnePackage &&
-      !(
-        describesRelationships.length > 0 || describedByRelationships.length > 0
-      )
+    return !(
+      hasOnlyOnePackage ||
+      describesRelationships.length > 0 ||
+      describedByRelationships.length > 0
     );
   }
 
