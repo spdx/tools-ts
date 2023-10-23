@@ -71,7 +71,11 @@ export class SPDXDocument extends Document {
   }
 
   private static generateNamespace(documentName: string): string {
-    return "https://" + documentName + "-" + uuidv4();
+    // Remove/replace invalid characters (https://datatracker.ietf.org/doc/html/rfc2141#section-2.1)
+    const formattedDocumentName = documentName
+      .replace(/^[^A-Za-z0-9]+/, "")
+      .replace(/[^A-Za-z0-9-]/g, "-");
+    return "urn:" + formattedDocumentName ?? "document" + ":" + uuidv4();
   }
 
   private static formatExternalDocumentRefs(
