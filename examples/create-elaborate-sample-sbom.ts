@@ -22,34 +22,42 @@ const document = sbom.createDocument(
     documentComment: "This is a document for testing",
   },
 );
-document
-  .addPackage("first package", "https://download-location.com", {
+const firstPackage = document.addPackage(
+  "first package",
+  "https://download-location.com",
+  {
     filesAnalyzed: true,
     spdxId: "first-package",
     verificationCode: {
       value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
     },
-  })
-  .addRelationship("DOCUMENT", "first-package", "DESCRIBES")
-  .addPackage("second package", "https://download-location.com", {
+  },
+);
+
+document.addRelationship(document, firstPackage, "DESCRIBES");
+const secondPackage = document.addPackage(
+  "second package",
+  "https://download-location.com",
+  {
     filesAnalyzed: false,
     spdxId: "second-package",
-  })
-  .addRelationship("first-package", "second-package", "DEPENDENCY_OF");
+  },
+);
+document.addRelationship(firstPackage, secondPackage, "DEPENDENCY_OF");
 
-document
-  .addFile(
-    "first file",
-    [
-      {
-        checksumValue: "6a204bd89f3c8348bff90840990a7ab50fdc30ce",
-        checksumAlgorithm: "SHA1",
-      },
-    ],
+const firstFile = document.addFile(
+  "first file",
+  [
     {
-      spdxId: "first-file",
-      fileTypes: ["TEXT"],
+      checksumValue: "6a204bd89f3c8348bff90840990a7ab50fdc30ce",
+      checksumAlgorithm: "SHA1",
     },
-  )
-  .addRelationship("first-package", "first-file", "CONTAINS");
+  ],
+  {
+    spdxId: "first-file",
+    fileTypes: ["TEXT"],
+  },
+);
+
+document.addRelationship(firstPackage, firstFile, "CONTAINS");
 document.writeSync("./examples/resources/elaborate-sample.spdx.json");

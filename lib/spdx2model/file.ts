@@ -1,4 +1,5 @@
 import type { Checksum } from "./checksum";
+import { v4 as uuidv4 } from "uuid";
 
 export enum FileType {
   OTHER = "OTHER",
@@ -32,7 +33,7 @@ export class File {
     options?: Partial<FileOptions>,
   ) {
     this.name = name;
-    this.spdxId = "SPDXRef-" + (options?.spdxId ?? name);
+    this.spdxId = "SPDXRef-" + uuidv4();
     this.checksums = checksums;
     this.fileTypes = options?.fileTypes ?? undefined;
   }

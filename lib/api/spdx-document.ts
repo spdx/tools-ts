@@ -111,23 +111,21 @@ export class SPDXDocument extends Document {
     return new SPDXDocument(creationInfo);
   }
 
-  // TODO: Do we want to allow relationships as argument?
   addPackage(
     name: string,
     downloadLocation: string,
     options?: Partial<AddPackagesOptions>,
-  ): this {
-    this.packages = this.packages.concat(
-      new Package(name, downloadLocation, options),
-    );
-    return this;
+  ): Package {
+    const pkg = new Package(name, downloadLocation, options);
+    this.packages = this.packages.concat(pkg);
+    return pkg;
   }
 
   addFile(
     name: string,
     checksums: [InputChecksum] | InputChecksum,
     options?: Partial<AddFileOptions>,
-  ): this {
+  ): File {
     const formattedChecksums = Array.isArray(checksums)
       ? checksums.map(
           (checksum) =>
@@ -151,19 +149,26 @@ export class SPDXDocument extends Document {
       fileTypes,
     });
 
-    this.files = this.files ? this.files.concat(file) : [file];
-    return this;
+    this.files = this.files.concat(file);
+    return file;
   }
 
   addRelationship(
-    spdxElementId: string,
-    relatedSpdxElementId: string,
+    spdxElement: Document | Package | File,
+    relatedSpdxElement: Document | Package | File,
     relationshipType: string,
     options?: Partial<RelationshipOptions>,
   ): this {
+    function getSpdxId(spdxElement: Document | Package | File): string {
+      if (spdxElement instanceof Document) {
+        return spdxElement.creationInfo.spdxId;
+      } else {
+        return spdxElement.spdxId;
+      }
+    }
     const relationship = new Relationship(
-      "SPDXRef-" + spdxElementId,
-      "SPDXRef-" + relatedSpdxElementId,
+      getSpdxId(spdxElement),
+      getSpdxId(relatedSpdxElement),
       relationshipType as RelationshipType,
       { comment: options?.comment },
     );
@@ -181,7 +186,7 @@ export class SPDXDocument extends Document {
       }
     }
 
-    await this.writeSBOM(location);
+    await this.writeFile(location);
   }
 
   writeSync(location: string, allowInvalid: boolean = false): void {
@@ -193,7 +198,7 @@ export class SPDXDocument extends Document {
       }
     }
 
-    this.writeSBOM(location)
+    this.writeFile(location)
       .then(() => {
         console.log("Wrote SBOM successfully: " + location);
       })

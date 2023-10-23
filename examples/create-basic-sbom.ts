@@ -13,30 +13,38 @@ const document = spdx.createDocument(
   },
 );
 
-document
-  .addPackage("uuid", "https://github.com/uuidjs/uuid", {
+const uuidPackage = document.addPackage(
+  "uuid",
+  "https://github.com/uuidjs/uuid",
+  {
     verificationCode: {
       value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
     },
-  })
-  .addPackage("eslint", "https://github.com/eslint/eslint", {
+  },
+);
+const eslintPackage = document.addPackage(
+  "eslint",
+  "https://github.com/eslint/eslint",
+  {
     filesAnalyzed: false,
     comment: "This package is added just for testing.",
-  })
-  .addRelationship("DOCUMENT", "uuid", "DESCRIBES")
-  .addRelationship("uuid", "eslint", "DEPENDS_ON");
+  },
+);
 
 document
-  .addFile(
-    "README.md",
-    {
-      checksumValue: "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3",
-      checksumAlgorithm: "SHA1",
-    },
-    {
-      fileTypes: ["TEXT"],
-    },
-  )
-  .addRelationship("uuid", "README.md", "CONTAINS");
+  .addRelationship(document, uuidPackage, "DESCRIBES")
+  .addRelationship(uuidPackage, eslintPackage, "DEPENDS_ON");
+
+const readmeFile = document.addFile(
+  "README.md",
+  {
+    checksumValue: "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3",
+    checksumAlgorithm: "SHA1",
+  },
+  {
+    fileTypes: ["TEXT"],
+  },
+);
+document.addRelationship(uuidPackage, readmeFile, "CONTAINS");
 
 document.writeSync("./examples/resources/spdx-tools-ts.spdx.json");

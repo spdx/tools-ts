@@ -25,7 +25,7 @@ jobs:
         run: npm run build-examples
 
       - name: Create sample SBOM
-        run: npm run create-sample-sboms
+        run: npm run write-examples
 
       - name: Install spdx-tools-java
         run: .github/workflows/scripts/spdx-tools-java-wrapper.sh bootstrap
