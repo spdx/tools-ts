@@ -1,17 +1,14 @@
 import * as spdx from "../lib/spdx-tools";
 
-const document = spdx.createDocument(
-  "SPDX Tools ts SBOM",
-  {
+const document = spdx.createDocument("SPDX Tools ts SBOM", {
+  namespace:
+    "https://github.com/spdx/tools-ts/examples/resources/spdx-tools-ts.sbom.json-21b3f009-ac30-4da3-a295-7172e0c4ba49",
+  creators: {
     name: "Anton Bauhofer",
     type: "Person",
     email: "anton.bauhofer@tngtech.com",
   },
-  {
-    namespace:
-      "https://github.com/spdx/tools-ts/examples/resources/spdx-tools-ts.sbom.json-21b3f009-ac30-4da3-a295-7172e0c4ba49",
-  },
-);
+});
 
 const uuidPackage = document.addPackage(
   "uuid",

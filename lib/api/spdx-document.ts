@@ -36,6 +36,7 @@ export interface InputChecksum {
 export interface CreateDocumentOptions {
   spdxVersion: string;
   spdxId: string;
+  creators: Creator | Creator[];
   created: Date;
   namespace: string;
   externalDocumentRefs: DocumentRef[];
@@ -58,12 +59,18 @@ export interface AddFileOptions {
 }
 
 export class SPDXDocument extends Document {
-  private static formatCreators(creators: Creator | Creator[]): Actor[] {
-    return Array.isArray(creators)
-      ? creators
-          .map((creator) => Actor.fromCreator(creator))
-          .concat(Actor.tools())
-      : [Actor.fromCreator(creators)].concat(Actor.tools());
+  private static formatCreators(
+    creators: Creator | Creator[] | undefined,
+  ): Actor[] {
+    if (!creators) {
+      return [Actor.tools()];
+    } else if (Array.isArray(creators)) {
+      return creators
+        .map((creator) => Actor.fromCreator(creator))
+        .concat(Actor.tools());
+    } else {
+      return [Actor.fromCreator(creators), Actor.tools()];
+    }
   }
 
   private static formatSpdxVersion(spdxVersion?: string): string {
@@ -98,14 +105,13 @@ export class SPDXDocument extends Document {
 
   static createDocument(
     name: string,
-    creators: Creator | Creator[],
     options?: Partial<CreateDocumentOptions>,
   ): SPDXDocument {
     const creationInfo = new DocumentCreationInfo(
       this.formatSpdxVersion(options?.spdxVersion),
       name,
       options?.namespace ?? this.generateNamespace(name),
-      this.formatCreators(creators),
+      this.formatCreators(options?.creators),
       options?.created ?? new Date(),
       {
         ...options,
