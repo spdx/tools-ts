@@ -25,7 +25,7 @@ export class File {
   name: string;
   spdxId: string;
   checksums: Checksum[];
-  fileTypes?: FileType[];
+  fileTypes: FileType[];
 
   constructor(
     name: string,
@@ -35,6 +35,6 @@ export class File {
     this.name = name;
     this.spdxId = "SPDXRef-" + uuidv4();
     this.checksums = checksums;
-    this.fileTypes = options?.fileTypes ?? undefined;
+    this.fileTypes = options?.fileTypes ?? [];
   }
 }

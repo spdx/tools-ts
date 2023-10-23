@@ -25,6 +25,10 @@ export class Actor {
     return new Actor(creator.name, actorType, creator.email);
   }
 
+  static tools(): Actor {
+    return new Actor("SPDX Tools TS", ActorType.Tool);
+  }
+
   toString(): string {
     return (
       this.type.valueOf() +

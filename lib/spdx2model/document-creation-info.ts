@@ -2,6 +2,7 @@ import type { Actor } from "./actor";
 import type { ExternalDocumentRef } from "./external-document-ref";
 
 export interface DocumentCreationInfoOptions {
+  spdxId: string;
   created: Date;
   dataLicense: string;
   externalDocumentRefs: ExternalDocumentRef[];
@@ -14,7 +15,7 @@ export class DocumentCreationInfo {
   spdxVersion: string;
   dataLicense: string = "CC0-1.0";
   // TODO: Verify that this is correct
-  spdxId: string = "SPDXRef-DOCUMENT";
+  spdxId: string;
   name: string;
   documentNamespace: string;
   externalDocumentRefs: ExternalDocumentRef[];
@@ -41,5 +42,6 @@ export class DocumentCreationInfo {
     this.creatorComment = options?.creatorComment ?? undefined;
     this.licenseListVersion = options?.licenseListVersion ?? undefined;
     this.documentComment = options?.documentComment ?? undefined;
+    this.spdxId = options?.spdxId ?? "SPDXRef-DOCUMENT";
   }
 }
