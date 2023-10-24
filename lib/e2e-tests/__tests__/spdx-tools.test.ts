@@ -10,11 +10,7 @@ test("Creates and writes minimal document", async () => {
   mock({ "root/dir": { "existingFile.txt": "" } });
   const testfile = "root/dir/sbom.spdx.json";
 
-  const document = sbom.createDocument(
-    "test document",
-    { name: "test creator", type: "Person" },
-    { spdxVersion: "2.3" },
-  );
+  const document = sbom.createDocument("test document", { spdxVersion: "2.3" });
   document.addPackage("test-package", "test/download/location", {
     spdxId: "package-spdx-id",
   });
@@ -24,9 +20,6 @@ test("Creates and writes minimal document", async () => {
     const parsedFileContent = JSON.parse(writtenFileContent);
     expect(parsedFileContent.packages[0].name).toBe("test-package");
     expect(parsedFileContent.name).toBe("test document");
-    expect(parsedFileContent.creationInfo.creators).toStrictEqual([
-      "Person: test creator",
-    ]);
   });
 });
 
@@ -34,17 +27,10 @@ test("Creates and writes basic document", async () => {
   mock({ "root/dir": { "existingFile.txt": "" } });
   const testfile = "root/dir/sbom.spdx.json";
 
-  const document = sbom.createDocument(
-    "SPDX Tools ts SBOM",
-    {
-      name: "Test User",
-      type: "Person",
-    },
-    {
-      namespace:
-        "https://github.com/spdx/tools-ts/examples/resources/spdx-tools-ts.sbom.json-21b3f009-ac30-4da3-a295-7172e0c4ba49",
-    },
-  );
+  const document = sbom.createDocument("SPDX Tools ts SBOM", {
+    namespace:
+      "https://github.com/spdx/tools-ts/examples/resources/spdx-tools-ts.sbom.json-21b3f009-ac30-4da3-a295-7172e0c4ba49",
+  });
 
   const uuidPackage = document.addPackage(
     "uuid",
