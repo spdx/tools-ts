@@ -63,13 +63,11 @@ export class SPDXDocument extends Document {
     creators: Creator | Creator[] | undefined,
   ): Actor[] {
     if (!creators) {
-      return [Actor.tools()];
+      return [];
     } else if (Array.isArray(creators)) {
-      return creators
-        .map((creator) => Actor.fromCreator(creator))
-        .concat(Actor.tools());
+      return creators.map((creator) => Actor.fromCreator(creator));
     } else {
-      return [Actor.fromCreator(creators), Actor.tools()];
+      return [Actor.fromCreator(creators)];
     }
   }
 
@@ -111,7 +109,7 @@ export class SPDXDocument extends Document {
       this.formatSpdxVersion(options?.spdxVersion),
       name,
       options?.namespace ?? this.generateNamespace(name),
-      this.formatCreators(options?.creators),
+      this.formatCreators(options?.creators).concat(Actor.tools()),
       options?.created ?? new Date(),
       {
         ...options,
