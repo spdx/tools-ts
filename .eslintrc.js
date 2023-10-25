@@ -23,6 +23,8 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-extraneous-class": 0,
     "@typescript-eslint/strict-boolean-expressions": 0,
+    "@typescript-eslint/no-invalid-void-type": 0,
+    "@typescript-eslint/prefer-nullish-coalescing": 0,
     "@typescript-eslint/consistent-type-exports": "error",
     "@typescript-eslint/consistent-type-imports": [
       "error",

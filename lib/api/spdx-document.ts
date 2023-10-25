@@ -80,7 +80,7 @@ export class SPDXDocument extends Document {
     const formattedDocumentName = documentName
       .replace(/^[^A-Za-z0-9]+/, "")
       .replace(/[^A-Za-z0-9-]/g, "-");
-    return "urn:" + formattedDocumentName ?? "document" + ":" + uuidv4();
+    return "urn:" + (formattedDocumentName ?? "document") + ":" + uuidv4();
   }
 
   private static formatExternalDocumentRefs(
@@ -165,13 +165,17 @@ export class SPDXDocument extends Document {
   }
 
   addRelationship(
-    spdxElement: Document | Package | File,
-    relatedSpdxElement: Document | Package | File,
+    spdxElement: Document | Package | File | string,
+    relatedSpdxElement: Document | Package | File | string,
     relationshipType: string,
     options?: Partial<RelationshipOptions>,
   ): this {
-    function getSpdxId(spdxElement: Document | Package | File): string {
-      if (spdxElement instanceof Document) {
+    function getSpdxId(
+      spdxElement: Document | Package | File | string,
+    ): string {
+      if (typeof spdxElement === "string") {
+        return spdxElement;
+      } else if (spdxElement instanceof Document) {
         return spdxElement.creationInfo.spdxId;
       } else {
         return spdxElement.spdxId;

@@ -87,7 +87,7 @@ export class Package {
   ) {
     this.name = name;
     this.downloadLocation = downloadLocation;
-    this.spdxId = "SPDXRef-" + uuidv4();
+    this.spdxId = options?.spdxId ?? "SPDXRef-" + uuidv4();
     this.version = options?.version ?? undefined;
     this.fileName = options?.fileName ?? undefined;
     this.supplier = options?.supplier ?? undefined;

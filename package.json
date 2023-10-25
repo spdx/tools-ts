@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "A Typescript library for creating SPDX documents",
   "license": "MIT",
-  "main": "./dist/sbom.js",
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/jest": "^29.5.5",
@@ -23,7 +22,7 @@
     "lint-staged": "^14.0.1",
     "mock-fs": "^5.2.0",
     "prettier": "3.0.3",
-    "rollup": "^4.0.2",
+    "rollup": "^4.1.4",
     "rollup-plugin-dts": "^6.1.0",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.2",
@@ -44,10 +43,11 @@
   "lint-staged": {
     "**/*.ts": [
       "echo 'Linting...'",
-      "npm run lint-fix",
+      "npm run lint-fix"
+    ],
+    "lib/**/*.ts": [
       "echo 'Building...'",
-      "npm run build"
-    ]
+      "npm run build"]
   },
   "exports": {
     ".": {
