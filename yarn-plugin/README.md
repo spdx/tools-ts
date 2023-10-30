@@ -4,7 +4,7 @@ Create an SPDX SBOM file for the current project.
 
 ## Installation
 ```sh
-yarn plugin import https://raw.githubusercontent.com/spdx/tools-ts/main/yarn-plugin/package.json/v0.0.1/bundles/@yarnpkg/plugin-spdx.js
+yarn plugin import https://raw.githubusercontent.com/spdx/tools-ts/main/yarn-plugin/bundles/@yarnpkg/plugin-spdx.js
 ```
 
 ## Usage
