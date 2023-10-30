@@ -24,7 +24,7 @@ const firstPackage = document.addPackage(
   "https://download-location.com",
   {
     filesAnalyzed: true,
-    spdxId: "first-package",
+    spdxId: "SPDXRef-first-package",
     verificationCode: {
       value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
     },
@@ -37,7 +37,7 @@ const secondPackage = document.addPackage(
   "https://download-location.com",
   {
     filesAnalyzed: false,
-    spdxId: "second-package",
+    spdxId: "SPDXRef-second-package",
   },
 );
 document.addRelationship(firstPackage, secondPackage, "DEPENDENCY_OF");
