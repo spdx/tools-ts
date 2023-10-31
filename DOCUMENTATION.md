@@ -40,11 +40,9 @@ Packages are used to describe the contents of a software package.
 After creating a document (see [Documents](#Documents)), packages can be added with the command `document.addPackages`:
 
 ```javascript
-const pkg = document.addPackages([
-    new Package("my-package", {
-        downloadLocation: "https://download-location.com",
-    }),
-]);
+const pkg = document.addPackage("my-package", {
+    downloadLocation: "https://download-location.com",
+});
 ```
 
 It requires the following arguments:
@@ -69,15 +67,17 @@ Files are used to provide information about files that are contained in software
 After creating a document (see [Documents](#Documents)), files can be added with the command `document.addFiles`:
 
 ```javascript
-document.addFiles([
-    new File("my-file", {
+document.addFile(
+    "my-file",
+    {
         checksumValue: "de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3",
         checksumAlgorithm: "SHA1",
-    }, {
+    },
+    {
         fileTypes: ["TEXT"],
         concludedLicense: "MIT",
-    }),
-]);
+    },
+);
 ```
 
 It requires the following arguments:
