@@ -14,16 +14,10 @@ The recommended way to use this library is to create a document, add contents to
 import sbom from "../spdx-tools";
 import { Package } from "../spdx2model/package";
 
-const document = sbom.createDocument(
-  "my-first-document",
-  { name: "me", type: "Person" },
-  { spdxVersion: "2.3" },
-);
-document.addPackages([
-  new Package("first-package", "https://download-location.com", {
-    filesAnalyzed: false,
-  }),
-]);
+const document = sbom.createDocument("my-first-document");
+const pkg = document.addPackage("my-package");
+document.addRelationship(document, pkg, "DESCRIBES");
+
 document.write("./sample.spdx.json");
 ```
 
