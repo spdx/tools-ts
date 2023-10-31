@@ -45,11 +45,12 @@ export interface CreateDocumentOptions {
   documentComment: string;
 }
 
-// TODO: Add prperties
+// TODO: Add properties
 export interface AddPackagesOptions {
   filesAnalyzed: boolean;
   spdxId: string;
   comment: string;
+  downloadLocation: string;
   verificationCode: PackageVerificationCode;
 }
 
@@ -122,12 +123,8 @@ export class SPDXDocument extends Document {
     return new SPDXDocument(creationInfo);
   }
 
-  addPackage(
-    name: string,
-    downloadLocation: string,
-    options?: Partial<AddPackagesOptions>,
-  ): Package {
-    const pkg = new Package(name, downloadLocation, options);
+  addPackage(name: string, options?: Partial<AddPackagesOptions>): Package {
+    const pkg = new Package(name, options);
     this.packages = this.packages.concat(pkg);
     return pkg;
   }
@@ -206,11 +203,9 @@ export class SPDXDocument extends Document {
 
   writeSync(location: string, allowInvalid: boolean = false): void {
     const validationIssues = this.validate();
-    if (validationIssues.length > 0) {
+    if (validationIssues.length > 0 && !allowInvalid) {
       console.error(`Document is invalid: ${validationIssues.join("\n")}`);
-      if (!allowInvalid) {
-        return;
-      }
+      return;
     }
 
     this.writeFile(location)

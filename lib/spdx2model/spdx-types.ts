@@ -1,10 +1,10 @@
-export class spdxNoAssertion {
+export class SpdxNoAssertion {
   toString(): string {
     return "NOASSERTION";
   }
 }
 
-export class spdxNone {
+export class SpdxNone {
   toString(): string {
     return "NONE";
   }
