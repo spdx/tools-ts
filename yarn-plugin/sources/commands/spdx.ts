@@ -16,6 +16,26 @@ const spdxDependsOn = "DEPENDS_ON";
 const spdxDescribes = "DESCRIBES";
 const spdxJsonFileExtension = ".spdx.json";
 
+const urlRegex =
+  "(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/|" +
+  "ssh:\\/\\/|git:\\/\\/|svn:\\/\\/|sftp:\\/\\/|" +
+  "ftp:\\/\\/)?([\\w\\-.!~*'()%;:&=+$,]+@)?[a-z0-9]+" +
+  "([\\-\\.]{1}[a-z0-9]+){0,100}\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?";
+
+const supportedDownloadRepos = "(git|hg|svn|bzr)";
+const gitRegex = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)";
+const bazaarRegex = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)";
+const downloadLocationRegex =
+  "^(((" +
+  supportedDownloadRepos +
+  "\\+)?" +
+  urlRegex +
+  ")|" +
+  gitRegex +
+  "|" +
+  bazaarRegex +
+  ")$";
+
 export class SpdxCommand extends BaseCommand {
   static paths = [[`spdx`]];
 
@@ -135,11 +155,22 @@ export class SpdxCommand extends BaseCommand {
 function getDownloadLocation(
   repository: { url: string } | string | undefined,
 ): string {
-  if (repository && typeof repository === "object") {
+  if (
+    repository &&
+    typeof repository === "object" &&
+    isValidDownloadLocation(repository.url)
+  ) {
     return repository.url;
   } else {
     return spdxNoAssertion;
   }
+}
+
+function isValidDownloadLocation(downloadLocation: string): boolean {
+  return (
+    new RegExp(urlRegex).test(downloadLocation) &&
+    new RegExp(downloadLocationRegex).test(downloadLocation)
+  );
 }
 
 function formatSpdxId(id: string): string {
