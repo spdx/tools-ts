@@ -1,4 +1,4 @@
-#yarn-plugin-spdx
+# yarn-plugin-spdx
 
 Create an SPDX SBOM file for the current project.
 
