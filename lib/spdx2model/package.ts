@@ -1,24 +1,26 @@
 import type { Actor } from "./actor";
 import type { Checksum } from "./checksum";
-import type { spdxNoAssertion, spdxNone } from "./spdx-types";
+import type { SpdxNone } from "./spdx-types";
+import { SpdxNoAssertion } from "./spdx-types";
 import { v4 as uuidv4 } from "uuid";
 
 interface PackageOptions {
   spdxId: string;
   version: string;
   fileName: string;
-  supplier: Actor | spdxNoAssertion;
-  originator: Actor | spdxNoAssertion;
+  downloadLocation: string | SpdxNoAssertion | SpdxNone;
+  supplier: Actor | SpdxNoAssertion;
+  originator: Actor | SpdxNoAssertion;
   filesAnalyzed: boolean;
   verificationCode: PackageVerificationCode;
   checksums: Checksum[];
-  homepage: string | spdxNoAssertion | spdxNone;
+  homepage: string | SpdxNoAssertion | SpdxNone;
   sourceInfo: string;
-  licenseConcluded: string | spdxNoAssertion | spdxNone;
-  licenseInfoFromFiles: Array<string | spdxNoAssertion | spdxNone>;
-  licenseDeclared: string | spdxNoAssertion | spdxNone;
+  licenseConcluded: string | SpdxNoAssertion | SpdxNone;
+  licenseInfoFromFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+  licenseDeclared: string | SpdxNoAssertion | SpdxNone;
   licenseComment: string;
-  copyrightText: string | spdxNoAssertion | spdxNone;
+  copyrightText: string | SpdxNoAssertion | SpdxNone;
   summary: string;
   description: string;
   comment: string;
@@ -52,23 +54,23 @@ export interface PackageVerificationCode {
 
 export class Package {
   name: string;
-  downloadLocation: string | spdxNoAssertion | spdxNone;
+  downloadLocation: string | SpdxNoAssertion | SpdxNone;
   spdxId: string;
   version?: string;
   fileName?: string;
-  supplier?: Actor | spdxNoAssertion;
-  originator?: Actor | spdxNoAssertion;
+  supplier?: Actor | SpdxNoAssertion;
+  originator?: Actor | SpdxNoAssertion;
   filesAnalyzed: boolean;
   verificationCode?: PackageVerificationCode;
   checksums: Checksum[];
-  homepage?: string | spdxNoAssertion | spdxNone;
+  homepage?: string | SpdxNoAssertion | SpdxNone;
   sourceInfo?: string;
   // TODO: Implement LicenseExpression class
-  licenseConcluded?: string | spdxNoAssertion | spdxNone;
-  licenseInfoFromFiles: Array<string | spdxNoAssertion | spdxNone>;
-  licenseDeclared?: string | spdxNoAssertion | spdxNone;
+  licenseConcluded?: string | SpdxNoAssertion | SpdxNone;
+  licenseInfoFromFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+  licenseDeclared?: string | SpdxNoAssertion | SpdxNone;
   licenseComment?: string;
-  copyrightText?: string | spdxNoAssertion | spdxNone;
+  copyrightText?: string | SpdxNoAssertion | SpdxNone;
   summary?: string;
   description?: string;
   comment?: string;
@@ -80,19 +82,15 @@ export class Package {
   builtDate?: Date;
   validUntilDate?: Date;
 
-  constructor(
-    name: string,
-    downloadLocation: string | spdxNoAssertion | spdxNone,
-    options?: Partial<PackageOptions>,
-  ) {
+  constructor(name: string, options?: Partial<PackageOptions>) {
     this.name = name;
-    this.downloadLocation = downloadLocation;
+    this.downloadLocation = options?.downloadLocation ?? new SpdxNoAssertion();
     this.spdxId = options?.spdxId ?? "SPDXRef-" + uuidv4();
     this.version = options?.version ?? undefined;
     this.fileName = options?.fileName ?? undefined;
     this.supplier = options?.supplier ?? undefined;
     this.originator = options?.originator ?? undefined;
-    this.filesAnalyzed = options?.filesAnalyzed ?? true;
+    this.filesAnalyzed = options?.filesAnalyzed ?? false;
     this.verificationCode = options?.verificationCode ?? undefined;
     this.checksums = options?.checksums ?? [];
     this.homepage = options?.homepage ?? undefined;

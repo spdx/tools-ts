@@ -11,7 +11,8 @@ test("Creates and writes minimal document", async () => {
   const testfile = "root/dir/sbom.spdx.json";
 
   const document = sbom.createDocument("test document", { spdxVersion: "2.3" });
-  document.addPackage("test-package", "test/download/location", {
+  document.addPackage("test-package", {
+    downloadLocation: "test/download/location",
     spdxId: "package-spdx-id",
   });
   await document.write(testfile).then(() => {
@@ -32,23 +33,17 @@ test("Creates and writes basic document", async () => {
       "https://github.com/spdx/tools-ts/examples/resources/spdx-tools-ts.sbom.json-21b3f009-ac30-4da3-a295-7172e0c4ba49",
   });
 
-  const uuidPackage = document.addPackage(
-    "uuid",
-    "https://github.com/uuidjs/uuid",
-    {
-      verificationCode: {
-        value: "b65013ce770696a72a0dded749a5058e5f8e2a4e",
-      },
+  const uuidPackage = document.addPackage("uuid", {
+    downloadLocation: "https://github.com/uuidjs/uuid",
+    verificationCode: {
+      value: "b65013ce770696a72a0dded749a5058e5f8e2a4e",
     },
-  );
-  const eslintPackage = document.addPackage(
-    "eslint",
-    "https://github.com/eslint/eslint",
-    {
-      filesAnalyzed: false,
-      comment: "This package is added for testing.",
-    },
-  );
+  });
+  const eslintPackage = document.addPackage("eslint", {
+    downloadLocation: "https://github.com/eslint/eslint",
+    filesAnalyzed: false,
+    comment: "This package is added for testing.",
+  });
 
   const readmeFile = document.addFile(
     "README.md",

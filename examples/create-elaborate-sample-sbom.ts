@@ -19,27 +19,21 @@ const document = sbom.createDocument("first-document", {
   licenseListVersion: "3.14",
   documentComment: "This is a document for testing",
 });
-const firstPackage = document.addPackage(
-  "first package",
-  "https://download-location.com",
-  {
-    filesAnalyzed: true,
-    spdxId: "SPDXRef-first-package",
-    verificationCode: {
-      value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
-    },
+const firstPackage = document.addPackage("first package", {
+  downloadLocation: "https://download-location.com",
+  filesAnalyzed: true,
+  spdxId: "SPDXRef-first-package",
+  verificationCode: {
+    value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
   },
-);
+});
 
 document.addRelationship(document, firstPackage, "DESCRIBES");
-const secondPackage = document.addPackage(
-  "second package",
-  "https://download-location.com",
-  {
-    filesAnalyzed: false,
-    spdxId: "SPDXRef-second-package",
-  },
-);
+const secondPackage = document.addPackage("second package", {
+  downloadLocation: "https://download-location.com",
+  filesAnalyzed: false,
+  spdxId: "SPDXRef-second-package",
+});
 document.addRelationship(firstPackage, secondPackage, "DEPENDENCY_OF");
 
 const firstFile = document.addFile(

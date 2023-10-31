@@ -1,9 +1,10 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2023-10-23T08:30:57Z",
+    "created": "2023-10-31T13:00:09Z",
     "creators": [
-      "Person: Anton Bauhofer (anton.bauhofer@tngtech.com)"
+      "Person: Anton Bauhofer (anton.bauhofer@tngtech.com)",
+      "Tool: SPDX Tools TS"
     ]
   },
   "dataLicense": "CC0-1.0",
@@ -14,7 +15,7 @@
     {
       "name": "uuid",
       "downloadLocation": "https://github.com/uuidjs/uuid",
-      "SPDXID": "SPDXRef-uuid",
+      "SPDXID": "SPDXRef-6d969891-eaf9-48a9-baca-34a158f14d3e",
       "filesAnalyzed": true,
       "packageVerificationCode": {
         "packageVerificationCodeValue": "b65013ce770696a72a0dded749a5058e5f8e2a4d"
@@ -23,13 +24,13 @@
     {
       "name": "eslint",
       "downloadLocation": "https://github.com/eslint/eslint",
-      "SPDXID": "SPDXRef-eslint",
+      "SPDXID": "SPDXRef-407cc03b-6d64-4cc4-b2bb-c01403234ec1",
       "filesAnalyzed": false
     }
   ],
   "files": [
     {
-      "SPDXID": "SPDXRef-README.md",
+      "SPDXID": "SPDXRef-1832b5b6-6b69-4782-9732-64e34cdf2fc6",
       "fileName": "README.md",
       "checksums": [
         {
@@ -45,17 +46,17 @@
   "relationships": [
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
-      "relatedSpdxElement": "SPDXRef-uuid",
+      "relatedSpdxElement": "SPDXRef-6d969891-eaf9-48a9-baca-34a158f14d3e",
       "relationshipType": "DESCRIBES"
     },
     {
-      "spdxElementId": "SPDXRef-uuid",
-      "relatedSpdxElement": "SPDXRef-eslint",
+      "spdxElementId": "SPDXRef-6d969891-eaf9-48a9-baca-34a158f14d3e",
+      "relatedSpdxElement": "SPDXRef-407cc03b-6d64-4cc4-b2bb-c01403234ec1",
       "relationshipType": "DEPENDS_ON"
     },
     {
-      "spdxElementId": "SPDXRef-uuid",
-      "relatedSpdxElement": "SPDXRef-README.md",
+      "spdxElementId": "SPDXRef-6d969891-eaf9-48a9-baca-34a158f14d3e",
+      "relatedSpdxElement": "SPDXRef-1832b5b6-6b69-4782-9732-64e34cdf2fc6",
       "relationshipType": "CONTAINS"
     }
   ]

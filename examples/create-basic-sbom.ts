@@ -10,23 +10,18 @@ const document = spdx.createDocument("SPDX Tools ts SBOM", {
   },
 });
 
-const uuidPackage = document.addPackage(
-  "uuid",
-  "https://github.com/uuidjs/uuid",
-  {
-    verificationCode: {
-      value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
-    },
+const uuidPackage = document.addPackage("uuid", {
+  filesAnalyzed: true,
+  downloadLocation: "https://github.com/uuidjs/uuid",
+  verificationCode: {
+    value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
   },
-);
-const eslintPackage = document.addPackage(
-  "eslint",
-  "https://github.com/eslint/eslint",
-  {
-    filesAnalyzed: false,
-    comment: "This package is added just for testing.",
-  },
-);
+});
+const eslintPackage = document.addPackage("eslint", {
+  downloadLocation: "https://github.com/eslint/eslint",
+  filesAnalyzed: false,
+  comment: "This package is added just for testing.",
+});
 
 document
   .addRelationship(document, uuidPackage, "DESCRIBES")

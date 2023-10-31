@@ -10,6 +10,12 @@ import { resolveLinker } from "../linkers";
 import * as nodeModules from "../linkers/node-modules";
 import { Filename, ppath } from "@yarnpkg/fslib";
 
+const spdxNoAssertion = "NOASSERTION";
+const spdxIdPrependix = "SPDXRef-";
+const spdxDependsOn = "DEPENDS_ON";
+const spdxDescribes = "DESCRIBES";
+const spdxJsonFileExtension = ".spdx.json";
+
 export class SpdxCommand extends BaseCommand {
   static paths = [[`spdx`]];
 
@@ -88,13 +94,12 @@ export class SpdxCommand extends BaseCommand {
           "utf8",
         ),
       );
-      // TODO: "repository" sometimes contains invalid links. Consider alternatively using "homepage".
-      // TODO: Extract more information and use include it in the SPDX file.
       const { repository } = packageManifest;
-      const formattedRepository: string = formatRepository(repository);
+      const formattedRepository: string = getDownloadLocation(repository);
 
       const currentPkgSpdxId = formatSpdxId(descriptor.descriptorHash);
-      spdxDocument.addPackage(pkg.name, formattedRepository, {
+      spdxDocument.addPackage(pkg.name, {
+        downloadLocation: formattedRepository,
         spdxId: currentPkgSpdxId,
       });
 
@@ -109,7 +114,7 @@ export class SpdxCommand extends BaseCommand {
         spdxDocument.addRelationship(
           currentPkgSpdxId,
           formatSpdxId(dependencyDescriptor.descriptorHash),
-          "DEPENDS_ON",
+          spdxDependsOn,
         );
       }
 
@@ -117,27 +122,26 @@ export class SpdxCommand extends BaseCommand {
         spdxDocument.addRelationship(
           spdxDocument,
           currentPkgSpdxId,
-          "DESCRIBES",
+          spdxDescribes,
         );
       }
     }
     spdxDocument.writeSync(
-      (workspace.manifest.name?.name ?? "") + ".spdx.json",
+      (workspace.manifest.name?.name ?? "") + spdxJsonFileExtension,
     );
   }
 }
 
-function formatRepository(
+function getDownloadLocation(
   repository: { url: string } | string | undefined,
 ): string {
-  if (!repository) return "unknown";
-  if (typeof repository === "object") {
+  if (repository && typeof repository === "object") {
     return repository.url;
   } else {
-    return repository;
+    return spdxNoAssertion;
   }
 }
 
 function formatSpdxId(id: string): string {
-  return "SPDXRef-" + id;
+  return spdxIdPrependix + id;
 }
