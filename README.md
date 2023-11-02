@@ -27,13 +27,18 @@ Please refer to [DOCUMENTATION.md](DOCUMENTATION.md) for a detailed API document
 ## Supported features
 This library is currently in early development state and not all features of SPDX are supported yet.
 The following features are supported by this library:
-- [x] Document creation
-- [ ] Packages (WIP)
-- [ ] Files (WIP)
-- [x] Relationships
-- [ ] Snippets (not yet implemented) 
-- [ ] Annotations (not yet implemented)
-- [ ] Other licensing information (not yet implemented)
+
+
+### SPDX 2.3:
+| Feature | State | Comment |
+| ------- | ----- | ------- |
+| Document creation | DONE
+| Packages | PARTIAL | essential properties are supported
+| Files | PARTIAL | essential properties are supported
+| Relationships | DONE
+| Snippets |  
+| Annotations | 
+| Other licensing information |
 
 # Contributing
 We welcome contributions to this repository.
