@@ -1,4 +1,5 @@
 import { BaseCommand, WorkspaceRequiredError } from "@yarnpkg/cli";
+import type { Package } from "@yarnpkg/core";
 import { Configuration, Project } from "@yarnpkg/core";
 import * as spdx from "../../../lib/spdx-tools";
 import type { Usage } from "clipanion";
@@ -105,6 +106,7 @@ export class SpdxCommand extends BaseCommand {
       linker = nodeModules as Linker;
     }
 
+    const existingSpdxIds = new Set<string>();
     for (const [descriptor, pkg] of sortedPackages.entries()) {
       const packagePath = await linker.getPackagePath(project, pkg);
       if (packagePath === null) continue;
@@ -117,7 +119,10 @@ export class SpdxCommand extends BaseCommand {
       const { repository } = packageManifest;
       const formattedRepository: string = getDownloadLocation(repository);
 
-      const currentPkgSpdxId = formatSpdxId(descriptor.descriptorHash);
+      const currentPkgSpdxId = getSpdxId(pkg);
+      if (existingSpdxIds.has(currentPkgSpdxId)) continue;
+      existingSpdxIds.add(currentPkgSpdxId);
+
       spdxDocument.addPackage(pkg.name, {
         downloadLocation: formattedRepository,
         spdxId: currentPkgSpdxId,
@@ -133,7 +138,7 @@ export class SpdxCommand extends BaseCommand {
 
         spdxDocument.addRelationship(
           currentPkgSpdxId,
-          formatSpdxId(dependencyDescriptor.descriptorHash),
+          getSpdxId(dependencyPkg),
           spdxDependsOn,
         );
       }
@@ -173,6 +178,8 @@ function isValidDownloadLocation(downloadLocation: string): boolean {
   );
 }
 
-function formatSpdxId(id: string): string {
-  return spdxIdPrependix + id;
+function getSpdxId(pkg: Package): string {
+  const pkgName = pkg.name.replace(/^@/, "").replace(/_/g, "-");
+  const pkgVersion = pkg.version.replace(/\//g, ".").replace(/_/g, "-");
+  return spdxIdPrependix + pkgName + "-" + pkgVersion;
 }
