@@ -2,6 +2,7 @@
 import type { Descriptor, Package, Project, Report } from "@yarnpkg/core";
 import { Cache, miscUtils, structUtils, ThrowReport } from "@yarnpkg/core";
 import type { InstallOptions } from "@yarnpkg/core/lib/Project";
+// import * as hostedGitInfo from "hosted-git-info";
 
 export const getSortedPackages = async (
   project: Project,
@@ -89,4 +90,133 @@ export interface ManifestWithLicenseInfo {
   author?: { name: string; url: string };
 }
 
+interface Author {
+  name?: string;
+  email?: string;
+  url?: string;
+}
+
+/**
+ * Get author information from a manifest's author string
+ *
+ * @param {string} author - format: "name (url) <email>"
+ * @returns {Author} parsed author information
+ */
+export function parseAuthor(author: string): Author {
+  const result: Author = {};
+
+  const nameMatch = author.match(/^([^(<]+)/);
+  if (nameMatch) {
+    const name = nameMatch[0].trim();
+    if (name) {
+      result.name = name;
+    }
+  }
+
+  const emailMatch = author.match(/<([^>]+)>/);
+  if (emailMatch) {
+    result.email = emailMatch[1];
+  }
+
+  const urlMatch = author.match(/\(([^)]+)\)/);
+  if (urlMatch) {
+    result.url = urlMatch[1];
+  }
+
+  return result;
+}
+
 type ManifestLicenseValue = string | { type: string };
+
+/**
+ * Get license information from a manifest
+ *
+ * @param {ManifestWithLicenseInfo} manifest - Manifest with license information
+ * @returns {LicenseInfo} License information
+ */
+export const getLicenseInfoFromManifest = (
+  manifest: ManifestWithLicenseInfo,
+): LicenseInfo => {
+  const { license, licenses, repository, homepage, author } = manifest;
+
+  const vendor = typeof author === "string" ? parseAuthor(author) : author;
+
+  const getNormalizedLicense = (): string => {
+    if (license) {
+      return normalizeManifestLicenseValue(license);
+    }
+    if (licenses) {
+      if (!Array.isArray(licenses)) {
+        return normalizeManifestLicenseValue(licenses);
+      }
+      if (licenses.length === 1) {
+        return normalizeManifestLicenseValue(licenses[0]);
+      }
+      if (licenses.length > 1) {
+        return `(${licenses.map(normalizeManifestLicenseValue).join(" OR ")})`;
+      }
+    }
+    return UNKNOWN_LICENSE;
+  };
+
+  return {
+    license: getNormalizedLicense(),
+    url: repository,
+    // TODO: Properly fix this
+    // url: normalizeManifestRepositoryUrl(repository) || homepage,
+    vendorName: vendor?.name,
+    vendorUrl: homepage || vendor?.url,
+  };
+};
+
+interface ManifestWithLicenseInfo {
+  name: string;
+  license?: ManifestLicenseValue;
+  licenses?: ManifestLicenseValue | ManifestLicenseValue[];
+  repository?: { url: string } | string;
+  homepage?: string;
+  author?: { name: string; url: string };
+}
+
+const UNKNOWN_LICENSE = "UNKNOWN";
+
+/**
+ * Normalize a manifest license value into a license string
+ *
+ * @param {ManifestLicenseValue} manifestLicenseValue - Manifest license value
+ * @returns {string} License string
+ */
+const normalizeManifestLicenseValue = (
+  manifestLicenseValue: ManifestLicenseValue,
+): string =>
+  (typeof manifestLicenseValue !== "string"
+    ? manifestLicenseValue.type
+    : manifestLicenseValue) || UNKNOWN_LICENSE;
+
+interface LicenseInfo {
+  license: string;
+  url?: { url: string } | string;
+  // url?: string;
+  vendorName?: string;
+  vendorUrl?: string;
+}
+
+// /**
+//  * Normalize a manifest repository value into a repository URL, if found
+//  *
+//  * @param {ManifestWithLicenseInfo['repository']} manifestRepositoryValue - Manifest repository value
+//  * @returns {string|undefined} Repository URL, if found
+//  */
+// const normalizeManifestRepositoryUrl = (
+//   manifestRepositoryValue: ManifestWithLicenseInfo["repository"],
+// ): string | undefined => {
+//   const rawRepositoryUrl =
+//     typeof manifestRepositoryValue === "string"
+//       ? manifestRepositoryValue
+//       : manifestRepositoryValue?.url;
+//   if (!rawRepositoryUrl) return rawRepositoryUrl;
+//   const hosted = hostedGitInfo.fromUrl(rawRepositoryUrl);
+//   return !hosted || hosted.getDefaultRepresentation() !== "shortcut"
+//     ? rawRepositoryUrl
+//     : hosted.https();
+// };

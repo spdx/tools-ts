@@ -14,6 +14,7 @@ import { Checksum } from "../spdx2model/checksum";
 import { v4 as uuidv4 } from "uuid";
 import type { FileType } from "../spdx2model/file";
 import { File } from "../spdx2model/file";
+import { SpdxNoAssertion, SpdxNone } from "../spdx2model/spdx-types";
 
 export interface Creator {
   name: string;
@@ -52,6 +53,8 @@ export interface AddPackagesOptions {
   comment: string;
   downloadLocation: string;
   verificationCode: PackageVerificationCode;
+  // TODO: Should this also contain SpdxNoAssertion | SpdxNone?
+  licenseConcluded: string;
 }
 
 export interface AddFileOptions {

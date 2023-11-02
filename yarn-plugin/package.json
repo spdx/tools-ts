@@ -11,9 +11,11 @@
     "@yarnpkg/libzip": "^3.0.0",
     "@yarnpkg/parsers": "^3.0.0",
     "@yarnpkg/plugin-pnp": "^4.0.0",
-    "clipanion": "^4.0.0-rc.2"
+    "clipanion": "^4.0.0-rc.2",
+    "hosted-git-info": "^7.0.1"
   },
   "devDependencies": {
+    "@types/hosted-git-info": "^3.0.4",
     "@types/node": "^18.0.0",
     "@yarnpkg/builder": "^4.0.0",
     "rimraf": "5.0.0",

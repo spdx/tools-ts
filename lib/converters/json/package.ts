@@ -12,6 +12,7 @@ export class JsonPackage {
   licenseInfoFromFiles?: string[];
   externalRefs?: string[];
   attributionTexts?: string[];
+  licenseConcluded?: string;
 
   constructor(
     name: string,
@@ -23,6 +24,7 @@ export class JsonPackage {
     externalRefs?: string[],
     attributionTexts?: string[],
     packageVerificationCode?: JsonPackageVerificationCode,
+    licenseConcluded?: string,
   ) {
     this.name = name;
     this.downloadLocation = downloadLocation;
@@ -33,6 +35,7 @@ export class JsonPackage {
     this.licenseInfoFromFiles = licenseInfoFromFiles;
     this.externalRefs = externalRefs;
     this.attributionTexts = attributionTexts;
+    this.licenseConcluded = licenseConcluded;
   }
 
   static fromPackage(pkg: Package): JsonPackage {
@@ -58,6 +61,7 @@ export class JsonPackage {
       undefined,
       undefined,
       jsonPackageVerificationCode,
+      pkg.licenseConcluded.toString(),
     );
   }
 }

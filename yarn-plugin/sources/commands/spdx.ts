@@ -5,7 +5,7 @@ import * as spdx from "../../../lib/spdx-tools";
 import type { Usage } from "clipanion";
 import { Command, Option } from "clipanion";
 import type { ManifestWithLicenseInfo } from "../utils";
-import { getSortedPackages } from "../utils";
+import { getLicenseInfoFromManifest, getSortedPackages } from "../utils";
 import type { Linker } from "../linkers";
 import { resolveLinker } from "../linkers";
 import * as nodeModules from "../linkers/node-modules";
@@ -16,26 +16,6 @@ const spdxIdPrependix = "SPDXRef-";
 const spdxDependsOn = "DEPENDS_ON";
 const spdxDescribes = "DESCRIBES";
 const spdxJsonFileExtension = ".spdx.json";
-
-const urlRegex =
-  "(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/|" +
-  "ssh:\\/\\/|git:\\/\\/|svn:\\/\\/|sftp:\\/\\/|" +
-  "ftp:\\/\\/)?([\\w\\-.!~*'()%;:&=+$,]+@)?[a-z0-9]+" +
-  "([\\-\\.]{1}[a-z0-9]+){0,100}\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?";
-
-const supportedDownloadRepos = "(git|hg|svn|bzr)";
-const gitRegex = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)";
-const bazaarRegex = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)";
-const downloadLocationRegex =
-  "^(((" +
-  supportedDownloadRepos +
-  "\\+)?" +
-  urlRegex +
-  ")|" +
-  gitRegex +
-  "|" +
-  bazaarRegex +
-  ")$";
 
 export class SpdxCommand extends BaseCommand {
   static paths = [[`spdx`]];
@@ -60,11 +40,11 @@ export class SpdxCommand extends BaseCommand {
       [`Generate SPDX document`, `$0 spdx`],
       [
         `Generate SPDX document with only direct dependencies`,
-        `$0 spdx --recursive false`,
+        `$0 spdx --recursive true`,
       ],
       [
         `Generate SPDX document with only production dependencies`,
-        `$0 spdx --production false`,
+        `$0 spdx --production true`,
       ],
     ],
   });
@@ -116,8 +96,11 @@ export class SpdxCommand extends BaseCommand {
           "utf8",
         ),
       );
-      const { repository } = packageManifest;
-      const formattedRepository: string = getDownloadLocation(repository);
+      // const { repository } = packageManifest;
+      // const { license, url, vendorName, vendorUrl } =
+      //   getLicenseInfoFromManifest(packageManifest);
+      const { license, url } = getLicenseInfoFromManifest(packageManifest);
+      const formattedRepository: string = getDownloadLocation(url);
 
       const currentPkgSpdxId = getSpdxId(pkg);
       if (existingSpdxIds.has(currentPkgSpdxId)) continue;
@@ -126,6 +109,7 @@ export class SpdxCommand extends BaseCommand {
       spdxDocument.addPackage(pkg.name, {
         downloadLocation: formattedRepository,
         spdxId: currentPkgSpdxId,
+        licenseConcluded: license,
       });
 
       for (const [, dependencyDescriptor] of pkg.dependencies.entries()) {
@@ -170,6 +154,27 @@ function getDownloadLocation(
     return spdxNoAssertion;
   }
 }
+
+// TODO: Use these regex and the validation function for validation in the SPDX library
+const urlRegex =
+  "(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/|" +
+  "ssh:\\/\\/|git:\\/\\/|svn:\\/\\/|sftp:\\/\\/|" +
+  "ftp:\\/\\/)?([\\w\\-.!~*'()%;:&=+$,]+@)?[a-z0-9]+" +
+  "([\\-\\.]{1}[a-z0-9]+){0,100}\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?";
+
+const supportedDownloadRepos = "(git|hg|svn|bzr)";
+const gitRegex = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)";
+const bazaarRegex = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)";
+const downloadLocationRegex =
+  "^(((" +
+  supportedDownloadRepos +
+  "\\+)?" +
+  urlRegex +
+  ")|" +
+  gitRegex +
+  "|" +
+  bazaarRegex +
+  ")$";
 
 function isValidDownloadLocation(downloadLocation: string): boolean {
   return (
