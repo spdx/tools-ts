@@ -17,12 +17,20 @@ export class Actor {
     this.type = type;
   }
 
-  static fromSpdxActor(creator: SpdxActor): Actor {
-    const actorType = ActorType[creator.type as keyof typeof ActorType];
+  static fromSpdxActor(actor: SpdxActor): Actor {
+    const actorType = ActorType[actor.type as keyof typeof ActorType];
     if (!actorType) {
-      throw new Error("Invalid actor type: " + creator.type);
+      throw new Error("Invalid actor type: " + actor.type);
     }
-    return new Actor(creator.name, actorType, creator.email);
+    return new Actor(actor.name, actorType, actor.email);
+  }
+
+  static fromSpdxActors(actors: SpdxActor[] | SpdxActor): Actor[] {
+    if (Array.isArray(actors)) {
+      return actors.map((creator) => Actor.fromSpdxActor(creator));
+    } else {
+      return [Actor.fromSpdxActor(actors)];
+    }
   }
 
   static tools(): Actor {

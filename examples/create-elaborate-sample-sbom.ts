@@ -11,8 +11,8 @@ const document = sbom.createDocument("first-document", {
       documentRefId: "DocumentRef-referenced-document-id",
       documentUri:
         "https://referenced-document.com/paths-to/document-4fced07f-b166-4203-a409-4275b7c5e642",
-      checksum_value: "5d41402abc4b2a76b9719d911017c592cb8d5e0e",
-      checksum_algorithm: "SHA1",
+      checksumValue: "5d41402abc4b2a76b9719d911017c592cb8d5e0e",
+      checksumAlgorithm: "SHA1",
     },
   ],
   creatorComment: "This document was created automatically",

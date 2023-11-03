@@ -1,5 +1,5 @@
 import { JsonChecksum } from "./checksum";
-import type { ExternalDocumentRef } from "../../spdx2model/external-document-ref";
+import type { ExternalDocumentReference } from "../../spdx2model/external-document-reference";
 
 export class JsonExternalDocumentRef {
   checksum: JsonChecksum;
@@ -17,7 +17,7 @@ export class JsonExternalDocumentRef {
   }
 
   static fromExternalDocumentRef(
-    ref: ExternalDocumentRef,
+    ref: ExternalDocumentReference,
   ): JsonExternalDocumentRef {
     const jsonChecksum: JsonChecksum = JsonChecksum.fromChecksum(ref.checksum);
 

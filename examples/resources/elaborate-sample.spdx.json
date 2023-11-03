@@ -2,7 +2,7 @@
   "SPDXID": "SPDXRef-DOCUMENT",
   "comment": "This is a document for testing",
   "creationInfo": {
-    "created": "2023-10-31T13:00:09Z",
+    "created": "2023-11-03T13:22:50Z",
     "creators": [
       "Person: test creator",
       "Tool: SPDX Tools TS"
@@ -43,7 +43,7 @@
   ],
   "files": [
     {
-      "SPDXID": "SPDXRef-02c9dd6a-e3ec-4119-9dc5-c4a26c79d2df",
+      "SPDXID": "SPDXRef-e59130d9-974a-4cd1-a1bf-4130c105be20",
       "fileName": "first file",
       "checksums": [
         {
@@ -69,7 +69,7 @@
     },
     {
       "spdxElementId": "SPDXRef-first-package",
-      "relatedSpdxElement": "SPDXRef-02c9dd6a-e3ec-4119-9dc5-c4a26c79d2df",
+      "relatedSpdxElement": "SPDXRef-e59130d9-974a-4cd1-a1bf-4130c105be20",
       "relationshipType": "CONTAINS"
     }
   ]
