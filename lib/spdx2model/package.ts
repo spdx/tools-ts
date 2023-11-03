@@ -1,30 +1,27 @@
-import type { Actor } from "./actor";
-import type { Checksum } from "./checksum";
-import type { SpdxNone } from "./spdx-types";
-import {
-  SpdxNoAssertion,
-  toSpdxType,
-  validateSpdxNoAssertion,
-} from "./spdx-types";
+import { Actor } from "./actor";
+import { Checksum } from "./checksum";
+import type { SpdxNone } from "./utils";
+import { SpdxNoAssertion, toSpdxType, validateSpdxNoAssertion } from "./utils";
 import { v4 as uuidv4 } from "uuid";
+import type { AddPackagesOptions, SpdxActor } from "../api/spdx-document";
 
 interface PackageOptions {
   spdxId: string;
   version: string;
   fileName: string;
-  downloadLocation: string;
-  supplier: Actor | string;
-  originator: Actor | string;
+  downloadLocation: string | SpdxNoAssertion | SpdxNone;
+  supplier: Actor | SpdxNoAssertion;
+  originator: Actor | SpdxNoAssertion;
   filesAnalyzed: boolean;
   verificationCode: PackageVerificationCode;
   checksums: Checksum[];
-  homepage: string;
+  homepage: string | SpdxNoAssertion | SpdxNone;
   sourceInfo: string;
-  licenseConcluded: string;
-  licenseInfoFromFiles: string[];
-  licenseDeclared: string;
+  licenseConcluded: string | SpdxNoAssertion | SpdxNone;
+  licenseInfoFromFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+  licenseDeclared: string | SpdxNoAssertion | SpdxNone;
   licenseComment: string;
-  copyrightText: string;
+  copyrightText: string | SpdxNoAssertion | SpdxNone;
   summary: string;
   description: string;
   comment: string;
@@ -56,8 +53,16 @@ export interface PackageVerificationCode {
   excludedFiles?: string[];
 }
 
+function formatPackagePurpose(purpose: string): PackagePurpose {
+  const packagePurpose = PackagePurpose[purpose as keyof typeof PackagePurpose];
+  if (!packagePurpose) {
+    throw new Error("Invalid package purpose: " + purpose);
+  }
+  return packagePurpose;
+}
+
 function formatVendor(
-  vendor: Actor | string | undefined,
+  vendor: SpdxActor | string | undefined,
 ): Actor | SpdxNoAssertion | undefined {
   if (!vendor) {
     return undefined;
@@ -66,7 +71,7 @@ function formatVendor(
     validateSpdxNoAssertion(spdxVendor);
     return spdxVendor;
   } else {
-    return vendor;
+    return Actor.fromSpdxActor(vendor);
   }
 }
 
@@ -102,14 +107,12 @@ export class Package {
 
   constructor(name: string, options?: Partial<PackageOptions>) {
     this.name = name;
-    this.downloadLocation = options?.downloadLocation
-      ? toSpdxType(options.downloadLocation)
-      : new SpdxNoAssertion();
+    this.downloadLocation = options?.downloadLocation ?? new SpdxNoAssertion();
     this.spdxId = options?.spdxId ?? "SPDXRef-" + uuidv4();
     this.version = options?.version ?? undefined;
     this.fileName = options?.fileName ?? undefined;
-    this.supplier = formatVendor(options?.supplier);
-    this.originator = formatVendor(options?.originator);
+    this.supplier = options?.supplier ?? undefined;
+    this.originator = options?.originator ?? undefined;
     this.filesAnalyzed = options?.filesAnalyzed ?? false;
     this.verificationCode = options?.verificationCode ?? undefined;
     this.checksums = options?.checksums ?? [];
@@ -129,5 +132,47 @@ export class Package {
     this.releaseDate = options?.releaseDate ?? undefined;
     this.builtDate = options?.builtDate ?? undefined;
     this.validUntilDate = options?.validUntilDate ?? undefined;
+  }
+
+  static fromApiPackage(
+    name: string,
+    options?: Partial<AddPackagesOptions>,
+  ): Package {
+    return new Package(name, {
+      spdxId: options?.spdxId,
+      version: options?.version,
+      fileName: options?.fileName,
+      downloadLocation:
+        options?.downloadLocation && toSpdxType(options.downloadLocation),
+      supplier: formatVendor(options?.supplier),
+      originator: formatVendor(options?.originator),
+      filesAnalyzed: options?.filesAnalyzed,
+      verificationCode: options?.verificationCode,
+      checksums:
+        options?.checksums && Checksum.fromSpdxChecksums(options.checksums),
+      homepage: options?.homepage && toSpdxType(options.homepage),
+      sourceInfo: options?.sourceInfo,
+      licenseConcluded:
+        options?.licenseConcluded && toSpdxType(options.licenseConcluded),
+      licenseInfoFromFiles: options?.licenseInfoFromFiles?.map((license) =>
+        toSpdxType(license),
+      ),
+      licenseDeclared:
+        options?.licenseDeclared && toSpdxType(options.licenseDeclared),
+      licenseComment: options?.licenseComment,
+      copyrightText:
+        options?.copyrightText && toSpdxType(options.copyrightText),
+      summary: options?.summary,
+      description: options?.description,
+      comment: options?.comment,
+      externalReferences: options?.externalReferences,
+      attributionTexts: options?.attributionTexts,
+      primaryPackagePurpose: options?.primaryPackagePurpose
+        ? formatPackagePurpose(options.primaryPackagePurpose)
+        : undefined,
+      releaseDate: options?.releaseDate,
+      builtDate: options?.builtDate,
+      validUntilDate: options?.validUntilDate,
+    });
   }
 }

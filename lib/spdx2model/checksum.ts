@@ -1,3 +1,5 @@
+import type { SpdxChecksum } from "../api/spdx-document";
+
 export enum ChecksumAlgorithm {
   "SHA1" = "SHA1",
   "BLAKE3" = "BLAKE3",
@@ -25,5 +27,28 @@ export class Checksum {
   constructor(algorithm: ChecksumAlgorithm, value: string) {
     this.algorithm = algorithm;
     this.value = value;
+  }
+
+  static fromSpdxChecksum(checksum: SpdxChecksum): Checksum {
+    const checksumAlgorithm =
+      ChecksumAlgorithm[
+        checksum.checksumAlgorithm as keyof typeof ChecksumAlgorithm
+      ];
+    if (!checksumAlgorithm) {
+      throw new Error(
+        "Invalid checksum algorithm: " + checksum.checksumAlgorithm,
+      );
+    }
+    return new Checksum(checksumAlgorithm, checksum.checksumValue);
+  }
+
+  static fromSpdxChecksums(
+    checksums: SpdxChecksum[] | SpdxChecksum,
+  ): Checksum[] {
+    if (Array.isArray(checksums)) {
+      return checksums.map((checksum) => Checksum.fromSpdxChecksum(checksum));
+    } else {
+      return [Checksum.fromSpdxChecksum(checksums)];
+    }
   }
 }
