@@ -9,8 +9,7 @@ import { Package } from "../spdx2model/package";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
-import type { ChecksumAlgorithm } from "../spdx2model/checksum";
-import { Checksum } from "../spdx2model/checksum";
+import { ChecksumAlgorithm, Checksum } from "../spdx2model/checksum";
 import { v4 as uuidv4 } from "uuid";
 import type { FileType } from "../spdx2model/file";
 import { File } from "../spdx2model/file";
@@ -28,7 +27,7 @@ export interface DocumentRef {
   checksum_algorithm: string;
 }
 
-export interface InputChecksum {
+export interface FileChecksum {
   checksumValue: string;
   checksumAlgorithm: string;
 }
@@ -102,6 +101,29 @@ export class SPDXDocument extends Document {
       : undefined;
   }
 
+  // TODO: Convert the following two functions into class functions of the model class Checksum ("fromAPI")
+  private static formatChecksum(checksum: FileChecksum): Checksum {
+    if (!Object.keys(ChecksumAlgorithm).includes(checksum.checksumAlgorithm)) {
+      throw new Error(
+        "Invalid checksum algorithm: " + checksum.checksumAlgorithm,
+      );
+    }
+    return new Checksum(
+      checksum.checksumAlgorithm as ChecksumAlgorithm,
+      checksum.checksumValue,
+    );
+  }
+
+  private static formatChecksums(
+    checksums: [FileChecksum] | FileChecksum,
+  ): Checksum[] {
+    if (Array.isArray(checksums)) {
+      return checksums.map((checksum) => SPDXDocument.formatChecksum(checksum));
+    } else {
+      return [SPDXDocument.formatChecksum(checksums)];
+    }
+  }
+
   static createDocument(
     name: string,
     options?: Partial<CreateDocumentOptions>,
@@ -131,23 +153,10 @@ export class SPDXDocument extends Document {
 
   addFile(
     name: string,
-    checksums: [InputChecksum] | InputChecksum,
+    checksums: [FileChecksum] | FileChecksum,
     options?: Partial<AddFileOptions>,
   ): File {
-    const formattedChecksums = Array.isArray(checksums)
-      ? checksums.map(
-          (checksum) =>
-            new Checksum(
-              checksum.checksumAlgorithm as ChecksumAlgorithm,
-              checksum.checksumValue,
-            ),
-        )
-      : [
-          new Checksum(
-            checksums.checksumAlgorithm as ChecksumAlgorithm,
-            checksums.checksumValue,
-          ),
-        ];
+    const formattedChecksums = SPDXDocument.formatChecksums(checksums);
     const fileTypes = options?.fileTypes
       ? options.fileTypes.map((fileType) => fileType as FileType)
       : undefined;
