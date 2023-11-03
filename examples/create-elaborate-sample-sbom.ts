@@ -21,11 +21,44 @@ const document = sbom.createDocument("first-document", {
 });
 const firstPackage = document.addPackage("first package", {
   downloadLocation: "https://download-location.com",
-  filesAnalyzed: true,
   spdxId: "SPDXRef-first-package",
+  version: "1.0.0",
+  fileName: "first-package-1.0.0.tar.gz",
+  supplier: { name: "test supplier", type: "Person" },
+  originator: { name: "test originator", type: "Person" },
+  filesAnalyzed: true,
   verificationCode: {
     value: "b65013ce770696a72a0dded749a5058e5f8e2a4d",
   },
+  checksums: [
+    {
+      checksumValue: "6a204bd89f3c8348bff90840990a7ab50fdc30ce",
+      checksumAlgorithm: "SHA1",
+    },
+  ],
+  homepage: "https://homepage.com",
+  sourceInfo: "https://source-info.com",
+  licenseConcluded: "MIT",
+  licenseInfoFromFiles: ["MIT"],
+  licenseDeclared: "MIT",
+  licenseComment: "This is a comment",
+  copyrightText: "Copyright",
+  summary: "This is a summary",
+  description: "This is a description",
+  comment: "This is a comment",
+  externalReferences: [
+    {
+      referenceType: "test reference type",
+      referenceLocator: "https://github.com/test-repo",
+      referenceCategory: "OTHER",
+      comment: "test reference comment",
+    },
+  ],
+  attributionTexts: ["This is an attribution text"],
+  primaryPackagePurpose: "APPLICATION",
+  releaseDate: new Date(),
+  builtDate: new Date(),
+  validUntilDate: new Date(),
 });
 
 document.addRelationship(document, firstPackage, "DESCRIBES");

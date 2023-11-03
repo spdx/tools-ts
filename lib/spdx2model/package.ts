@@ -3,7 +3,11 @@ import { Checksum } from "./checksum";
 import type { SpdxNone } from "./utils";
 import { SpdxNoAssertion, toSpdxType, validateSpdxNoAssertion } from "./utils";
 import { v4 as uuidv4 } from "uuid";
-import type { AddPackagesOptions, SpdxActor } from "../api/spdx-document";
+import type {
+  AddPackagesOptions,
+  SpdxActor,
+  SpdxExternalPackageReference,
+} from "../api/spdx-document";
 
 interface PackageOptions {
   spdxId: string;
@@ -25,7 +29,7 @@ interface PackageOptions {
   summary: string;
   description: string;
   comment: string;
-  externalReferences: string[];
+  externalReferences: ExternalPackageRef[];
   attributionTexts: string[];
   primaryPackagePurpose: PackagePurpose;
   releaseDate: Date;
@@ -46,6 +50,15 @@ enum PackagePurpose {
   FILE = "FILE",
   INSTALL = "INSTALL",
   OTHER = "OTHER",
+}
+
+enum ExternalPackageRefCategory {
+  "OTHER" = "OTHER",
+  "PERSISTENT-ID" = "PERSISTENT-ID",
+  "PERSISTENT_ID" = "PERSISTENT_ID",
+  "SECURITY" = "SECURITY",
+  "PACKAGE-MANAGER" = "PACKAGE-MANAGER",
+  "PACKAGE_MANAGER" = "PACKAGE_MANAGER",
 }
 
 export interface PackageVerificationCode {
@@ -75,6 +88,48 @@ function formatVendor(
   }
 }
 
+export class ExternalPackageRef {
+  category: ExternalPackageRefCategory;
+  type: string;
+  locator: string;
+  comment?: string;
+
+  constructor(
+    category: ExternalPackageRefCategory,
+    type: string,
+    locator: string,
+    comment?: string,
+  ) {
+    this.category = category;
+    this.type = type;
+    this.locator = locator;
+    this.comment = comment;
+  }
+
+  static fromSpdxExternalPackageRefs(
+    refs: SpdxExternalPackageReference[],
+  ): ExternalPackageRef[] {
+    return refs.map((ref) => {
+      const referenceCategory =
+        ExternalPackageRefCategory[
+          ref.referenceCategory as keyof typeof ExternalPackageRefCategory
+        ];
+      if (!referenceCategory) {
+        throw new Error(
+          "Invalid external package reference category: " +
+            ref.referenceCategory,
+        );
+      }
+      return new ExternalPackageRef(
+        referenceCategory,
+        ref.referenceType,
+        ref.referenceLocator,
+        ref.comment,
+      );
+    });
+  }
+}
+
 export class Package {
   name: string;
   downloadLocation: string | SpdxNoAssertion | SpdxNone;
@@ -98,7 +153,7 @@ export class Package {
   description?: string;
   comment?: string;
   // TODO: Implement ExternalPackageRef class
-  externalReferences: string[];
+  externalReferences: ExternalPackageRef[];
   attributionTexts: string[];
   primaryPackagePurpose?: PackagePurpose;
   releaseDate?: Date;
@@ -162,7 +217,11 @@ export class Package {
       summary: options?.summary,
       description: options?.description,
       comment: options?.comment,
-      externalReferences: options?.externalReferences,
+      externalReferences:
+        options?.externalReferences &&
+        ExternalPackageRef.fromSpdxExternalPackageRefs(
+          options.externalReferences,
+        ),
       attributionTexts: options?.attributionTexts,
       primaryPackagePurpose: options?.primaryPackagePurpose
         ? formatPackagePurpose(options.primaryPackagePurpose)

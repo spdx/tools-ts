@@ -1,7 +1,7 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2023-11-03T13:22:50Z",
+    "created": "2023-11-03T16:09:28Z",
     "creators": [
       "Person: Anton Bauhofer (anton.bauhofer@tngtech.com)",
       "Tool: SPDX Tools TS"
@@ -15,22 +15,25 @@
     {
       "name": "uuid",
       "downloadLocation": "https://github.com/uuidjs/uuid",
-      "SPDXID": "SPDXRef-42c48d6b-59b8-4069-8fc5-5e98e956a319",
+      "SPDXID": "SPDXRef-add4a458-f742-4fba-bc97-6e20a5358974",
       "filesAnalyzed": true,
       "packageVerificationCode": {
         "packageVerificationCodeValue": "b65013ce770696a72a0dded749a5058e5f8e2a4d"
-      }
+      },
+      "licenseInfoFromFiles": []
     },
     {
       "name": "eslint",
       "downloadLocation": "https://github.com/eslint/eslint",
-      "SPDXID": "SPDXRef-81eafe64-9461-427f-bea5-6992c4f15cf4",
-      "filesAnalyzed": false
+      "SPDXID": "SPDXRef-d1095eeb-f19d-41da-9f21-cbf090361f96",
+      "filesAnalyzed": false,
+      "licenseInfoFromFiles": [],
+      "comment": "This package is added just for testing."
     }
   ],
   "files": [
     {
-      "SPDXID": "SPDXRef-1daacc7b-dbba-4a02-84fd-1372b528f817",
+      "SPDXID": "SPDXRef-1fd19375-ee93-4f07-a0f6-bbdd0f32545f",
       "fileName": "README.md",
       "checksums": [
         {
@@ -46,17 +49,17 @@
   "relationships": [
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
-      "relatedSpdxElement": "SPDXRef-42c48d6b-59b8-4069-8fc5-5e98e956a319",
+      "relatedSpdxElement": "SPDXRef-add4a458-f742-4fba-bc97-6e20a5358974",
       "relationshipType": "DESCRIBES"
     },
     {
-      "spdxElementId": "SPDXRef-42c48d6b-59b8-4069-8fc5-5e98e956a319",
-      "relatedSpdxElement": "SPDXRef-81eafe64-9461-427f-bea5-6992c4f15cf4",
+      "spdxElementId": "SPDXRef-add4a458-f742-4fba-bc97-6e20a5358974",
+      "relatedSpdxElement": "SPDXRef-d1095eeb-f19d-41da-9f21-cbf090361f96",
       "relationshipType": "DEPENDS_ON"
     },
     {
-      "spdxElementId": "SPDXRef-42c48d6b-59b8-4069-8fc5-5e98e956a319",
-      "relatedSpdxElement": "SPDXRef-1daacc7b-dbba-4a02-84fd-1372b528f817",
+      "spdxElementId": "SPDXRef-add4a458-f742-4fba-bc97-6e20a5358974",
+      "relatedSpdxElement": "SPDXRef-1fd19375-ee93-4f07-a0f6-bbdd0f32545f",
       "relationshipType": "CONTAINS"
     }
   ]

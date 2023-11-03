@@ -74,9 +74,9 @@ In addition, it takes an object with the following optional parameters:
 | summary | string | - | Summary of the package |
 | description | string | - | Description of the package |
 | comment | string | - | Additional information |
-| externalReferences | string[] | [] | External references |
+| externalReferences | {referenceType: string, referenceLocator: string, referenceCategory: string, comment?: string;}[] | [] | External references |
 | attributionTexts | string[] | [] | Attribution texts |
-| primaryPackagePurpose | string | - | Primary purpose of the package |
+| primaryPackagePurpose | string ("APPLICATION", "FRAMEWORK", "LIBRARY", "CONTAINER", "OPERATING_SYSTEM", "DEVICE", "FIRMWARE", "SOURCE", "ARCHIVE", "FILE", "INSTALL", "OTHER") | - | Primary purpose of the package |
 | releaseDate | Date | - | Release date of the package |
 | buildDate | Date | - | Build date of the package |
 | validUntilDate | Date | - | Date until which the package is valid |
