@@ -33,7 +33,7 @@ The following features are supported by this library:
 | Feature | State | Comment |
 | ------- | ----- | ------- |
 | Document creation | DONE
-| Packages | PARTIAL | essential properties are supported
+| Packages | DONE
 | Files | PARTIAL | essential properties are supported
 | Relationships | DONE
 | Snippets |  

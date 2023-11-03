@@ -55,12 +55,31 @@ In addition, it takes an object with the following optional parameters:
 
 | Argument | Format | Default | Description |
 | ----------- | ----------- | ----------- | ----------- |
-| filesAnalyzed | boolean | false | Indicates whether the package contents have been analyzed |
-| spdxId | string | SPDX-Ref-<UUID V4> | ID of the package |
 | downloadLocation | string | NOASSERTION | Download location of the package |
-| comment | string | - | Additional information |
+| spdxId | string | SPDX-Ref-<UUID V4> | ID of the package |
+| version | string | - | Version of the package |
+| fileName | string | - | File name of the package |
+| supplier | {name: string, type: "Person" / "Organization" / "Tool", email?: string} / "NOASSERTION" | - | Supplier of the package |
+| originator | {name: string, type: "Person" / "Organization" / "Tool", email?: string} / "NOASSERTION" | - | Originator of the package |
+| filesAnalyzed | boolean | false | Indicates whether the package contents have been analyzed |
 | verificationCode | {value: string, excludedFiles?: string[]} | - | Identification for contents of a package |
-
+| checksums | {checksumValue: string, checksumAlgorithm: string}[] | - | Checksums of the package |
+| homePage | string | - | Homepage of the package |
+| sourceInfo | string | - | Information about the source of the package |
+| licenseConcluded | string | - | License concluded for the package |
+| licenseInfoFromFiles | string[] | [] | Licenses found in the package |
+| licenseDeclared | string | - | License declared for the package |
+| licenseComment | string | - | Comments about the license |
+| copyrightText | string | - | Copyright |
+| summary | string | - | Summary of the package |
+| description | string | - | Description of the package |
+| comment | string | - | Additional information |
+| externalReferences | string[] | [] | External references |
+| attributionTexts | string[] | [] | Attribution texts |
+| primaryPackagePurpose | string | - | Primary purpose of the package |
+| releaseDate | Date | - | Release date of the package |
+| buildDate | Date | - | Build date of the package |
+| validUntilDate | Date | - | Date until which the package is valid |
 
 ## Files
 Files are used to provide information about files that are contained in software packages.

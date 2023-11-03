@@ -1,4 +1,4 @@
-import type { Creator } from "../api/spdx-document";
+import type { SpdxActor } from "../api/spdx-document";
 
 export enum ActorType {
   Person = "Person",
@@ -17,7 +17,7 @@ export class Actor {
     this.type = type;
   }
 
-  static fromCreator(creator: Creator): Actor {
+  static fromSpdxActor(creator: SpdxActor): Actor {
     const actorType = ActorType[creator.type as keyof typeof ActorType];
     if (!actorType) {
       throw new Error("Invalid actor type: " + creator.type);

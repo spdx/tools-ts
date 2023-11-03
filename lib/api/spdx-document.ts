@@ -9,12 +9,14 @@ import { Package } from "../spdx2model/package";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import { ExternalDocumentRef } from "../spdx2model/external-document-ref";
-import { ChecksumAlgorithm, Checksum } from "../spdx2model/checksum";
+import type { ChecksumAlgorithm } from "../spdx2model/checksum";
+import { Checksum } from "../spdx2model/checksum";
 import { v4 as uuidv4 } from "uuid";
 import type { FileType } from "../spdx2model/file";
 import { File } from "../spdx2model/file";
 
-export interface Creator {
+// TODO: Add validation to conversion from Actor to SpdxActor
+export interface SpdxActor {
   name: string;
   type: string;
   email?: string;
@@ -27,7 +29,7 @@ export interface DocumentRef {
   checksum_algorithm: string;
 }
 
-export interface FileChecksum {
+export interface SpdxChecksum {
   checksumValue: string;
   checksumAlgorithm: string;
 }
@@ -35,7 +37,7 @@ export interface FileChecksum {
 export interface CreateDocumentOptions {
   spdxVersion: string;
   spdxId: string;
-  creators: Creator | Creator[];
+  creators: SpdxActor | SpdxActor[];
   created: Date;
   namespace: string;
   externalDocumentRefs: DocumentRef[];
@@ -44,13 +46,33 @@ export interface CreateDocumentOptions {
   documentComment: string;
 }
 
-// TODO: Add properties
 export interface AddPackagesOptions {
-  filesAnalyzed: boolean;
-  spdxId: string;
-  comment: string;
   downloadLocation: string;
+  spdxId: string;
+  version: string;
+  fileName: string;
+  supplier?: SpdxActor | string;
+  originator?: SpdxActor | string;
+  filesAnalyzed: boolean;
   verificationCode: PackageVerificationCode;
+  checksums: SpdxChecksum[];
+  homepage: string;
+  sourceInfo: string;
+  licenseConcluded: string;
+  licenseInfoFromFiles: string[];
+  licenseDeclared: string;
+  licenseComment: string;
+  copyrightText: string;
+  summary: string;
+  description: string;
+  comment: string;
+  // TODO: Implement references class
+  externalReferences: string[];
+  attributionTexts: string[];
+  primaryPackagePurpose: string;
+  releaseDate: Date;
+  builtDate: Date;
+  validUntilDate: Date;
 }
 
 export interface AddFileOptions {
@@ -60,14 +82,14 @@ export interface AddFileOptions {
 
 export class SPDXDocument extends Document {
   private static formatCreators(
-    creators: Creator | Creator[] | undefined,
+    creators: SpdxActor | SpdxActor[] | undefined,
   ): Actor[] {
     if (!creators) {
       return [];
     } else if (Array.isArray(creators)) {
-      return creators.map((creator) => Actor.fromCreator(creator));
+      return creators.map((creator) => Actor.fromSpdxActor(creator));
     } else {
-      return [Actor.fromCreator(creators)];
+      return [Actor.fromSpdxActor(creators)];
     }
   }
 
@@ -101,29 +123,6 @@ export class SPDXDocument extends Document {
       : undefined;
   }
 
-  // TODO: Convert the following two functions into class functions of the model class Checksum ("fromAPI")
-  private static formatChecksum(checksum: FileChecksum): Checksum {
-    if (!Object.keys(ChecksumAlgorithm).includes(checksum.checksumAlgorithm)) {
-      throw new Error(
-        "Invalid checksum algorithm: " + checksum.checksumAlgorithm,
-      );
-    }
-    return new Checksum(
-      checksum.checksumAlgorithm as ChecksumAlgorithm,
-      checksum.checksumValue,
-    );
-  }
-
-  private static formatChecksums(
-    checksums: [FileChecksum] | FileChecksum,
-  ): Checksum[] {
-    if (Array.isArray(checksums)) {
-      return checksums.map((checksum) => SPDXDocument.formatChecksum(checksum));
-    } else {
-      return [SPDXDocument.formatChecksum(checksums)];
-    }
-  }
-
   static createDocument(
     name: string,
     options?: Partial<CreateDocumentOptions>,
@@ -146,17 +145,17 @@ export class SPDXDocument extends Document {
   }
 
   addPackage(name: string, options?: Partial<AddPackagesOptions>): Package {
-    const pkg = new Package(name, options);
+    const pkg = Package.fromApiPackage(name, options);
     this.packages = this.packages.concat(pkg);
     return pkg;
   }
 
   addFile(
     name: string,
-    checksums: [FileChecksum] | FileChecksum,
+    checksums: [SpdxChecksum] | SpdxChecksum,
     options?: Partial<AddFileOptions>,
   ): File {
-    const formattedChecksums = SPDXDocument.formatChecksums(checksums);
+    const formattedChecksums = Checksum.fromSpdxChecksums(checksums);
     const fileTypes = options?.fileTypes
       ? options.fileTypes.map((fileType) => fileType as FileType)
       : undefined;
