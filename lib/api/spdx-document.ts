@@ -25,6 +25,13 @@ export interface SpdxChecksum {
   checksumAlgorithm: string;
 }
 
+export interface SpdxExternalPackageReference {
+  referenceType: string;
+  referenceLocator: string;
+  referenceCategory: string;
+  comment?: string;
+}
+
 export interface CreateDocumentOptions {
   spdxVersion: string;
   spdxId: string;
@@ -58,7 +65,7 @@ export interface AddPackagesOptions {
   description: string;
   comment: string;
   // TODO: Implement references class
-  externalReferences: string[];
+  externalReferences: SpdxExternalPackageReference[];
   attributionTexts: string[];
   primaryPackagePurpose: string;
   releaseDate: Date;
