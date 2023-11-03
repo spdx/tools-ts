@@ -48,6 +48,23 @@ declare class SpdxNone {
     toString(): string;
 }
 
+declare enum ExternalPackageRefCategory {
+    "OTHER" = "OTHER",
+    "PERSISTENT-ID" = "PERSISTENT-ID",
+    "PERSISTENT_ID" = "PERSISTENT_ID",
+    "SECURITY" = "SECURITY",
+    "PACKAGE-MANAGER" = "PACKAGE-MANAGER",
+    "PACKAGE_MANAGER" = "PACKAGE_MANAGER"
+}
+declare class ExternalPackageRef {
+    category: ExternalPackageRefCategory;
+    type: string;
+    locator: string;
+    comment?: string;
+    constructor(category: ExternalPackageRefCategory, type: string, locator: string, comment?: string);
+    static fromSpdxExternalPackageRefs(refs: SpdxExternalPackageReference[]): ExternalPackageRef[];
+}
+
 interface PackageOptions {
     spdxId: string;
     version: string;
@@ -68,7 +85,7 @@ interface PackageOptions {
     summary: string;
     description: string;
     comment: string;
-    externalReferences: string[];
+    externalReferences: ExternalPackageRef[];
     attributionTexts: string[];
     primaryPackagePurpose: PackagePurpose;
     releaseDate: Date;
@@ -114,7 +131,7 @@ declare class Package {
     summary?: string;
     description?: string;
     comment?: string;
-    externalReferences: string[];
+    externalReferences: ExternalPackageRef[];
     attributionTexts: string[];
     primaryPackagePurpose?: PackagePurpose;
     releaseDate?: Date;
@@ -280,6 +297,12 @@ interface SpdxChecksum {
     checksumValue: string;
     checksumAlgorithm: string;
 }
+interface SpdxExternalPackageReference {
+    referenceType: string;
+    referenceLocator: string;
+    referenceCategory: string;
+    comment?: string;
+}
 interface CreateDocumentOptions {
     spdxVersion: string;
     spdxId: string;
@@ -311,7 +334,7 @@ interface AddPackagesOptions {
     summary: string;
     description: string;
     comment: string;
-    externalReferences: string[];
+    externalReferences: SpdxExternalPackageReference[];
     attributionTexts: string[];
     primaryPackagePurpose: string;
     releaseDate: Date;

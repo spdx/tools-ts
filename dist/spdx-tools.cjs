@@ -48,6 +48,22 @@ class JsonPackageVerificationCode {
     }
 }
 
+class JsonExternalPackageRef {
+    comment;
+    referenceCategory;
+    referenceLocator;
+    referenceType;
+    constructor(referenceCategory, referenceLocator, referenceType, comment) {
+        this.referenceCategory = referenceCategory;
+        this.referenceLocator = referenceLocator;
+        this.referenceType = referenceType;
+        this.comment = comment;
+    }
+    static fromExternalPackageRef(ref) {
+        return new JsonExternalPackageRef(ref.category.toString(), ref.locator, ref.type, ref.comment);
+    }
+}
+
 class JsonPackage {
     name;
     downloadLocation;
@@ -58,7 +74,24 @@ class JsonPackage {
     licenseInfoFromFiles;
     externalRefs;
     attributionTexts;
-    constructor(name, downloadLocation, SPDXID, filesAnalyzed, checksums, licenseInfoFromFiles, externalRefs, attributionTexts, packageVerificationCode) {
+    builtDate;
+    comment;
+    copyrightText;
+    description;
+    homepage;
+    licenseComments;
+    licenseConcluded;
+    licenseDeclared;
+    originator;
+    packageFileName;
+    primaryPackagePurpose;
+    releaseDate;
+    sourceInfo;
+    summary;
+    supplier;
+    validUntilDate;
+    versionInfo;
+    constructor(name, downloadLocation, SPDXID, filesAnalyzed, packageVerificationCode, checksums, licenseInfoFromFiles, externalRefs, attributionTexts, builtDate, comment, copyrightText, description, homepage, licenseComments, licenseConcluded, licenseDeclared, originator, packageFileName, primaryPackagePurpose, releaseDate, sourceInfo, summary, supplier, validUntilDate, versionInfo) {
         this.name = name;
         this.downloadLocation = downloadLocation;
         this.SPDXID = SPDXID;
@@ -68,6 +101,23 @@ class JsonPackage {
         this.licenseInfoFromFiles = licenseInfoFromFiles;
         this.externalRefs = externalRefs;
         this.attributionTexts = attributionTexts;
+        this.builtDate = builtDate;
+        this.comment = comment;
+        this.copyrightText = copyrightText;
+        this.description = description;
+        this.homepage = homepage;
+        this.licenseComments = licenseComments;
+        this.licenseConcluded = licenseConcluded;
+        this.licenseDeclared = licenseDeclared;
+        this.originator = originator;
+        this.packageFileName = packageFileName;
+        this.primaryPackagePurpose = primaryPackagePurpose;
+        this.releaseDate = releaseDate;
+        this.sourceInfo = sourceInfo;
+        this.summary = summary;
+        this.supplier = supplier;
+        this.validUntilDate = validUntilDate;
+        this.versionInfo = versionInfo;
     }
     static fromPackage(pkg) {
         const jsonChecksums = pkg.checksums.length > 0
@@ -76,9 +126,10 @@ class JsonPackage {
         const jsonPackageVerificationCode = pkg.verificationCode
             ? JsonPackageVerificationCode.fromPackageVerificationCode(pkg.verificationCode)
             : undefined;
-        return new JsonPackage(pkg.name, pkg.downloadLocation.toString(), pkg.spdxId, pkg.filesAnalyzed, jsonChecksums, 
-        // TODO: Fill in licenseInfoFromFiles
-        undefined, undefined, undefined, jsonPackageVerificationCode);
+        const jsonExternalPackageRefs = pkg.externalReferences?.length > 0
+            ? pkg.externalReferences.map((ref) => JsonExternalPackageRef.fromExternalPackageRef(ref))
+            : undefined;
+        return new JsonPackage(pkg.name, pkg.downloadLocation.toString(), pkg.spdxId, pkg.filesAnalyzed, jsonPackageVerificationCode, jsonChecksums, pkg.licenseInfoFromFiles.map((licenseInfo) => licenseInfo.toString()), jsonExternalPackageRefs, pkg.attributionTexts.length > 0 ? pkg.attributionTexts : undefined, pkg.builtDate ? formatDatetime(pkg.builtDate) : undefined, pkg.comment, pkg.copyrightText?.toString(), pkg.description, pkg.homepage?.toString(), pkg.licenseComment, pkg.licenseConcluded?.toString(), pkg.licenseDeclared?.toString(), pkg.originator?.toString(), pkg.fileName, pkg.primaryPackagePurpose?.toString(), pkg.releaseDate ? formatDatetime(pkg.releaseDate) : undefined, pkg.sourceInfo, pkg.summary, pkg.supplier?.toString(), pkg.validUntilDate ? formatDatetime(pkg.validUntilDate) : undefined, pkg.version);
     }
 }
 
@@ -422,6 +473,7 @@ class Checksum {
 
 const NOASSERTION = "NOASSERTION";
 const NONE = "NONE";
+// TODO: Consider replacing these with enums (e.g. enum SpdxNoAssertion {NOASSERTION = "NOASSERTION"})?
 class SpdxNoAssertion {
     toString() {
         return NOASSERTION;
@@ -449,6 +501,38 @@ function toSpdxType(entry, converter) {
 function validateSpdxNoAssertion(value) {
     if (!(value instanceof SpdxNoAssertion || typeof value === "string")) {
         throw new Error(`Invalid entry: ${value.toString()} is not allowed.`);
+    }
+}
+
+var ExternalPackageRefCategory;
+(function (ExternalPackageRefCategory) {
+    ExternalPackageRefCategory["OTHER"] = "OTHER";
+    ExternalPackageRefCategory["PERSISTENT-ID"] = "PERSISTENT-ID";
+    ExternalPackageRefCategory["PERSISTENT_ID"] = "PERSISTENT_ID";
+    ExternalPackageRefCategory["SECURITY"] = "SECURITY";
+    ExternalPackageRefCategory["PACKAGE-MANAGER"] = "PACKAGE-MANAGER";
+    ExternalPackageRefCategory["PACKAGE_MANAGER"] = "PACKAGE_MANAGER";
+})(ExternalPackageRefCategory || (ExternalPackageRefCategory = {}));
+class ExternalPackageRef {
+    category;
+    type;
+    locator;
+    comment;
+    constructor(category, type, locator, comment) {
+        this.category = category;
+        this.type = type;
+        this.locator = locator;
+        this.comment = comment;
+    }
+    static fromSpdxExternalPackageRefs(refs) {
+        return refs.map((ref) => {
+            const referenceCategory = ExternalPackageRefCategory[ref.referenceCategory];
+            if (!referenceCategory) {
+                throw new Error("Invalid external package reference category: " +
+                    ref.referenceCategory);
+            }
+            return new ExternalPackageRef(referenceCategory, ref.referenceType, ref.referenceLocator, ref.comment);
+        });
     }
 }
 
@@ -565,7 +649,8 @@ class Package {
             summary: options?.summary,
             description: options?.description,
             comment: options?.comment,
-            externalReferences: options?.externalReferences,
+            externalReferences: options?.externalReferences &&
+                ExternalPackageRef.fromSpdxExternalPackageRefs(options.externalReferences),
             attributionTexts: options?.attributionTexts,
             primaryPackagePurpose: options?.primaryPackagePurpose
                 ? formatPackagePurpose(options.primaryPackagePurpose)
@@ -633,7 +718,7 @@ class DocumentCreationInfo {
     static fromApi(name, options) {
         return new DocumentCreationInfo(formatSpdxVersion(options?.spdxVersion), name, options?.namespace ?? generateNamespace(name), options?.creators
             ? Actor.fromSpdxActors(options.creators).concat(Actor.tools())
-            : [], options?.created ?? new Date(), {
+            : [Actor.tools()], options?.created ?? new Date(), {
             ...options,
             externalDocumentRefs: options?.externalDocumentRefs
                 ? options.externalDocumentRefs.map((ref) => ExternalDocumentReference.fromApi(ref))
