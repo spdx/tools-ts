@@ -1,26 +1,30 @@
 import type { Actor } from "./actor";
 import type { Checksum } from "./checksum";
 import type { SpdxNone } from "./spdx-types";
-import { SpdxNoAssertion } from "./spdx-types";
+import {
+  SpdxNoAssertion,
+  toSpdxType,
+  validateSpdxNoAssertion,
+} from "./spdx-types";
 import { v4 as uuidv4 } from "uuid";
 
 interface PackageOptions {
   spdxId: string;
   version: string;
   fileName: string;
-  downloadLocation: string | SpdxNoAssertion | SpdxNone;
-  supplier: Actor | SpdxNoAssertion;
-  originator: Actor | SpdxNoAssertion;
+  downloadLocation: string;
+  supplier: Actor | string;
+  originator: Actor | string;
   filesAnalyzed: boolean;
   verificationCode: PackageVerificationCode;
   checksums: Checksum[];
-  homepage: string | SpdxNoAssertion | SpdxNone;
+  homepage: string;
   sourceInfo: string;
-  licenseConcluded: string | SpdxNoAssertion | SpdxNone;
-  licenseInfoFromFiles: Array<string | SpdxNoAssertion | SpdxNone>;
-  licenseDeclared: string | SpdxNoAssertion | SpdxNone;
+  licenseConcluded: string;
+  licenseInfoFromFiles: string[];
+  licenseDeclared: string;
   licenseComment: string;
-  copyrightText: string | SpdxNoAssertion | SpdxNone;
+  copyrightText: string;
   summary: string;
   description: string;
   comment: string;
@@ -50,6 +54,20 @@ enum PackagePurpose {
 export interface PackageVerificationCode {
   value: string;
   excludedFiles?: string[];
+}
+
+function formatVendor(
+  vendor: Actor | string | undefined,
+): Actor | SpdxNoAssertion | undefined {
+  if (!vendor) {
+    return undefined;
+  } else if (typeof vendor === "string") {
+    const spdxVendor = toSpdxType(vendor);
+    validateSpdxNoAssertion(spdxVendor);
+    return spdxVendor;
+  } else {
+    return vendor;
+  }
 }
 
 export class Package {
@@ -84,12 +102,14 @@ export class Package {
 
   constructor(name: string, options?: Partial<PackageOptions>) {
     this.name = name;
-    this.downloadLocation = options?.downloadLocation ?? new SpdxNoAssertion();
+    this.downloadLocation = options?.downloadLocation
+      ? toSpdxType(options.downloadLocation)
+      : new SpdxNoAssertion();
     this.spdxId = options?.spdxId ?? "SPDXRef-" + uuidv4();
     this.version = options?.version ?? undefined;
     this.fileName = options?.fileName ?? undefined;
-    this.supplier = options?.supplier ?? undefined;
-    this.originator = options?.originator ?? undefined;
+    this.supplier = formatVendor(options?.supplier);
+    this.originator = formatVendor(options?.originator);
     this.filesAnalyzed = options?.filesAnalyzed ?? false;
     this.verificationCode = options?.verificationCode ?? undefined;
     this.checksums = options?.checksums ?? [];
