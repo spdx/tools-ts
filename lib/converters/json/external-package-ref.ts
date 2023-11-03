@@ -1,4 +1,4 @@
-import type { ExternalPackageRef } from "../../spdx2model/package";
+import type { ExternalPackageRef } from "../../spdx2model/external-package-reference";
 
 export class JsonExternalPackageRef {
   comment?: string;
