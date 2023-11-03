@@ -141,6 +141,20 @@ In addition, it takes an object with the following optional parameters:
 | ----------- | ----------- | ----------- | ----------- |
 | comment | string | - | Comment about the relationship |
 
+## Validating a document
+After creating a document (see [Documents](#Documents)), it can be validated with the command `document.validate`:
+Disclaimer: The implementation of the validation is not complete yet.
+
+```javascript
+document.validate();
+```
+
+It takes the following optional parameters:
+
+| Argument | Format | Default | Description |
+| ----------- | ----------- | ----------- | ----------- |
+| allowInvalid | boolean | true | Throw an error if the document is invalid |
+
 ## Writing a document
 After creating a document (see [Documents](#Documents)), it can be written to a file with the command `document.write` or `document.writeSync`:
 

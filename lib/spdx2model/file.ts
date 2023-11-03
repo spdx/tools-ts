@@ -1,5 +1,6 @@
-import type { Checksum } from "./checksum";
+import { Checksum } from "./checksum";
 import { v4 as uuidv4 } from "uuid";
+import type { AddFileOptions, SpdxChecksum } from "../api/spdx-document";
 
 export enum FileType {
   OTHER = "OTHER",
@@ -20,6 +21,14 @@ export interface FileOptions {
   fileTypes: FileType[];
 }
 
+function formatFileType(fileType: string): FileType {
+  const fileTypeEnum = FileType[fileType as keyof typeof FileType];
+  if (!fileTypeEnum) {
+    throw new Error("Invalid file type: " + fileType);
+  }
+  return fileTypeEnum;
+}
+
 // TODO: Implement optional properties
 export class File {
   name: string;
@@ -36,5 +45,18 @@ export class File {
     this.spdxId = "SPDXRef-" + uuidv4();
     this.checksums = checksums;
     this.fileTypes = options?.fileTypes ?? [];
+  }
+
+  static fromApi(
+    name: string,
+    checksums: [SpdxChecksum] | SpdxChecksum,
+    options?: Partial<AddFileOptions>,
+  ): File {
+    return new File(name, Checksum.fromSpdxChecksums(checksums), {
+      spdxId: options?.spdxId ?? undefined,
+      fileTypes: options?.fileTypes
+        ? options.fileTypes.map((fileType) => formatFileType(fileType))
+        : undefined,
+    });
   }
 }

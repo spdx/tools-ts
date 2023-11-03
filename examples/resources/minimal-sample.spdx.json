@@ -1,27 +1,25 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2023-10-31T13:00:09Z",
-    "creators": [
-      "Tool: SPDX Tools TS"
-    ]
+    "created": "2023-11-03T13:22:50Z",
+    "creators": []
   },
   "dataLicense": "CC0-1.0",
   "name": "first-document",
   "spdxVersion": "SPDX-2.3",
-  "documentNamespace": "urn:first-document:4895449d-94a8-4f1f-afde-67b71343f83e",
+  "documentNamespace": "urn:first-document:f0cc2ba9-e9e7-4e70-b600-179210ccf7d9",
   "packages": [
     {
       "name": "first-package",
       "downloadLocation": "NOASSERTION",
-      "SPDXID": "SPDXRef-3bdfc4a8-4711-45d2-bf48-890a05aa82ae",
+      "SPDXID": "SPDXRef-26e05191-cd62-47cf-b418-04d76d995cf8",
       "filesAnalyzed": false
     }
   ],
   "relationships": [
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
-      "relatedSpdxElement": "SPDXRef-3bdfc4a8-4711-45d2-bf48-890a05aa82ae",
+      "relatedSpdxElement": "SPDXRef-26e05191-cd62-47cf-b418-04d76d995cf8",
       "relationshipType": "DESCRIBES"
     }
   ]

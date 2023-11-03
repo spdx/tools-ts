@@ -88,7 +88,7 @@ export class Document {
     return false;
   }
 
-  validate(): string[] {
+  gatherValidationIssues(): string[] {
     const validationIssues: string[] = [];
     if (this.creationInfo.spdxVersion !== "SPDX-2.3") {
       validationIssues.concat(

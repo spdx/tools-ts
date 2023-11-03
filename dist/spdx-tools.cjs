@@ -1,175 +1,7 @@
 'use strict';
 
-var uuid = require('uuid');
 var fs = require('fs/promises');
-
-var ActorType;
-(function (ActorType) {
-    ActorType["Person"] = "Person";
-    ActorType["Organization"] = "Organization";
-    ActorType["Tool"] = "Tool";
-})(ActorType || (ActorType = {}));
-class Actor {
-    type;
-    name;
-    email;
-    constructor(name, type, email) {
-        this.name = name;
-        this.email = email ?? undefined;
-        this.type = type;
-    }
-    static fromCreator(creator) {
-        const actorType = ActorType[creator.type];
-        if (!actorType) {
-            throw new Error("Invalid actor type: " + creator.type);
-        }
-        return new Actor(creator.name, actorType, creator.email);
-    }
-    static tools() {
-        return new Actor("SPDX Tools TS", ActorType.Tool);
-    }
-    toString() {
-        return (this.type.valueOf() +
-            ": " +
-            this.name +
-            (this.email ? " (" + this.email + ")" : ""));
-    }
-}
-
-var RelationshipType;
-(function (RelationshipType) {
-    RelationshipType["AMENDS"] = "AMENDS";
-    RelationshipType["ANCESTOR_OF"] = "ANCESTOR_OF";
-    RelationshipType["BUILD_DEPENDENCY_OF"] = "BUILD_DEPENDENCY_OF";
-    RelationshipType["BUILD_TOOL_OF"] = "BUILD_TOOL_OF";
-    RelationshipType["CONTAINED_BY"] = "CONTAINED_BY";
-    RelationshipType["CONTAINS"] = "CONTAINS";
-    RelationshipType["COPY_OF"] = "COPY_OF";
-    RelationshipType["DATA_FILE_OF"] = "DATA_FILE_OF";
-    RelationshipType["DEPENDENCY_MANIFEST_OF"] = "DEPENDENCY_MANIFEST_OF";
-    RelationshipType["DEPENDENCY_OF"] = "DEPENDENCY_OF";
-    RelationshipType["DEPENDS_ON"] = "DEPENDS_ON";
-    RelationshipType["DESCENDANT_OF"] = "DESCENDANT_OF";
-    RelationshipType["DESCRIBED_BY"] = "DESCRIBED_BY";
-    RelationshipType["DESCRIBES"] = "DESCRIBES";
-    RelationshipType["DEV_DEPENDENCY_OF"] = "DEV_DEPENDENCY_OF";
-    RelationshipType["DEV_TOOL_OF"] = "DEV_TOOL_OF";
-    RelationshipType["DISTRIBUTION_ARTIFACT"] = "DISTRIBUTION_ARTIFACT";
-    RelationshipType["DOCUMENTATION_OF"] = "DOCUMENTATION_OF";
-    RelationshipType["DYNAMIC_LINK"] = "DYNAMIC_LINK";
-    RelationshipType["EXAMPLE_OF"] = "EXAMPLE_OF";
-    RelationshipType["EXPANDED_FROM_ARCHIVE"] = "EXPANDED_FROM_ARCHIVE";
-    RelationshipType["FILE_ADDED"] = "FILE_ADDED";
-    RelationshipType["FILE_DELETED"] = "FILE_DELETED";
-    RelationshipType["FILE_MODIFIED"] = "FILE_MODIFIED";
-    RelationshipType["GENERATED_FROM"] = "GENERATED_FROM";
-    RelationshipType["GENERATES"] = "GENERATES";
-    RelationshipType["HAS_PREREQUISITE"] = "HAS_PREREQUISITE";
-    RelationshipType["METAFILE_OF"] = "METAFILE_OF";
-    RelationshipType["OPTIONAL_COMPONENT_OF"] = "OPTIONAL_COMPONENT_OF";
-    RelationshipType["OPTIONAL_DEPENDENCY_OF"] = "OPTIONAL_DEPENDENCY_OF";
-    RelationshipType["OTHER"] = "OTHER";
-    RelationshipType["PACKAGE_OF"] = "PACKAGE_OF";
-    RelationshipType["PATCH_APPLIED"] = "PATCH_APPLIED";
-    RelationshipType["PATCH_FOR"] = "PATCH_FOR";
-    RelationshipType["PREREQUISITE_FOR"] = "PREREQUISITE_FOR";
-    RelationshipType["PROVIDED_DEPENDENCY_OF"] = "PROVIDED_DEPENDENCY_OF";
-    RelationshipType["REQUIREMENT_DESCRIPTION_FOR"] = "REQUIREMENT_DESCRIPTION_FOR";
-    RelationshipType["RUNTIME_DEPENDENCY_OF"] = "RUNTIME_DEPENDENCY_OF";
-    RelationshipType["SPECIFICATION_FOR"] = "SPECIFICATION_FOR";
-    RelationshipType["STATIC_LINK"] = "STATIC_LINK";
-    RelationshipType["TEST_CASE_OF"] = "TEST_CASE_OF";
-    RelationshipType["TEST_DEPENDENCY_OF"] = "TEST_DEPENDENCY_OF";
-    RelationshipType["TEST_OF"] = "TEST_OF";
-    RelationshipType["TEST_TOOL_OF"] = "TEST_TOOL_OF";
-    RelationshipType["VARIANT_OF"] = "VARIANT_OF";
-})(RelationshipType || (RelationshipType = {}));
-class Relationship {
-    spdxElementId;
-    relatedSpdxElementId;
-    relationshipType;
-    comment;
-    constructor(spdxElementId, relatedSpdxElementId, relationshipType, options) {
-        this.spdxElementId = spdxElementId;
-        this.relatedSpdxElementId = relatedSpdxElementId;
-        this.relationshipType = relationshipType;
-        this.comment = options?.comment;
-    }
-}
-
-var PackagePurpose;
-(function (PackagePurpose) {
-    PackagePurpose["APPLICATION"] = "APPLICATION";
-    PackagePurpose["FRAMEWORK"] = "FRAMEWORK";
-    PackagePurpose["LIBRARY"] = "LIBRARY";
-    PackagePurpose["CONTAINER"] = "CONTAINER";
-    PackagePurpose["OPERATING_SYSTEM"] = "OPERATING_SYSTEM";
-    PackagePurpose["DEVICE"] = "DEVICE";
-    PackagePurpose["FIRMWARE"] = "FIRMWARE";
-    PackagePurpose["SOURCE"] = "SOURCE";
-    PackagePurpose["ARCHIVE"] = "ARCHIVE";
-    PackagePurpose["FILE"] = "FILE";
-    PackagePurpose["INSTALL"] = "INSTALL";
-    PackagePurpose["OTHER"] = "OTHER";
-})(PackagePurpose || (PackagePurpose = {}));
-class Package {
-    name;
-    downloadLocation;
-    spdxId;
-    version;
-    fileName;
-    supplier;
-    originator;
-    filesAnalyzed;
-    verificationCode;
-    checksums;
-    homepage;
-    sourceInfo;
-    // TODO: Implement LicenseExpression class
-    licenseConcluded;
-    licenseInfoFromFiles;
-    licenseDeclared;
-    licenseComment;
-    copyrightText;
-    summary;
-    description;
-    comment;
-    // TODO: Implement ExternalPackageRef class
-    externalReferences;
-    attributionTexts;
-    primaryPackagePurpose;
-    releaseDate;
-    builtDate;
-    validUntilDate;
-    constructor(name, downloadLocation, options) {
-        this.name = name;
-        this.downloadLocation = downloadLocation;
-        this.spdxId = options?.spdxId ?? "SPDXRef-" + uuid.v4();
-        this.version = options?.version ?? undefined;
-        this.fileName = options?.fileName ?? undefined;
-        this.supplier = options?.supplier ?? undefined;
-        this.originator = options?.originator ?? undefined;
-        this.filesAnalyzed = options?.filesAnalyzed ?? true;
-        this.verificationCode = options?.verificationCode ?? undefined;
-        this.checksums = options?.checksums ?? [];
-        this.homepage = options?.homepage ?? undefined;
-        this.sourceInfo = options?.sourceInfo ?? undefined;
-        this.licenseConcluded = options?.licenseConcluded ?? undefined;
-        this.licenseInfoFromFiles = options?.licenseInfoFromFiles ?? [];
-        this.licenseDeclared = options?.licenseDeclared ?? undefined;
-        this.licenseComment = options?.licenseComment ?? undefined;
-        this.copyrightText = options?.copyrightText ?? undefined;
-        this.summary = options?.summary ?? undefined;
-        this.description = options?.description ?? undefined;
-        this.comment = options?.comment ?? undefined;
-        this.externalReferences = options?.externalReferences ?? [];
-        this.attributionTexts = options?.attributionTexts ?? [];
-        this.primaryPackagePurpose = options?.primaryPackagePurpose ?? undefined;
-        this.releaseDate = options?.releaseDate ?? undefined;
-        this.builtDate = options?.builtDate ?? undefined;
-        this.validUntilDate = options?.validUntilDate ?? undefined;
-    }
-}
+var uuid = require('uuid');
 
 function formatDatetime(datetime) {
     return datetime.toISOString().split(".")[0] + "Z";
@@ -408,7 +240,7 @@ class Document {
         });
         return false;
     }
-    validate() {
+    gatherValidationIssues() {
         const validationIssues = [];
         if (this.creationInfo.spdxVersion !== "SPDX-2.3") {
             validationIssues.concat("Invalid SPDX version. Currently only SPDX-2.3 is supported.");
@@ -428,42 +260,119 @@ class Document {
     }
 }
 
-class DocumentCreationInfo {
-    spdxVersion;
-    dataLicense = "CC0-1.0";
-    // TODO: Verify that this is correct
-    spdxId;
-    name;
-    documentNamespace;
-    externalDocumentRefs;
-    licenseListVersion;
-    creators;
-    created;
-    creatorComment;
-    documentComment;
-    constructor(spdxVersion, name, documentNamespace, creators, created, options) {
-        this.spdxVersion = spdxVersion;
-        this.name = name;
-        this.documentNamespace = documentNamespace;
-        this.creators = creators;
-        this.created = created;
-        this.externalDocumentRefs = options?.externalDocumentRefs ?? [];
-        this.creatorComment = options?.creatorComment ?? undefined;
-        this.licenseListVersion = options?.licenseListVersion ?? undefined;
-        this.documentComment = options?.documentComment ?? undefined;
-        this.spdxId = options?.spdxId ?? "SPDXRef-DOCUMENT";
+var RelationshipType;
+(function (RelationshipType) {
+    RelationshipType["AMENDS"] = "AMENDS";
+    RelationshipType["ANCESTOR_OF"] = "ANCESTOR_OF";
+    RelationshipType["BUILD_DEPENDENCY_OF"] = "BUILD_DEPENDENCY_OF";
+    RelationshipType["BUILD_TOOL_OF"] = "BUILD_TOOL_OF";
+    RelationshipType["CONTAINED_BY"] = "CONTAINED_BY";
+    RelationshipType["CONTAINS"] = "CONTAINS";
+    RelationshipType["COPY_OF"] = "COPY_OF";
+    RelationshipType["DATA_FILE_OF"] = "DATA_FILE_OF";
+    RelationshipType["DEPENDENCY_MANIFEST_OF"] = "DEPENDENCY_MANIFEST_OF";
+    RelationshipType["DEPENDENCY_OF"] = "DEPENDENCY_OF";
+    RelationshipType["DEPENDS_ON"] = "DEPENDS_ON";
+    RelationshipType["DESCENDANT_OF"] = "DESCENDANT_OF";
+    RelationshipType["DESCRIBED_BY"] = "DESCRIBED_BY";
+    RelationshipType["DESCRIBES"] = "DESCRIBES";
+    RelationshipType["DEV_DEPENDENCY_OF"] = "DEV_DEPENDENCY_OF";
+    RelationshipType["DEV_TOOL_OF"] = "DEV_TOOL_OF";
+    RelationshipType["DISTRIBUTION_ARTIFACT"] = "DISTRIBUTION_ARTIFACT";
+    RelationshipType["DOCUMENTATION_OF"] = "DOCUMENTATION_OF";
+    RelationshipType["DYNAMIC_LINK"] = "DYNAMIC_LINK";
+    RelationshipType["EXAMPLE_OF"] = "EXAMPLE_OF";
+    RelationshipType["EXPANDED_FROM_ARCHIVE"] = "EXPANDED_FROM_ARCHIVE";
+    RelationshipType["FILE_ADDED"] = "FILE_ADDED";
+    RelationshipType["FILE_DELETED"] = "FILE_DELETED";
+    RelationshipType["FILE_MODIFIED"] = "FILE_MODIFIED";
+    RelationshipType["GENERATED_FROM"] = "GENERATED_FROM";
+    RelationshipType["GENERATES"] = "GENERATES";
+    RelationshipType["HAS_PREREQUISITE"] = "HAS_PREREQUISITE";
+    RelationshipType["METAFILE_OF"] = "METAFILE_OF";
+    RelationshipType["OPTIONAL_COMPONENT_OF"] = "OPTIONAL_COMPONENT_OF";
+    RelationshipType["OPTIONAL_DEPENDENCY_OF"] = "OPTIONAL_DEPENDENCY_OF";
+    RelationshipType["OTHER"] = "OTHER";
+    RelationshipType["PACKAGE_OF"] = "PACKAGE_OF";
+    RelationshipType["PATCH_APPLIED"] = "PATCH_APPLIED";
+    RelationshipType["PATCH_FOR"] = "PATCH_FOR";
+    RelationshipType["PREREQUISITE_FOR"] = "PREREQUISITE_FOR";
+    RelationshipType["PROVIDED_DEPENDENCY_OF"] = "PROVIDED_DEPENDENCY_OF";
+    RelationshipType["REQUIREMENT_DESCRIPTION_FOR"] = "REQUIREMENT_DESCRIPTION_FOR";
+    RelationshipType["RUNTIME_DEPENDENCY_OF"] = "RUNTIME_DEPENDENCY_OF";
+    RelationshipType["SPECIFICATION_FOR"] = "SPECIFICATION_FOR";
+    RelationshipType["STATIC_LINK"] = "STATIC_LINK";
+    RelationshipType["TEST_CASE_OF"] = "TEST_CASE_OF";
+    RelationshipType["TEST_DEPENDENCY_OF"] = "TEST_DEPENDENCY_OF";
+    RelationshipType["TEST_OF"] = "TEST_OF";
+    RelationshipType["TEST_TOOL_OF"] = "TEST_TOOL_OF";
+    RelationshipType["VARIANT_OF"] = "VARIANT_OF";
+})(RelationshipType || (RelationshipType = {}));
+function getSpdxIdFromElement(spdxElement) {
+    if (typeof spdxElement === "string") {
+        return spdxElement;
+    }
+    else if (spdxElement instanceof Document) {
+        return spdxElement.creationInfo.spdxId;
+    }
+    else {
+        return spdxElement.spdxId;
+    }
+}
+class Relationship {
+    spdxElementId;
+    relatedSpdxElementId;
+    relationshipType;
+    comment;
+    constructor(spdxElementId, relatedSpdxElementId, relationshipType, options) {
+        this.spdxElementId = spdxElementId;
+        this.relatedSpdxElementId = relatedSpdxElementId;
+        this.relationshipType = relationshipType;
+        this.comment = options?.comment;
+    }
+    static fromApi(spdxElement, relatedSpdxElement, relationshipType, options) {
+        return new Relationship(getSpdxIdFromElement(spdxElement), getSpdxIdFromElement(relatedSpdxElement), relationshipType, { comment: options?.comment });
     }
 }
 
-class ExternalDocumentRef {
-    documentRefId;
-    documentUri;
-    checksum;
-    constructor(documentRefId, documentUri, checksum) {
-        // TODO: What are the constraints for this?
-        this.documentRefId = documentRefId;
-        this.documentUri = documentUri;
-        this.checksum = checksum;
+var ActorType;
+(function (ActorType) {
+    ActorType["Person"] = "Person";
+    ActorType["Organization"] = "Organization";
+    ActorType["Tool"] = "Tool";
+})(ActorType || (ActorType = {}));
+class Actor {
+    type;
+    name;
+    email;
+    constructor(name, type, email) {
+        this.name = name;
+        this.email = email ?? undefined;
+        this.type = type;
+    }
+    static fromSpdxActor(actor) {
+        const actorType = ActorType[actor.type];
+        if (!actorType) {
+            throw new Error("Invalid actor type: " + actor.type);
+        }
+        return new Actor(actor.name, actorType, actor.email);
+    }
+    static fromSpdxActors(actors) {
+        if (Array.isArray(actors)) {
+            return actors.map((creator) => Actor.fromSpdxActor(creator));
+        }
+        else {
+            return [Actor.fromSpdxActor(actors)];
+        }
+    }
+    static tools() {
+        return new Actor("SPDX Tools TS", ActorType.Tool);
+    }
+    toString() {
+        return (this.type.valueOf() +
+            ": " +
+            this.name +
+            (this.email ? " (" + this.email + ")" : ""));
     }
 }
 
@@ -494,6 +403,243 @@ class Checksum {
         this.algorithm = algorithm;
         this.value = value;
     }
+    static fromSpdxChecksum(checksum) {
+        const checksumAlgorithm = ChecksumAlgorithm[checksum.checksumAlgorithm];
+        if (!checksumAlgorithm) {
+            throw new Error("Invalid checksum algorithm: " + checksum.checksumAlgorithm);
+        }
+        return new Checksum(checksumAlgorithm, checksum.checksumValue);
+    }
+    static fromSpdxChecksums(checksums) {
+        if (Array.isArray(checksums)) {
+            return checksums.map((checksum) => Checksum.fromSpdxChecksum(checksum));
+        }
+        else {
+            return [Checksum.fromSpdxChecksum(checksums)];
+        }
+    }
+}
+
+const NOASSERTION = "NOASSERTION";
+const NONE = "NONE";
+class SpdxNoAssertion {
+    toString() {
+        return NOASSERTION;
+    }
+}
+class SpdxNone {
+    toString() {
+        return NONE;
+    }
+}
+function toSpdxType(entry, converter) {
+    const defaultConverter = (entry) => {
+        return entry;
+    };
+    if (entry === NOASSERTION) {
+        return new SpdxNoAssertion();
+    }
+    else if (entry === NONE) {
+        return new SpdxNone();
+    }
+    else {
+        return converter ? converter(entry) : defaultConverter(entry);
+    }
+}
+function validateSpdxNoAssertion(value) {
+    if (!(value instanceof SpdxNoAssertion || typeof value === "string")) {
+        throw new Error(`Invalid entry: ${value.toString()} is not allowed.`);
+    }
+}
+
+var PackagePurpose;
+(function (PackagePurpose) {
+    PackagePurpose["APPLICATION"] = "APPLICATION";
+    PackagePurpose["FRAMEWORK"] = "FRAMEWORK";
+    PackagePurpose["LIBRARY"] = "LIBRARY";
+    PackagePurpose["CONTAINER"] = "CONTAINER";
+    PackagePurpose["OPERATING_SYSTEM"] = "OPERATING_SYSTEM";
+    PackagePurpose["DEVICE"] = "DEVICE";
+    PackagePurpose["FIRMWARE"] = "FIRMWARE";
+    PackagePurpose["SOURCE"] = "SOURCE";
+    PackagePurpose["ARCHIVE"] = "ARCHIVE";
+    PackagePurpose["FILE"] = "FILE";
+    PackagePurpose["INSTALL"] = "INSTALL";
+    PackagePurpose["OTHER"] = "OTHER";
+})(PackagePurpose || (PackagePurpose = {}));
+function formatPackagePurpose(purpose) {
+    const packagePurpose = PackagePurpose[purpose];
+    if (!packagePurpose) {
+        throw new Error("Invalid package purpose: " + purpose);
+    }
+    return packagePurpose;
+}
+function formatVendor(vendor) {
+    if (!vendor) {
+        return undefined;
+    }
+    else if (typeof vendor === "string") {
+        const spdxVendor = toSpdxType(vendor);
+        validateSpdxNoAssertion(spdxVendor);
+        return spdxVendor;
+    }
+    else {
+        return Actor.fromSpdxActor(vendor);
+    }
+}
+class Package {
+    name;
+    downloadLocation;
+    spdxId;
+    version;
+    fileName;
+    supplier;
+    originator;
+    filesAnalyzed;
+    verificationCode;
+    checksums;
+    homepage;
+    sourceInfo;
+    // TODO: Implement LicenseExpression class
+    licenseConcluded;
+    licenseInfoFromFiles;
+    licenseDeclared;
+    licenseComment;
+    copyrightText;
+    summary;
+    description;
+    comment;
+    // TODO: Implement ExternalPackageRef class
+    externalReferences;
+    attributionTexts;
+    primaryPackagePurpose;
+    releaseDate;
+    builtDate;
+    validUntilDate;
+    constructor(name, options) {
+        this.name = name;
+        this.downloadLocation = options?.downloadLocation ?? new SpdxNoAssertion();
+        this.spdxId = options?.spdxId ?? "SPDXRef-" + uuid.v4();
+        this.version = options?.version ?? undefined;
+        this.fileName = options?.fileName ?? undefined;
+        this.supplier = options?.supplier ?? undefined;
+        this.originator = options?.originator ?? undefined;
+        this.filesAnalyzed = options?.filesAnalyzed ?? false;
+        this.verificationCode = options?.verificationCode ?? undefined;
+        this.checksums = options?.checksums ?? [];
+        this.homepage = options?.homepage ?? undefined;
+        this.sourceInfo = options?.sourceInfo ?? undefined;
+        this.licenseConcluded = options?.licenseConcluded ?? undefined;
+        this.licenseInfoFromFiles = options?.licenseInfoFromFiles ?? [];
+        this.licenseDeclared = options?.licenseDeclared ?? undefined;
+        this.licenseComment = options?.licenseComment ?? undefined;
+        this.copyrightText = options?.copyrightText ?? undefined;
+        this.summary = options?.summary ?? undefined;
+        this.description = options?.description ?? undefined;
+        this.comment = options?.comment ?? undefined;
+        this.externalReferences = options?.externalReferences ?? [];
+        this.attributionTexts = options?.attributionTexts ?? [];
+        this.primaryPackagePurpose = options?.primaryPackagePurpose ?? undefined;
+        this.releaseDate = options?.releaseDate ?? undefined;
+        this.builtDate = options?.builtDate ?? undefined;
+        this.validUntilDate = options?.validUntilDate ?? undefined;
+    }
+    static fromApi(name, options) {
+        return new Package(name, {
+            spdxId: options?.spdxId,
+            version: options?.version,
+            fileName: options?.fileName,
+            downloadLocation: options?.downloadLocation && toSpdxType(options.downloadLocation),
+            supplier: formatVendor(options?.supplier),
+            originator: formatVendor(options?.originator),
+            filesAnalyzed: options?.filesAnalyzed,
+            verificationCode: options?.verificationCode,
+            checksums: options?.checksums && Checksum.fromSpdxChecksums(options.checksums),
+            homepage: options?.homepage && toSpdxType(options.homepage),
+            sourceInfo: options?.sourceInfo,
+            licenseConcluded: options?.licenseConcluded && toSpdxType(options.licenseConcluded),
+            licenseInfoFromFiles: options?.licenseInfoFromFiles?.map((license) => toSpdxType(license)),
+            licenseDeclared: options?.licenseDeclared && toSpdxType(options.licenseDeclared),
+            licenseComment: options?.licenseComment,
+            copyrightText: options?.copyrightText && toSpdxType(options.copyrightText),
+            summary: options?.summary,
+            description: options?.description,
+            comment: options?.comment,
+            externalReferences: options?.externalReferences,
+            attributionTexts: options?.attributionTexts,
+            primaryPackagePurpose: options?.primaryPackagePurpose
+                ? formatPackagePurpose(options.primaryPackagePurpose)
+                : undefined,
+            releaseDate: options?.releaseDate,
+            builtDate: options?.builtDate,
+            validUntilDate: options?.validUntilDate,
+        });
+    }
+}
+
+class ExternalDocumentReference {
+    documentRefId;
+    documentUri;
+    checksum;
+    constructor(documentRefId, documentUri, checksum) {
+        // TODO: What are the constraints for this?
+        this.documentRefId = documentRefId;
+        this.documentUri = documentUri;
+        this.checksum = checksum;
+    }
+    static fromApi(ref) {
+        return new ExternalDocumentReference(ref.documentRefId, ref.documentUri, Checksum.fromSpdxChecksum({
+            checksumValue: ref.checksumValue,
+            checksumAlgorithm: ref.checksumAlgorithm,
+        }));
+    }
+}
+
+function formatSpdxVersion(spdxVersion) {
+    return "SPDX-" + (spdxVersion ?? "2.3");
+}
+function generateNamespace(documentName) {
+    // Remove/replace invalid characters (https://datatracker.ietf.org/doc/html/rfc2141#section-2.1)
+    const formattedDocumentName = documentName
+        .replace(/^[^A-Za-z0-9]+/, "")
+        .replace(/[^A-Za-z0-9-]/g, "-");
+    return "urn:" + (formattedDocumentName ?? "document") + ":" + uuid.v4();
+}
+class DocumentCreationInfo {
+    spdxVersion;
+    dataLicense = "CC0-1.0";
+    // TODO: Verify that this is correct
+    spdxId;
+    name;
+    documentNamespace;
+    externalDocumentRefs;
+    licenseListVersion;
+    creators;
+    created;
+    creatorComment;
+    documentComment;
+    constructor(spdxVersion, name, documentNamespace, creators, created, options) {
+        this.spdxVersion = spdxVersion;
+        this.name = name;
+        this.documentNamespace = documentNamespace;
+        this.creators = creators;
+        this.created = created;
+        this.externalDocumentRefs = options?.externalDocumentRefs ?? [];
+        this.creatorComment = options?.creatorComment ?? undefined;
+        this.licenseListVersion = options?.licenseListVersion ?? undefined;
+        this.documentComment = options?.documentComment ?? undefined;
+        this.spdxId = options?.spdxId ?? "SPDXRef-DOCUMENT";
+    }
+    static fromApi(name, options) {
+        return new DocumentCreationInfo(formatSpdxVersion(options?.spdxVersion), name, options?.namespace ?? generateNamespace(name), options?.creators
+            ? Actor.fromSpdxActors(options.creators).concat(Actor.tools())
+            : [], options?.created ?? new Date(), {
+            ...options,
+            externalDocumentRefs: options?.externalDocumentRefs
+                ? options.externalDocumentRefs.map((ref) => ExternalDocumentReference.fromApi(ref))
+                : undefined,
+        });
+    }
 }
 
 var FileType;
@@ -510,6 +656,13 @@ var FileType;
     FileType["TEXT"] = "TEXT";
     FileType["AUDIO"] = "AUDIO";
 })(FileType || (FileType = {}));
+function formatFileType(fileType) {
+    const fileTypeEnum = FileType[fileType];
+    if (!fileTypeEnum) {
+        throw new Error("Invalid file type: " + fileType);
+    }
+    return fileTypeEnum;
+}
 // TODO: Implement optional properties
 class File {
     name;
@@ -522,97 +675,55 @@ class File {
         this.checksums = checksums;
         this.fileTypes = options?.fileTypes ?? [];
     }
+    static fromApi(name, checksums, options) {
+        return new File(name, Checksum.fromSpdxChecksums(checksums), {
+            spdxId: options?.spdxId ?? undefined,
+            fileTypes: options?.fileTypes
+                ? options.fileTypes.map((fileType) => formatFileType(fileType))
+                : undefined,
+        });
+    }
 }
 
 class SPDXDocument extends Document {
-    static formatCreators(creators) {
-        if (!creators) {
-            return [];
-        }
-        else if (Array.isArray(creators)) {
-            return creators.map((creator) => Actor.fromCreator(creator));
-        }
-        else {
-            return [Actor.fromCreator(creators)];
-        }
-    }
-    static formatSpdxVersion(spdxVersion) {
-        return "SPDX-" + (spdxVersion ?? "2.3");
-    }
-    static generateNamespace(documentName) {
-        // Remove/replace invalid characters (https://datatracker.ietf.org/doc/html/rfc2141#section-2.1)
-        const formattedDocumentName = documentName
-            .replace(/^[^A-Za-z0-9]+/, "")
-            .replace(/[^A-Za-z0-9-]/g, "-");
-        return "urn:" + (formattedDocumentName ?? "document") + ":" + uuid.v4();
-    }
-    static formatExternalDocumentRefs(refs) {
-        return refs
-            ? refs.map((ref) => new ExternalDocumentRef(ref.documentRefId, ref.documentUri, new Checksum(ref.checksum_algorithm, ref.checksum_value)))
-            : undefined;
-    }
     static createDocument(name, options) {
-        const creationInfo = new DocumentCreationInfo(this.formatSpdxVersion(options?.spdxVersion), name, options?.namespace ?? this.generateNamespace(name), this.formatCreators(options?.creators).concat(Actor.tools()), options?.created ?? new Date(), {
-            ...options,
-            externalDocumentRefs: this.formatExternalDocumentRefs(options?.externalDocumentRefs),
-        });
+        const creationInfo = DocumentCreationInfo.fromApi(name, options);
         return new SPDXDocument(creationInfo);
     }
-    addPackage(name, downloadLocation, options) {
-        const pkg = new Package(name, downloadLocation, options);
+    addPackage(name, options) {
+        const pkg = Package.fromApi(name, options);
         this.packages = this.packages.concat(pkg);
         return pkg;
     }
     addFile(name, checksums, options) {
-        const formattedChecksums = Array.isArray(checksums)
-            ? checksums.map((checksum) => new Checksum(checksum.checksumAlgorithm, checksum.checksumValue))
-            : [
-                new Checksum(checksums.checksumAlgorithm, checksums.checksumValue),
-            ];
-        const fileTypes = options?.fileTypes
-            ? options.fileTypes.map((fileType) => fileType)
-            : undefined;
-        const file = new File(name, formattedChecksums, {
-            spdxId: options?.spdxId ?? undefined,
-            fileTypes,
-        });
+        const file = File.fromApi(name, checksums, options);
         this.files = this.files.concat(file);
         return file;
     }
     addRelationship(spdxElement, relatedSpdxElement, relationshipType, options) {
-        function getSpdxId(spdxElement) {
-            if (typeof spdxElement === "string") {
-                return spdxElement;
-            }
-            else if (spdxElement instanceof Document) {
-                return spdxElement.creationInfo.spdxId;
-            }
-            else {
-                return spdxElement.spdxId;
-            }
-        }
-        const relationship = new Relationship(getSpdxId(spdxElement), getSpdxId(relatedSpdxElement), relationshipType, { comment: options?.comment });
+        const relationship = Relationship.fromApi(spdxElement, relatedSpdxElement, relationshipType, options);
         this.relationships = this.relationships.concat(relationship);
         return this;
     }
-    async write(location, allowInvalid = false) {
-        const validationIssues = this.validate();
+    validate(allowInvalid = true) {
+        const validationIssues = this.gatherValidationIssues();
         if (validationIssues.length > 0) {
-            console.error(`Document is invalid: ${validationIssues.join("\n")}`);
+            const validationMessage = "Document is invalid: " + validationIssues.join("\n");
             if (!allowInvalid) {
-                return;
+                throw new Error(validationMessage);
             }
+            console.error(validationMessage);
         }
+        else {
+            console.log("Document is valid");
+        }
+    }
+    async write(location, allowInvalid = false) {
+        this.validate(allowInvalid);
         await this.writeFile(location);
     }
     writeSync(location, allowInvalid = false) {
-        const validationIssues = this.validate();
-        if (validationIssues.length > 0) {
-            console.error(`Document is invalid: ${validationIssues.join("\n")}`);
-            if (!allowInvalid) {
-                return;
-            }
-        }
+        this.validate(allowInvalid);
         this.writeFile(location)
             .then(() => {
             console.log("Wrote SBOM successfully: " + location);

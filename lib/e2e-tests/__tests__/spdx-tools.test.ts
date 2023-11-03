@@ -10,6 +10,25 @@ test("Creates and writes minimal document", async () => {
   mock({ "root/dir": { "existingFile.txt": "" } });
   const testfile = "root/dir/sbom.spdx.json";
 
+  const document = sbom.createDocument("test document", {
+    spdxVersion: "2.3",
+  });
+  const pkg = document.addPackage("test-package");
+  document.addRelationship(document, pkg, "DESCRIBES");
+  await document.write(testfile).then(() => {
+    expect(fs.lstatSync(testfile).isFile()).toBe(true);
+    const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });
+    const parsedFileContent = JSON.parse(writtenFileContent);
+    expect(parsedFileContent.packages[0].name).toBe("test-package");
+    expect(parsedFileContent.name).toBe("test document");
+  });
+});
+
+// TODO: This test should fail since the document is invalid (missing describes relationship)
+test("Creates and writes incomplete document", async () => {
+  mock({ "root/dir": { "existingFile.txt": "" } });
+  const testfile = "root/dir/sbom.spdx.json";
+
   const document = sbom.createDocument("test document", { spdxVersion: "2.3" });
   document.addPackage("test-package", {
     downloadLocation: "test/download/location",

@@ -1,3 +1,7 @@
+import { Document } from "./document";
+import type { Package } from "./package";
+import type { File } from "./file";
+
 export enum RelationshipType {
   AMENDS = "AMENDS",
   ANCESTOR_OF = "ANCESTOR_OF",
@@ -50,6 +54,18 @@ export interface RelationshipOptions {
   comment: string;
 }
 
+function getSpdxIdFromElement(
+  spdxElement: Document | Package | File | string,
+): string {
+  if (typeof spdxElement === "string") {
+    return spdxElement;
+  } else if (spdxElement instanceof Document) {
+    return spdxElement.creationInfo.spdxId;
+  } else {
+    return spdxElement.spdxId;
+  }
+}
+
 export class Relationship {
   spdxElementId: string;
   relatedSpdxElementId: string;
@@ -66,5 +82,19 @@ export class Relationship {
     this.relatedSpdxElementId = relatedSpdxElementId;
     this.relationshipType = relationshipType;
     this.comment = options?.comment;
+  }
+
+  static fromApi(
+    spdxElement: Document | Package | File | string,
+    relatedSpdxElement: Document | Package | File | string,
+    relationshipType: string,
+    options?: Partial<RelationshipOptions>,
+  ): Relationship {
+    return new Relationship(
+      getSpdxIdFromElement(spdxElement),
+      getSpdxIdFromElement(relatedSpdxElement),
+      relationshipType as RelationshipType,
+      { comment: options?.comment },
+    );
   }
 }
