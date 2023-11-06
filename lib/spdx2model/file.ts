@@ -1,6 +1,8 @@
 import { Checksum } from "./checksum";
 import { v4 as uuidv4 } from "uuid";
 import type { AddFileOptions, SpdxChecksum } from "../api/spdx-document";
+import type { SpdxNoAssertion, SpdxNone } from "./utils";
+import { toSpdxType } from "./utils";
 
 export enum FileType {
   OTHER = "OTHER",
@@ -19,6 +21,14 @@ export enum FileType {
 export interface FileOptions {
   spdxId: string;
   fileTypes: FileType[];
+  licenseConcluded?: string | SpdxNoAssertion | SpdxNone;
+  licenseInfoInFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+  licenseComment?: string;
+  copyrightText?: string | SpdxNoAssertion | SpdxNone;
+  comment?: string;
+  notice?: string;
+  contributors: string[];
+  attributionTexts: string[];
 }
 
 function formatFileType(fileType: string): FileType {
@@ -29,12 +39,19 @@ function formatFileType(fileType: string): FileType {
   return fileTypeEnum;
 }
 
-// TODO: Implement optional properties
 export class File {
   name: string;
   spdxId: string;
   checksums: Checksum[];
   fileTypes: FileType[];
+  licenseConcluded?: string | SpdxNoAssertion | SpdxNone;
+  licenseInfoInFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+  licenseComment?: string;
+  copyrightText?: string | SpdxNoAssertion | SpdxNone;
+  comment?: string;
+  notice?: string;
+  contributors: string[];
+  attributionTexts: string[];
 
   constructor(
     name: string,
@@ -45,6 +62,14 @@ export class File {
     this.spdxId = "SPDXRef-" + uuidv4();
     this.checksums = checksums;
     this.fileTypes = options?.fileTypes ?? [];
+    this.licenseConcluded = options?.licenseConcluded ?? undefined;
+    this.licenseInfoInFiles = options?.licenseInfoInFiles ?? [];
+    this.licenseComment = options?.licenseComment ?? undefined;
+    this.copyrightText = options?.copyrightText ?? undefined;
+    this.comment = options?.comment ?? undefined;
+    this.notice = options?.notice ?? undefined;
+    this.contributors = options?.contributors ?? [];
+    this.attributionTexts = options?.attributionTexts ?? [];
   }
 
   static fromApi(
@@ -57,6 +82,18 @@ export class File {
       fileTypes: options?.fileTypes
         ? options.fileTypes.map((fileType) => formatFileType(fileType))
         : undefined,
+      licenseConcluded:
+        options?.licenseConcluded && toSpdxType(options.licenseConcluded),
+      licenseInfoInFiles: options?.licenseInfoInFiles?.map((licenseInfo) =>
+        toSpdxType(licenseInfo),
+      ),
+      licenseComment: options?.licenseComment ?? undefined,
+      copyrightText:
+        options?.copyrightText && toSpdxType(options.copyrightText),
+      comment: options?.comment ?? undefined,
+      notice: options?.notice ?? undefined,
+      contributors: options?.contributors ?? [],
+      attributionTexts: options?.attributionTexts ?? [],
     });
   }
 }

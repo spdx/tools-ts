@@ -113,7 +113,14 @@ In addition, it takes an object with the following optional parameters:
 | ----------- | ----------- | ----------- | ----------- |
 | spdxId | string | SPDX-Ref-<UUID V4> | ID of the package |
 | fileTypes | string[] | - | Types of the files (for example TEXT) |
-
+| licenseConcluded | string | - | License of the file |
+| licenseInfoInFiles | string[] | - | License info found in the file |
+| licenseComment | string | - | Comment on the license |
+| copyrightText | string | - | Copyright holder and other dates of the file | 
+| comment | string | - | Additional information |
+| notice | string | - | Notice of the file |
+| contributors | string[] | - | Contributors of the file |
+| attributionTexts | string[] | - | Acknowledgements about the file |
 
 ## Relationships
 Relationships are used to describe the relationship between different SPDX elements.

@@ -76,6 +76,14 @@ export interface AddPackagesOptions {
 export interface AddFileOptions {
   spdxId: string;
   fileTypes: string[];
+  licenseConcluded: string;
+  licenseInfoInFiles: string[];
+  licenseComment: string;
+  copyrightText: string;
+  comment: string;
+  notice: string;
+  contributors: string[];
+  attributionTexts: string[];
 }
 
 export class SPDXDocument extends Document {

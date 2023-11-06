@@ -98,7 +98,6 @@ export class Package {
   summary?: string;
   description?: string;
   comment?: string;
-  // TODO: Implement ExternalPackageRef class
   externalReferences: ExternalPackageRef[];
   attributionTexts: string[];
   primaryPackagePurpose?: PackagePurpose;

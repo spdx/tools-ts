@@ -80,6 +80,14 @@ const firstFile = document.addFile(
   {
     spdxId: "first-file",
     fileTypes: ["TEXT"],
+    licenseConcluded: "MIT",
+    licenseInfoInFiles: ["MIT"],
+    licenseComment: "This is a comment",
+    copyrightText: "This is a copyright",
+    comment: "This is a comment",
+    notice: "This is a notice",
+    contributors: ["Contributor"],
+    attributionTexts: ["This is an attribution text"],
   },
 );
 
