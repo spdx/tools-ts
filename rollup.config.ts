@@ -1,11 +1,10 @@
 import typescript from "@rollup/plugin-typescript";
-import json from "@rollup/plugin-json";
 import dts from "rollup-plugin-dts";
 
 const config = [
   {
     input: { "spdx-tools": "lib/spdx-tools.ts" },
-    plugins: [typescript({ sourceMap: true }), json()],
+    plugins: [typescript({ sourceMap: true })],
     external: ["fs/promises", "uuid"],
     output: [
       {

@@ -4,7 +4,6 @@
   "description": "A Typescript library for creating SPDX documents",
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/jest": "^29.5.5",
     "@types/mock-fs": "^4.13.2",
@@ -46,10 +45,6 @@
     "**/*.ts": [
       "echo 'Linting...'",
       "npm run lint-fix"
-    ],
-    "lib/**/*.ts": [
-      "echo 'Building...'",
-      "npm run build"
     ]
   },
   "exports": {
