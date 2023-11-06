@@ -34,7 +34,7 @@ The following features are supported by this library:
 | ------- | ----- | ------- |
 | Document creation | DONE
 | Packages | DONE
-| Files | PARTIAL | essential properties are supported
+| Files | DONE
 | Relationships | DONE
 | Snippets |  
 | Annotations | 
