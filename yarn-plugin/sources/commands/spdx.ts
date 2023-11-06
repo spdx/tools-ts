@@ -1,41 +1,20 @@
-import { BaseCommand, WorkspaceRequiredError } from "@yarnpkg/cli";
-import type { Package } from "@yarnpkg/core";
-import { Configuration, Project } from "@yarnpkg/core";
+import { BaseCommand } from "@yarnpkg/cli";
 import * as spdx from "../../../lib/spdx-tools";
 import type { Usage } from "clipanion";
 import { Command, Option } from "clipanion";
 import type { ManifestWithLicenseInfo } from "../utils";
-import { getSortedPackages } from "../utils";
-import type { Linker } from "../linkers";
-import { resolveLinker } from "../linkers";
-import * as nodeModules from "../linkers/node-modules";
+import {
+  getLinker,
+  getPackageInfos,
+  getSortedPackages,
+  getSpdxId,
+  setupProject,
+} from "../utils";
 import { Filename, ppath } from "@yarnpkg/fslib";
 
-const spdxNoAssertion = "NOASSERTION";
-const spdxIdPrependix = "SPDXRef-";
 const spdxDependsOn = "DEPENDS_ON";
 const spdxDescribes = "DESCRIBES";
 const spdxJsonFileExtension = ".spdx.json";
-
-const urlRegex =
-  "(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/|" +
-  "ssh:\\/\\/|git:\\/\\/|svn:\\/\\/|sftp:\\/\\/|" +
-  "ftp:\\/\\/)?([\\w\\-.!~*'()%;:&=+$,]+@)?[a-z0-9]+" +
-  "([\\-\\.]{1}[a-z0-9]+){0,100}\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?";
-
-const supportedDownloadRepos = "(git|hg|svn|bzr)";
-const gitRegex = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)";
-const bazaarRegex = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)";
-const downloadLocationRegex =
-  "^(((" +
-  supportedDownloadRepos +
-  "\\+)?" +
-  urlRegex +
-  ")|" +
-  gitRegex +
-  "|" +
-  bazaarRegex +
-  ")$";
 
 export class SpdxCommand extends BaseCommand {
   static paths = [[`spdx`]];
@@ -70,18 +49,7 @@ export class SpdxCommand extends BaseCommand {
   });
 
   async execute(): Promise<void> {
-    const configuration = await Configuration.find(
-      this.context.cwd,
-      this.context.plugins,
-    );
-    const { project, workspace } = await Project.find(
-      configuration,
-      this.context.cwd,
-    );
-    if (!workspace) {
-      throw new WorkspaceRequiredError(project.cwd, this.context.cwd);
-    }
-    await project.restoreInstallState();
+    const [project, workspace] = await setupProject();
 
     const spdxDocument = spdx.createDocument(
       workspace.manifest.name?.name ?? "spdx",
@@ -92,21 +60,15 @@ export class SpdxCommand extends BaseCommand {
       this.recursive,
       this.production,
     );
+    const linker = getLinker(project);
+
     const allDependencies = [...sortedPackages].flatMap(([, pkg]) =>
       [...pkg.dependencies].flatMap(
         ([, descriptor]) => descriptor.descriptorHash,
       ),
     );
-
-    const nodeLinker = project.configuration.get("nodeLinker");
-    let linker: Linker;
-    if (typeof nodeLinker === "string") {
-      linker = resolveLinker(nodeLinker);
-    } else {
-      linker = nodeModules as Linker;
-    }
-
     const existingSpdxIds = new Set<string>();
+
     for (const [descriptor, pkg] of sortedPackages.entries()) {
       const packagePath = await linker.getPackagePath(project, pkg);
       if (packagePath === null) continue;
@@ -116,8 +78,7 @@ export class SpdxCommand extends BaseCommand {
           "utf8",
         ),
       );
-      const { repository } = packageManifest;
-      const formattedRepository: string = getDownloadLocation(repository);
+      const formattedRepository = await getPackageInfos(packageManifest);
 
       const currentPkgSpdxId = getSpdxId(pkg);
       if (existingSpdxIds.has(currentPkgSpdxId)) continue;
@@ -152,34 +113,7 @@ export class SpdxCommand extends BaseCommand {
       }
     }
     spdxDocument.writeSync(
-      (workspace.manifest.name?.name ?? "") + spdxJsonFileExtension,
+      (workspace.manifest.name?.name ?? "project") + spdxJsonFileExtension,
     );
   }
-}
-
-function getDownloadLocation(
-  repository: { url: string } | string | undefined,
-): string {
-  if (
-    repository &&
-    typeof repository === "object" &&
-    isValidDownloadLocation(repository.url)
-  ) {
-    return repository.url;
-  } else {
-    return spdxNoAssertion;
-  }
-}
-
-function isValidDownloadLocation(downloadLocation: string): boolean {
-  return (
-    new RegExp(urlRegex).test(downloadLocation) &&
-    new RegExp(downloadLocationRegex).test(downloadLocation)
-  );
-}
-
-function getSpdxId(pkg: Package): string {
-  const pkgName = pkg.name.replace(/^@/, "").replace(/_/g, "-");
-  const pkgVersion = pkg.version.replace(/\//g, ".").replace(/_/g, "-");
-  return spdxIdPrependix + pkgName + "-" + pkgVersion;
 }
