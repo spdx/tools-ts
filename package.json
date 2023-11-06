@@ -19,6 +19,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.0",
     "jest": "^29.7.0",
+    "jsonschema": "^1.4.1",
     "lint-staged": "^14.0.1",
     "mock-fs": "^5.2.0",
     "prettier": "3.0.3",
@@ -44,10 +45,7 @@
     "**/*.ts": [
       "echo 'Linting...'",
       "npm run lint-fix"
-    ],
-    "lib/**/*.ts": [
-      "echo 'Building...'",
-      "npm run build"]
+    ]
   },
   "exports": {
     ".": {
