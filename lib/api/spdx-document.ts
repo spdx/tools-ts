@@ -44,7 +44,7 @@ export interface CreateDocumentOptions {
   documentComment: string;
 }
 
-export interface AddPackagesOptions {
+export interface AddPackageOptions {
   downloadLocation: string;
   spdxId: string;
   version: string;
@@ -95,7 +95,7 @@ export class SPDXDocument extends Document {
     return new SPDXDocument(creationInfo);
   }
 
-  addPackage(name: string, options?: Partial<AddPackagesOptions>): Package {
+  addPackage(name: string, options?: Partial<AddPackageOptions>): Package {
     const pkg = Package.fromApi(name, options);
     this.packages = this.packages.concat(pkg);
     return pkg;
