@@ -64,7 +64,7 @@ export interface AddPackageOptions {
   summary: string;
   description: string;
   comment: string;
-  // TODO: Implement references class
+  //  TODO: Implement references class
   externalReferences: SpdxExternalPackageReference[];
   attributionTexts: string[];
   primaryPackagePurpose: string;
