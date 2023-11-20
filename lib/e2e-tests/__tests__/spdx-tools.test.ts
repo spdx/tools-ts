@@ -1,6 +1,7 @@
 import * as sbom from "../../spdx-tools";
 import * as fs from "fs";
 import mock from "mock-fs";
+import type { Package } from "../../spdx2model/package";
 
 afterEach(() => {
   mock.restore();
@@ -24,22 +25,72 @@ test("Creates and writes minimal document", async () => {
   });
 });
 
-// TODO: This test should fail since the document is invalid (missing describes relationship)
 test("Creates and writes incomplete document", async () => {
   mock({ "root/dir": { "existingFile.txt": "" } });
   const testfile = "root/dir/sbom.spdx.json";
 
-  const document = sbom.createDocument("test document", { spdxVersion: "2.3" });
-  document.addPackage("test-package", {
-    downloadLocation: "test/download/location",
-    spdxId: "package-spdx-id",
+  const document = sbom.createDocument("my project", { spdxVersion: "2.3" });
+  document.addPackage("jest", {
+    downloadLocation: "https://github.com/jestjs/jest.git",
+    spdxId: "SPDXRef-jest-29.7.0",
   });
   await document.write(testfile).then(() => {
     expect(fs.lstatSync(testfile).isFile()).toBe(true);
     const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });
     const parsedFileContent = JSON.parse(writtenFileContent);
-    expect(parsedFileContent.packages[0].name).toBe("test-package");
-    expect(parsedFileContent.name).toBe("test document");
+    expect(parsedFileContent.packages[0].name).toBe("jest");
+    expect(parsedFileContent.name).toBe("my project");
+  });
+});
+
+test("Fails when writing invalid document", async () => {
+  mock({ "root/dir": { "existingFile.txt": "" } });
+  const testfile = "root/dir/sbom.spdx.json";
+
+  const document = sbom.createDocument("my project", { spdxVersion: "2.3" });
+  document.addPackage("jest", {
+    downloadLocation: "https://github.com/jestjs/jest.git",
+    spdxId: "SPDXRef-jest-29.7.0",
+  });
+  document.addPackage("nunjucks", {
+    downloadLocation: "https://github.com/mozilla/nunjucks.git",
+    spdxId: "SPDXRef-nunjucks-3.2.4",
+  });
+  expect(() => {
+    document.writeSync(testfile);
+  }).toThrow(Error);
+  expect(() => {
+    document.writeSync(testfile);
+  }).toThrow(
+    "Missing DESCRIBES or DESCRIBED_BY relationships.\n" +
+      "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.",
+  );
+});
+
+test("Succeeds when writing invalid document with allowInvalid flag", async () => {
+  mock({ "root/dir": { "existingFile.txt": "" } });
+  const testfile = "root/dir/sbom.spdx.json";
+
+  const document = sbom.createDocument("my project", { spdxVersion: "2.3" });
+  document.addPackage("jest", {
+    downloadLocation: "https://github.com/jestjs/jest.git",
+    spdxId: "SPDXRef-jest-29.7.0",
+  });
+  document.addPackage("nunjucks", {
+    downloadLocation: "https://github.com/mozilla/nunjucks.git",
+    spdxId: "SPDXRef-nunjucks-3.2.4",
+  });
+
+  await document.write(testfile, true).then(() => {
+    expect(fs.lstatSync(testfile).isFile()).toBe(true);
+    const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });
+    const parsedFileContent = JSON.parse(writtenFileContent);
+    const packageNames = parsedFileContent.packages.map(
+      (pkg: Package) => pkg.name,
+    );
+    expect(packageNames).toContain("jest");
+    expect(packageNames).toContain("nunjucks");
+    expect(parsedFileContent.name).toBe("my project");
   });
 });
 

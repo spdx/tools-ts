@@ -37,10 +37,10 @@ export class Document {
       (relationship) => relationship.relationshipType === "DESCRIBED_BY",
     );
 
-    return !(
-      hasOnlyOnePackage ||
-      describesRelationships.length > 0 ||
-      describedByRelationships.length > 0
+    return (
+      !hasOnlyOnePackage &&
+      describesRelationships.length === 0 &&
+      describedByRelationships.length === 0
     );
   }
 
@@ -70,18 +70,18 @@ export class Document {
   gatherValidationIssues(): string[] {
     const validationIssues: string[] = [];
     if (this.creationInfo.spdxVersion !== "SPDX-2.3") {
-      validationIssues.concat(
+      validationIssues.push(
         "Invalid SPDX version. Currently only SPDX-2.3 is supported.",
       );
     }
     if (this.hasMissingDescribesRelationships()) {
-      validationIssues.concat(
+      validationIssues.push(
         "Missing DESCRIBES or DESCRIBED_BY relationships.",
         "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.",
       );
     }
     if (this.hasDuplicateSpdxIds()) {
-      validationIssues.concat(
+      validationIssues.push(
         "Duplicate SPDX IDs for packages, files or relationships.",
       );
     }
