@@ -6,7 +6,7 @@ import type { Package, Project } from "@yarnpkg/core";
 import { structUtils } from "@yarnpkg/core";
 import type { PortablePath } from "@yarnpkg/fslib";
 import { VirtualFS } from "@yarnpkg/fslib";
-// import { getLibzipSync, ZipOpenFS } from "@yarnpkg/libzip";
+import { getLibzipSync, ZipOpenFS } from "@yarnpkg/libzip";
 import { getArchitectureSet } from "./utils";
 
 /**
@@ -56,10 +56,27 @@ const makePnPApi = (project: Project): void => {
 /**
  * Instantiate the virtual file system for reading package files in PnP
  */
-export const fs = new VirtualFS({
-  // TODO: Fix this. When using the plugin, it throws the type error: pe.ZipOpenFS is not a constructor
-  // baseFs: new ZipOpenFS({
-  //   libzip: getLibzipSync(),
-  //   readOnlyArchives: true,
-  // }),
-});
+const getFs = (): VirtualFS => {
+  makeFs();
+  return fs;
+};
+
+let fs: VirtualFS;
+
+/**
+ * Make the virtual file system for reading package files in PnP
+ *
+ * @returns {void}
+ */
+const makeFs = (): void => {
+  if (!fs) {
+    fs = new VirtualFS({
+      baseFs: new ZipOpenFS({
+        libzip: getLibzipSync(),
+        readOnlyArchives: true,
+      }),
+    });
+  }
+};
+
+export { getFs, fs };
