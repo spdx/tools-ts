@@ -6,7 +6,6 @@ import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import { File } from "../spdx2model/file";
 
-// TODO: Add validation to conversion from Actor to SpdxActor
 export interface SpdxActor {
   name: string;
   type: string;
@@ -64,7 +63,6 @@ export interface AddPackageOptions {
   summary: string;
   description: string;
   comment: string;
-  //  TODO: Implement references class
   externalReferences: SpdxExternalPackageReference[];
   attributionTexts: string[];
   primaryPackagePurpose: string;

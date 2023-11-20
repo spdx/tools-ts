@@ -22,6 +22,9 @@ export class Actor {
     if (!actorType) {
       throw new Error("Invalid actor type: " + actor.type);
     }
+    if (actorType === ActorType.Tool && actor.email) {
+      throw new Error("Email must be undefined if actorType is Tool.");
+    }
     return new Actor(actor.name, actorType, actor.email);
   }
 
