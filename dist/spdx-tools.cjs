@@ -168,38 +168,52 @@ class JsonFile {
     SPDXID;
     fileName;
     checksums;
-    // TODO: Should this be of type FileType[] -> where should the enum live?
+    attributionTexts;
+    comment;
+    copyrightText;
+    fileContributors;
     fileTypes;
-    constructor(SPDXID, fileName, checksums, fileTypes) {
+    licenseComments;
+    licenseConcluded;
+    licenseInfoInFiles;
+    noticeText;
+    constructor(SPDXID, fileName, checksums, attributionTexts, comment, copyrightText, fileContributors, fileTypes, licenseComments, licenseConcluded, licenseInfoInFiles, noticeText) {
         this.SPDXID = SPDXID;
         this.fileName = fileName;
         this.checksums = checksums;
+        this.attributionTexts = attributionTexts;
+        this.comment = comment;
+        this.copyrightText = copyrightText;
+        this.fileContributors = fileContributors;
         this.fileTypes = fileTypes;
+        this.licenseComments = licenseComments;
+        this.licenseConcluded = licenseConcluded;
+        this.licenseInfoInFiles = licenseInfoInFiles;
+        this.noticeText = noticeText;
     }
     static fromFile(file) {
         const jsonChecksums = file.checksums.map((checksum) => JsonChecksum.fromChecksum(checksum));
-        return new JsonFile(file.spdxId, file.name, jsonChecksums, file.fileTypes);
+        const jsonFileTypes = file.fileTypes.length > 0
+            ? file.fileTypes.map((fileType) => fileType.toString())
+            : undefined;
+        const jsonLicenseInfoInFiles = file.licenseInfoInFiles.length > 0
+            ? file.licenseInfoInFiles.map((licenseInfoInFile) => licenseInfoInFile.toString())
+            : undefined;
+        return new JsonFile(file.spdxId, file.name, jsonChecksums, file.attributionTexts.length > 0 ? file.attributionTexts : undefined, file.comment, file.copyrightText?.toString(), file.contributors.length > 0 ? file.contributors : undefined, jsonFileTypes, file.licenseComment, file.licenseConcluded?.toString(), jsonLicenseInfoInFiles, file.notice);
     }
 }
 
 class JsonDocument {
     SPDXID;
-    // TODO: Implement
-    // annotations
     comment;
     creationInfo;
     dataLicense;
     externalDocumentRefs;
-    // TODO: Implement
-    // hasExtractedLicenseInfos
     name;
     spdxVersion;
     documentNamespace;
     packages;
-    // TODO: Implement
     files;
-    // TODO: Implement
-    // snippets;
     relationships;
     constructor(spdxId, spdxVersion, name, documentNamespace, dataLicense, creationInfo, packages, files, relationships, externalDocumentRefs, comment) {
         this.SPDXID = spdxId;
@@ -236,26 +250,15 @@ class Document {
     creationInfo;
     packages;
     files;
-    // TODO: Implement
-    snippets;
-    // TODO: Implement
-    annotations;
     relationships;
-    // TODO: Implement
-    otherLicensingInfo;
     constructor(creationInfo, options) {
         this.creationInfo = creationInfo;
         this.packages = options?.packages ?? [];
         this.files = options?.files ?? [];
-        this.snippets = options?.snippets ?? [];
-        this.annotations = options?.annotations ?? [];
         this.relationships = options?.relationships ?? [];
-        this.otherLicensingInfo = options?.otherLicensingInfo ?? [];
     }
     hasMissingDescribesRelationships() {
-        const hasOnlyOnePackage = this.packages.length === 1 &&
-            this.files.length === 0 &&
-            this.snippets.length === 0;
+        const hasOnlyOnePackage = this.packages.length === 1 && this.files.length === 0;
         const describesRelationships = this.relationships.filter((relationship) => relationship.relationshipType === "DESCRIBES");
         const describedByRelationships = this.relationships.filter((relationship) => relationship.relationshipType === "DESCRIBED_BY");
         return !(hasOnlyOnePackage ||
@@ -270,19 +273,12 @@ class Document {
             }
             spdxIds.push(pkg.spdxId);
         });
-        // TODO: Uncomment when files and snippets are implemented
-        // this.files.forEach((file) => {
-        //   if (spdxIds.includes(file.spdxId)) {
-        //     return true;
-        //   }
-        //   spdxIds.push(file.spdxId);
-        // });
-        // this.snippets.forEach((snippet) => {
-        //   if (spdxIds.includes(snippet.spdxId)) {
-        //     return true;
-        //   }
-        //   spdxIds.push(snippet.spdxId);
-        // });
+        this.files.forEach((file) => {
+            if (spdxIds.includes(file.spdxId)) {
+                return true;
+            }
+            spdxIds.push(file.spdxId);
+        });
         this.relationships.forEach((relationship) => {
             if (spdxIds.includes(relationship.spdxElementId)) {
                 return true;
@@ -300,7 +296,7 @@ class Document {
             validationIssues.concat("Missing DESCRIBES or DESCRIBED_BY relationships.", "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.");
         }
         if (this.hasDuplicateSpdxIds()) {
-            validationIssues.concat("Duplicate SPDX IDs for packages, files, snippets or relationships.");
+            validationIssues.concat("Duplicate SPDX IDs for packages, files or relationships.");
         }
         return validationIssues;
     }
@@ -593,7 +589,6 @@ class Package {
     summary;
     description;
     comment;
-    // TODO: Implement ExternalPackageRef class
     externalReferences;
     attributionTexts;
     primaryPackagePurpose;
@@ -748,17 +743,32 @@ function formatFileType(fileType) {
     }
     return fileTypeEnum;
 }
-// TODO: Implement optional properties
 class File {
     name;
     spdxId;
     checksums;
     fileTypes;
+    licenseConcluded;
+    licenseInfoInFiles;
+    licenseComment;
+    copyrightText;
+    comment;
+    notice;
+    contributors;
+    attributionTexts;
     constructor(name, checksums, options) {
         this.name = name;
         this.spdxId = "SPDXRef-" + uuid.v4();
         this.checksums = checksums;
         this.fileTypes = options?.fileTypes ?? [];
+        this.licenseConcluded = options?.licenseConcluded ?? undefined;
+        this.licenseInfoInFiles = options?.licenseInfoInFiles ?? [];
+        this.licenseComment = options?.licenseComment ?? undefined;
+        this.copyrightText = options?.copyrightText ?? undefined;
+        this.comment = options?.comment ?? undefined;
+        this.notice = options?.notice ?? undefined;
+        this.contributors = options?.contributors ?? [];
+        this.attributionTexts = options?.attributionTexts ?? [];
     }
     static fromApi(name, checksums, options) {
         return new File(name, Checksum.fromSpdxChecksums(checksums), {
@@ -766,6 +776,14 @@ class File {
             fileTypes: options?.fileTypes
                 ? options.fileTypes.map((fileType) => formatFileType(fileType))
                 : undefined,
+            licenseConcluded: options?.licenseConcluded && toSpdxType(options.licenseConcluded),
+            licenseInfoInFiles: options?.licenseInfoInFiles?.map((licenseInfo) => toSpdxType(licenseInfo)),
+            licenseComment: options?.licenseComment ?? undefined,
+            copyrightText: options?.copyrightText && toSpdxType(options.copyrightText),
+            comment: options?.comment ?? undefined,
+            notice: options?.notice ?? undefined,
+            contributors: options?.contributors ?? [],
+            attributionTexts: options?.attributionTexts ?? [],
         });
     }
 }
