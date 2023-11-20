@@ -95,7 +95,7 @@ export class SPDXDocument extends Document {
 
   addPackage(name: string, options?: Partial<AddPackageOptions>): Package {
     const pkg = Package.fromApi(name, options);
-    this.packages = this.packages.concat(pkg);
+    this.packages.push(pkg);
     return pkg;
   }
 
@@ -105,7 +105,7 @@ export class SPDXDocument extends Document {
     options?: Partial<AddFileOptions>,
   ): File {
     const file = File.fromApi(name, checksums, options);
-    this.files = this.files.concat(file);
+    this.files.push(file);
     return file;
   }
 
@@ -121,7 +121,7 @@ export class SPDXDocument extends Document {
       relationshipType,
       options,
     );
-    this.relationships = this.relationships.concat(relationship);
+    this.relationships.push(relationship);
     return this;
   }
 
