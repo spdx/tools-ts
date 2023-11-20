@@ -3,7 +3,7 @@ import { Checksum } from "./checksum";
 import type { SpdxNone } from "./utils";
 import { SpdxNoAssertion, toSpdxType, validateSpdxNoAssertion } from "./utils";
 import { v4 as uuidv4 } from "uuid";
-import type { AddPackagesOptions, SpdxActor } from "../api/spdx-document";
+import type { AddPackageOptions, SpdxActor } from "../api/spdx-document";
 import { ExternalPackageRef } from "./external-package-reference";
 
 interface PackageOptions {
@@ -134,7 +134,7 @@ export class Package {
     this.validUntilDate = options?.validUntilDate ?? undefined;
   }
 
-  static fromApi(name: string, options?: Partial<AddPackagesOptions>): Package {
+  static fromApi(name: string, options?: Partial<AddPackageOptions>): Package {
     return new Package(name, {
       spdxId: options?.spdxId,
       version: options?.version,

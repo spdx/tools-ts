@@ -1,185 +1,110 @@
-import { BaseCommand, WorkspaceRequiredError } from "@yarnpkg/cli";
-import type { Package } from "@yarnpkg/core";
-import { Configuration, Project } from "@yarnpkg/core";
+import { BaseCommand } from "@yarnpkg/cli";
 import * as spdx from "../../../lib/spdx-tools";
 import type { Usage } from "clipanion";
-import { Command, Option } from "clipanion";
-import type { ManifestWithLicenseInfo } from "../utils";
-import { getSortedPackages } from "../utils";
-import type { Linker } from "../linkers";
-import { resolveLinker } from "../linkers";
-import * as nodeModules from "../linkers/node-modules";
-import { Filename, ppath } from "@yarnpkg/fslib";
+import { Command } from "clipanion";
+import {
+  clearDevDependencies,
+  getDevDependencies,
+  getLinker,
+  getSortedPackages,
+  setupProject,
+} from "../utils/project-helpers";
+import {
+  addDescribesRelationshipsToSpdxDocument,
+  addDevRelationshipsToSpdxDocument,
+  addPackagesToSpdxDocument,
+  addProdRelationshipsToSpdxDocument,
+} from "../utils/spdx-helpers";
+import {
+  getTopLevelDevDependencyPackages,
+  getTopLevelPackages,
+} from "../utils/package-helpers";
 
-const spdxNoAssertion = "NOASSERTION";
-const spdxIdPrependix = "SPDXRef-";
-const spdxDependsOn = "DEPENDS_ON";
-const spdxDescribes = "DESCRIBES";
 const spdxJsonFileExtension = ".spdx.json";
-
-const urlRegex =
-  "(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/|" +
-  "ssh:\\/\\/|git:\\/\\/|svn:\\/\\/|sftp:\\/\\/|" +
-  "ftp:\\/\\/)?([\\w\\-.!~*'()%;:&=+$,]+@)?[a-z0-9]+" +
-  "([\\-\\.]{1}[a-z0-9]+){0,100}\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?";
-
-const supportedDownloadRepos = "(git|hg|svn|bzr)";
-const gitRegex = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)";
-const bazaarRegex = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)";
-const downloadLocationRegex =
-  "^(((" +
-  supportedDownloadRepos +
-  "\\+)?" +
-  urlRegex +
-  ")|" +
-  gitRegex +
-  "|" +
-  bazaarRegex +
-  ")$";
 
 export class SpdxCommand extends BaseCommand {
   static paths = [[`spdx`]];
 
-  recursive = Option.Boolean(`-R,--recursive`, true, {
-    description: `Include transitive dependencies (dependencies of direct dependencies)`,
-  });
-
-  production = Option.Boolean(`--production`, true, {
-    description: `Exclude development dependencies`,
-  });
-
   static usage: Usage = Command.Usage({
     description: `Generate SPDX document for the project`,
     details: `
-        This command generates an SPDX document for the project. By default, the document will be placed in the root of the project.
+        This command generates an SPDX document for the project. The document will be placed in the root of the project.`,
 
-        If \`-R,--recursive\` is set, the listing will include transitive dependencies (dependencies of direct dependencies).
-
-        If \`--production\` is set, the listing will exclude development dependencies.`,
-    examples: [
-      [`Generate SPDX document`, `$0 spdx`],
-      [
-        `Generate SPDX document with only direct dependencies`,
-        `$0 spdx --recursive false`,
-      ],
-      [
-        `Generate SPDX document with only production dependencies`,
-        `$0 spdx --production false`,
-      ],
-    ],
+    examples: [[`Generate SPDX document`, `$0 spdx`]],
   });
 
   async execute(): Promise<void> {
-    const configuration = await Configuration.find(
-      this.context.cwd,
-      this.context.plugins,
-    );
-    const { project, workspace } = await Project.find(
-      configuration,
-      this.context.cwd,
-    );
-    if (!workspace) {
-      throw new WorkspaceRequiredError(project.cwd, this.context.cwd);
-    }
-    await project.restoreInstallState();
+    const [project, workspace] = await setupProject(this);
+    const linker = getLinker(project);
 
     const spdxDocument = spdx.createDocument(
       workspace.manifest.name?.name ?? "spdx",
     );
-
-    const sortedPackages = await getSortedPackages(
-      project,
-      this.recursive,
-      this.production,
-    );
-    const allDependencies = [...sortedPackages].flatMap(([, pkg]) =>
-      [...pkg.dependencies].flatMap(
-        ([, descriptor]) => descriptor.descriptorHash,
-      ),
-    );
-
-    const nodeLinker = project.configuration.get("nodeLinker");
-    let linker: Linker;
-    if (typeof nodeLinker === "string") {
-      linker = resolveLinker(nodeLinker);
-    } else {
-      linker = nodeModules as Linker;
-    }
-
     const existingSpdxIds = new Set<string>();
-    for (const [descriptor, pkg] of sortedPackages.entries()) {
-      const packagePath = await linker.getPackagePath(project, pkg);
-      if (packagePath === null) continue;
-      const packageManifest: ManifestWithLicenseInfo = JSON.parse(
-        await linker.fs.readFilePromise(
-          ppath.join(packagePath, Filename.manifest),
-          "utf8",
-        ),
-      );
-      const { repository } = packageManifest;
-      const formattedRepository: string = getDownloadLocation(repository);
 
-      const currentPkgSpdxId = getSpdxId(pkg);
-      if (existingSpdxIds.has(currentPkgSpdxId)) continue;
-      existingSpdxIds.add(currentPkgSpdxId);
+    const devDependencyIdentHashes = getDevDependencies(project);
+    const sortedMixedPackages = await getSortedPackages(project);
+    const allDependencies = [...sortedMixedPackages].flatMap(([, pkg]) =>
+      [...pkg.dependencies].flatMap(([, descriptor]) => descriptor.identHash),
+    );
+    const topLevelPackages = getTopLevelPackages(
+      sortedMixedPackages,
+      allDependencies,
+    );
+    const topLevelDevDependencyPackages = getTopLevelDevDependencyPackages(
+      topLevelPackages,
+      sortedMixedPackages,
+      devDependencyIdentHashes,
+    );
 
-      spdxDocument.addPackage(pkg.name, {
-        downloadLocation: formattedRepository,
-        spdxId: currentPkgSpdxId,
-      });
+    await addPackagesToSpdxDocument(
+      topLevelPackages,
+      spdxDocument,
+      project,
+      linker,
+      existingSpdxIds,
+    );
+    addDescribesRelationshipsToSpdxDocument(
+      topLevelPackages,
+      spdxDocument,
+      existingSpdxIds,
+    );
+    await addPackagesToSpdxDocument(
+      topLevelDevDependencyPackages,
+      spdxDocument,
+      project,
+      linker,
+      existingSpdxIds,
+    );
+    addDevRelationshipsToSpdxDocument(
+      topLevelPackages,
+      spdxDocument,
+      project,
+      existingSpdxIds,
+      devDependencyIdentHashes,
+    );
 
-      for (const [, dependencyDescriptor] of pkg.dependencies.entries()) {
-        const identHash = project.storedResolutions.get(
-          dependencyDescriptor.descriptorHash,
-        );
-        if (!identHash) continue;
-        const dependencyPkg = project.storedPackages.get(identHash);
-        if (!dependencyPkg) continue;
+    // Prod dependencies must be added after dev dependencies,
+    // since the dev dependencies are cleared in the project manifest to determine the prod dependencies.
+    await clearDevDependencies(project);
+    const sortedProdPackages = await getSortedPackages(project);
 
-        spdxDocument.addRelationship(
-          currentPkgSpdxId,
-          getSpdxId(dependencyPkg),
-          spdxDependsOn,
-        );
-      }
+    await addPackagesToSpdxDocument(
+      sortedProdPackages,
+      spdxDocument,
+      project,
+      linker,
+      existingSpdxIds,
+    );
+    addProdRelationshipsToSpdxDocument(
+      sortedProdPackages,
+      spdxDocument,
+      project,
+      existingSpdxIds,
+    );
 
-      if (!allDependencies.includes(descriptor.descriptorHash)) {
-        spdxDocument.addRelationship(
-          spdxDocument,
-          currentPkgSpdxId,
-          spdxDescribes,
-        );
-      }
-    }
     spdxDocument.writeSync(
       (workspace.manifest.name?.name ?? "") + spdxJsonFileExtension,
     );
   }
-}
-
-function getDownloadLocation(
-  repository: { url: string } | string | undefined,
-): string {
-  if (
-    repository &&
-    typeof repository === "object" &&
-    isValidDownloadLocation(repository.url)
-  ) {
-    return repository.url;
-  } else {
-    return spdxNoAssertion;
-  }
-}
-
-function isValidDownloadLocation(downloadLocation: string): boolean {
-  return (
-    new RegExp(urlRegex).test(downloadLocation) &&
-    new RegExp(downloadLocationRegex).test(downloadLocation)
-  );
-}
-
-function getSpdxId(pkg: Package): string {
-  const pkgName = pkg.name.replace(/^@/, "").replace(/_/g, "-");
-  const pkgVersion = pkg.version.replace(/\//g, ".").replace(/_/g, "-");
-  return spdxIdPrependix + pkgName + "-" + pkgVersion;
 }
