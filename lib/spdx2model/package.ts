@@ -89,7 +89,6 @@ export class Package {
   checksums: Checksum[];
   homepage?: string | SpdxNoAssertion | SpdxNone;
   sourceInfo?: string;
-  // TODO: Implement LicenseExpression class
   licenseConcluded?: string | SpdxNoAssertion | SpdxNone;
   licenseInfoFromFiles: Array<string | SpdxNoAssertion | SpdxNone>;
   licenseDeclared?: string | SpdxNoAssertion | SpdxNone;

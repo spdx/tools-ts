@@ -28,7 +28,6 @@ function generateNamespace(documentName: string): string {
 export class DocumentCreationInfo {
   spdxVersion: string;
   dataLicense: string = "CC0-1.0";
-  // TODO: Verify that this is correct
   spdxId: string;
   name: string;
   documentNamespace: string;

@@ -12,6 +12,10 @@ export class Actor {
   email?: string;
 
   constructor(name: string, type: ActorType, email?: string) {
+    if (type === ActorType.Tool && email) {
+      throw new Error("Email must be undefined if actorType is Tool.");
+    }
+
     this.name = name;
     this.email = email ?? undefined;
     this.type = type;
@@ -21,9 +25,6 @@ export class Actor {
     const actorType = ActorType[actor.type as keyof typeof ActorType];
     if (!actorType) {
       throw new Error("Invalid actor type: " + actor.type);
-    }
-    if (actorType === ActorType.Tool && actor.email) {
-      throw new Error("Email must be undefined if actorType is Tool.");
     }
     return new Actor(actor.name, actorType, actor.email);
   }

@@ -138,7 +138,7 @@ declare class Package {
     builtDate?: Date;
     validUntilDate?: Date;
     constructor(name: string, options?: Partial<PackageOptions>);
-    static fromApi(name: string, options?: Partial<AddPackagesOptions>): Package;
+    static fromApi(name: string, options?: Partial<AddPackageOptions>): Package;
 }
 
 declare class ExternalDocumentReference {
@@ -324,7 +324,7 @@ interface CreateDocumentOptions {
     licenseListVersion: string;
     documentComment: string;
 }
-interface AddPackagesOptions {
+interface AddPackageOptions {
     downloadLocation: string;
     spdxId: string;
     version: string;
@@ -365,7 +365,7 @@ interface AddFileOptions {
 }
 declare class SPDXDocument extends Document {
     static createDocument(name: string, options?: Partial<CreateDocumentOptions>): SPDXDocument;
-    addPackage(name: string, options?: Partial<AddPackagesOptions>): Package;
+    addPackage(name: string, options?: Partial<AddPackageOptions>): Package;
     addFile(name: string, checksums: [SpdxChecksum] | SpdxChecksum, options?: Partial<AddFileOptions>): File;
     addRelationship(spdxElement: Document | Package | File | string, relatedSpdxElement: Document | Package | File | string, relationshipType: string, options?: Partial<RelationshipOptions>): this;
     validate(allowInvalid?: boolean): void;
