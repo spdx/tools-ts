@@ -190,12 +190,28 @@ declare enum FileType {
 interface FileOptions {
     spdxId: string;
     fileTypes: FileType[];
+    licenseConcluded?: string | SpdxNoAssertion | SpdxNone;
+    licenseInfoInFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+    licenseComment?: string;
+    copyrightText?: string | SpdxNoAssertion | SpdxNone;
+    comment?: string;
+    notice?: string;
+    contributors: string[];
+    attributionTexts: string[];
 }
 declare class File {
     name: string;
     spdxId: string;
     checksums: Checksum[];
     fileTypes: FileType[];
+    licenseConcluded?: string | SpdxNoAssertion | SpdxNone;
+    licenseInfoInFiles: Array<string | SpdxNoAssertion | SpdxNone>;
+    licenseComment?: string;
+    copyrightText?: string | SpdxNoAssertion | SpdxNone;
+    comment?: string;
+    notice?: string;
+    contributors: string[];
+    attributionTexts: string[];
     constructor(name: string, checksums: Checksum[], options?: Partial<FileOptions>);
     static fromApi(name: string, checksums: [SpdxChecksum] | SpdxChecksum, options?: Partial<AddFileOptions>): File;
 }
@@ -203,19 +219,13 @@ declare class File {
 interface DocumentOptions {
     packages: Package[];
     files: File[];
-    snippets: string[];
-    annotations: string[];
     relationships: Relationship[];
-    otherLicensingInfo: string[];
 }
 declare class Document {
     creationInfo: DocumentCreationInfo;
     packages: Package[];
     files: File[];
-    snippets: string[];
-    annotations: string[];
     relationships: Relationship[];
-    otherLicensingInfo: string[];
     constructor(creationInfo: DocumentCreationInfo, options?: Partial<DocumentOptions>);
     private hasMissingDescribesRelationships;
     private hasDuplicateSpdxIds;
@@ -344,6 +354,14 @@ interface AddPackagesOptions {
 interface AddFileOptions {
     spdxId: string;
     fileTypes: string[];
+    licenseConcluded: string;
+    licenseInfoInFiles: string[];
+    licenseComment: string;
+    copyrightText: string;
+    comment: string;
+    notice: string;
+    contributors: string[];
+    attributionTexts: string[];
 }
 declare class SPDXDocument extends Document {
     static createDocument(name: string, options?: Partial<CreateDocumentOptions>): SPDXDocument;

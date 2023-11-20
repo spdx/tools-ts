@@ -8,23 +8,14 @@ import type { File } from "./file";
 interface DocumentOptions {
   packages: Package[];
   files: File[];
-  snippets: string[];
-  annotations: string[];
   relationships: Relationship[];
-  otherLicensingInfo: string[];
 }
 
 export class Document {
   creationInfo: DocumentCreationInfo;
   packages: Package[];
   files: File[];
-  // TODO: Implement
-  snippets: string[];
-  // TODO: Implement
-  annotations: string[];
   relationships: Relationship[];
-  // TODO: Implement
-  otherLicensingInfo: string[];
 
   constructor(
     creationInfo: DocumentCreationInfo,
@@ -33,17 +24,12 @@ export class Document {
     this.creationInfo = creationInfo;
     this.packages = options?.packages ?? [];
     this.files = options?.files ?? [];
-    this.snippets = options?.snippets ?? [];
-    this.annotations = options?.annotations ?? [];
     this.relationships = options?.relationships ?? [];
-    this.otherLicensingInfo = options?.otherLicensingInfo ?? [];
   }
 
   private hasMissingDescribesRelationships(): boolean {
     const hasOnlyOnePackage =
-      this.packages.length === 1 &&
-      this.files.length === 0 &&
-      this.snippets.length === 0;
+      this.packages.length === 1 && this.files.length === 0;
     const describesRelationships = this.relationships.filter(
       (relationship) => relationship.relationshipType === "DESCRIBES",
     );
@@ -66,19 +52,12 @@ export class Document {
       }
       spdxIds.push(pkg.spdxId);
     });
-    // TODO: Uncomment when files and snippets are implemented
-    // this.files.forEach((file) => {
-    //   if (spdxIds.includes(file.spdxId)) {
-    //     return true;
-    //   }
-    //   spdxIds.push(file.spdxId);
-    // });
-    // this.snippets.forEach((snippet) => {
-    //   if (spdxIds.includes(snippet.spdxId)) {
-    //     return true;
-    //   }
-    //   spdxIds.push(snippet.spdxId);
-    // });
+    this.files.forEach((file) => {
+      if (spdxIds.includes(file.spdxId)) {
+        return true;
+      }
+      spdxIds.push(file.spdxId);
+    });
     this.relationships.forEach((relationship) => {
       if (spdxIds.includes(relationship.spdxElementId)) {
         return true;
@@ -103,7 +82,7 @@ export class Document {
     }
     if (this.hasDuplicateSpdxIds()) {
       validationIssues.concat(
-        "Duplicate SPDX IDs for packages, files, snippets or relationships.",
+        "Duplicate SPDX IDs for packages, files or relationships.",
       );
     }
 

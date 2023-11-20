@@ -7,22 +7,15 @@ import { JsonFile } from "./file";
 
 export class JsonDocument {
   SPDXID: string;
-  // TODO: Implement
-  // annotations
   comment?: string;
   creationInfo: JsonDocumentCreationInfo;
   dataLicense: string;
   externalDocumentRefs?: JsonExternalDocumentRef[];
-  // TODO: Implement
-  // hasExtractedLicenseInfos
   name: string;
   spdxVersion: string;
   documentNamespace: string;
   packages?: JsonPackage[];
-  // TODO: Implement
   files?: JsonFile[];
-  // TODO: Implement
-  // snippets;
   relationships?: JsonRelationship[];
 
   constructor(
