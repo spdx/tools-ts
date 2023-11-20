@@ -6,3 +6,4 @@ node_modules/
 dist/
 examples/build/
 yarn-plugin/bundles/
+rollup-plugin/__tests__/dist

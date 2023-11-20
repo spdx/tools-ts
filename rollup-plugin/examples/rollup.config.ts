@@ -1,0 +1,17 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
+import { defineConfig } from "rollup";
+import spdxPlugin from "../spdx-plugin";
+import typescript from "@rollup/plugin-typescript";
+import { fileURLToPath } from "url";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
+
+export default defineConfig({
+  input: `${__dirname}index.ts`,
+  plugins: [spdxPlugin("hello"), typescript({})],
+  output: { dir: `${__dirname}dist`, format: "es" },
+});

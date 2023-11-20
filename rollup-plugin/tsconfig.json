@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["esnext"]
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
