@@ -393,6 +393,9 @@ class Actor {
     name;
     email;
     constructor(name, type, email) {
+        if (type === ActorType.Tool && email) {
+            throw new Error("Email must be undefined if actorType is Tool.");
+        }
         this.name = name;
         this.email = email ?? undefined;
         this.type = type;
@@ -469,7 +472,6 @@ class Checksum {
 
 const NOASSERTION = "NOASSERTION";
 const NONE = "NONE";
-// TODO: Consider replacing these with enums (e.g. enum SpdxNoAssertion {NOASSERTION = "NOASSERTION"})?
 class SpdxNoAssertion {
     toString() {
         return NOASSERTION;
@@ -580,7 +582,6 @@ class Package {
     checksums;
     homepage;
     sourceInfo;
-    // TODO: Implement LicenseExpression class
     licenseConcluded;
     licenseInfoFromFiles;
     licenseDeclared;
@@ -662,7 +663,10 @@ class ExternalDocumentReference {
     documentUri;
     checksum;
     constructor(documentRefId, documentUri, checksum) {
-        // TODO: What are the constraints for this?
+        if (!documentRefId.match(/^DocumentRef-[\da-zA-Z.+-]+$/)) {
+            throw new Error(`DocumentRefId must only contain letters, numbers, ".", "-" and "+", ` +
+                `and must start with "DocumentRef-, but is: ${documentRefId}.`);
+        }
         this.documentRefId = documentRefId;
         this.documentUri = documentUri;
         this.checksum = checksum;
@@ -688,7 +692,6 @@ function generateNamespace(documentName) {
 class DocumentCreationInfo {
     spdxVersion;
     dataLicense = "CC0-1.0";
-    // TODO: Verify that this is correct
     spdxId;
     name;
     documentNamespace;

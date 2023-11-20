@@ -7,7 +7,13 @@ export class ExternalDocumentReference {
   checksum: Checksum;
 
   constructor(documentRefId: string, documentUri: string, checksum: Checksum) {
-    // TODO: What are the constraints for this?
+    if (!documentRefId.match(/^DocumentRef-[\da-zA-Z.+-]+$/)) {
+      throw new Error(
+        `DocumentRefId must only contain letters, numbers, ".", "-" and "+", ` +
+          `and must start with "DocumentRef-, but is: ${documentRefId}.`,
+      );
+    }
+
     this.documentRefId = documentRefId;
     this.documentUri = documentUri;
     this.checksum = checksum;

@@ -1,7 +1,6 @@
 const NOASSERTION = "NOASSERTION";
 const NONE = "NONE";
 
-// TODO: Consider replacing these with enums (e.g. enum SpdxNoAssertion {NOASSERTION = "NOASSERTION"})?
 export class SpdxNoAssertion {
   toString(): string {
     return NOASSERTION;
