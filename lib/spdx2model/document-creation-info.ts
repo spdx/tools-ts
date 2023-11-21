@@ -13,16 +13,16 @@ export interface DocumentCreationInfoOptions {
   documentComment: string;
 }
 
-function formatSpdxVersion(spdxVersion?: string): string {
-  return "SPDX-" + (spdxVersion ?? "2.3");
+export function formatSpdxVersion(spdxVersion?: string): string {
+  return `SPDX-${spdxVersion ?? "2.3"}`;
 }
 
-function generateNamespace(documentName: string): string {
+export function generateNamespace(documentName: string): string {
   // Remove/replace invalid characters (https://datatracker.ietf.org/doc/html/rfc2141#section-2.1)
   const formattedDocumentName = documentName
     .replace(/^[^A-Za-z0-9]+/, "")
     .replace(/[^A-Za-z0-9-]/g, "-");
-  return "urn:" + (formattedDocumentName ?? "document") + ":" + uuidv4();
+  return `urn:${formattedDocumentName || "document"}:${uuidv4()}`;
 }
 
 export class DocumentCreationInfo {
@@ -43,14 +43,13 @@ export class DocumentCreationInfo {
     name: string,
     documentNamespace: string,
     creators: Actor[],
-    created: Date,
     options?: Partial<DocumentCreationInfoOptions>,
   ) {
     this.spdxVersion = spdxVersion;
     this.name = name;
     this.documentNamespace = documentNamespace;
     this.creators = creators;
-    this.created = created;
+    this.created = options?.created ?? new Date();
     this.externalDocumentRefs = options?.externalDocumentRefs ?? [];
     this.creatorComment = options?.creatorComment ?? undefined;
     this.licenseListVersion = options?.licenseListVersion ?? undefined;
@@ -69,7 +68,6 @@ export class DocumentCreationInfo {
       options?.creators
         ? Actor.fromSpdxActors(options.creators).concat(Actor.tools())
         : [Actor.tools()],
-      options?.created ?? new Date(),
       {
         ...options,
         externalDocumentRefs: options?.externalDocumentRefs

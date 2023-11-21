@@ -54,7 +54,7 @@ export interface RelationshipOptions {
   comment: string;
 }
 
-function getSpdxIdFromElement(
+export function getSpdxIdFromElement(
   spdxElement: Document | Package | File | string,
 ): string {
   if (typeof spdxElement === "string") {

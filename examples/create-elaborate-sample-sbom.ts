@@ -78,7 +78,7 @@ const firstFile = document.addFile(
     },
   ],
   {
-    spdxId: "first-file",
+    spdxId: "SPDXRef-first-file",
     fileTypes: ["TEXT"],
     licenseConcluded: "MIT",
     licenseInfoInFiles: ["MIT"],
