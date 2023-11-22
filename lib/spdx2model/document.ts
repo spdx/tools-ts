@@ -11,6 +11,19 @@ interface DocumentOptions {
   relationships: Relationship[];
 }
 
+export function itemsHaveDuplicateId(
+  spdxIds: Set<string>,
+  items: File[] | Package[],
+): boolean {
+  return items.some((item) => {
+    if (spdxIds.has(item.spdxId)) {
+      return true;
+    }
+    spdxIds.add(item.spdxId);
+    return false;
+  });
+}
+
 export class Document {
   creationInfo: DocumentCreationInfo;
   packages: Package[];
@@ -45,29 +58,14 @@ export class Document {
   }
 
   private hasDuplicateSpdxIds(): boolean {
-    const spdxIds: string[] = [];
-    this.packages.forEach((pkg) => {
-      if (spdxIds.includes(pkg.spdxId)) {
-        return true;
-      }
-      spdxIds.push(pkg.spdxId);
-    });
-    this.files.forEach((file) => {
-      if (spdxIds.includes(file.spdxId)) {
-        return true;
-      }
-      spdxIds.push(file.spdxId);
-    });
-    this.relationships.forEach((relationship) => {
-      if (spdxIds.includes(relationship.spdxElementId)) {
-        return true;
-      }
-      spdxIds.push(relationship.spdxElementId);
-    });
-    return false;
+    const spdxIds = new Set<string>([this.creationInfo.spdxId]);
+    return (
+      itemsHaveDuplicateId(spdxIds, this.packages) ||
+      itemsHaveDuplicateId(spdxIds, this.files)
+    );
   }
 
-  gatherValidationIssues(): string[] {
+  collectValidationIssues(): string[] {
     const validationIssues: string[] = [];
     if (this.creationInfo.spdxVersion !== "SPDX-2.3") {
       validationIssues.push(
@@ -76,13 +74,13 @@ export class Document {
     }
     if (this.hasMissingDescribesRelationships()) {
       validationIssues.push(
-        "Missing DESCRIBES or DESCRIBED_BY relationships.",
-        "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.",
+        "Missing DESCRIBES or DESCRIBED_BY relationships.\n" +
+          "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.",
       );
     }
     if (this.hasDuplicateSpdxIds()) {
       validationIssues.push(
-        "Duplicate SPDX IDs for packages, files or relationships.",
+        "Duplicate SPDX IDs for document, packages or files.",
       );
     }
 

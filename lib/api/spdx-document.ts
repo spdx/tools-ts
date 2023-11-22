@@ -126,7 +126,7 @@ export class SPDXDocument extends Document {
   }
 
   validate(allowInvalid: boolean = true): void {
-    const validationIssues = this.gatherValidationIssues();
+    const validationIssues = this.collectValidationIssues();
     if (validationIssues.length > 0) {
       const validationMessage =
         "Document is invalid: " + validationIssues.join("\n");

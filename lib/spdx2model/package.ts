@@ -34,7 +34,7 @@ interface PackageOptions {
   validUntilDate: Date;
 }
 
-enum PackagePurpose {
+export enum PackagePurpose {
   APPLICATION = "APPLICATION",
   FRAMEWORK = "FRAMEWORK",
   LIBRARY = "LIBRARY",
@@ -54,7 +54,7 @@ export interface PackageVerificationCode {
   excludedFiles?: string[];
 }
 
-function formatPackagePurpose(purpose: string): PackagePurpose {
+export function formatPackagePurpose(purpose: string): PackagePurpose {
   const packagePurpose = PackagePurpose[purpose as keyof typeof PackagePurpose];
   if (!packagePurpose) {
     throw new Error("Invalid package purpose: " + purpose);
@@ -62,7 +62,7 @@ function formatPackagePurpose(purpose: string): PackagePurpose {
   return packagePurpose;
 }
 
-function formatVendor(
+export function formatVendor(
   vendor: SpdxActor | string | undefined,
 ): Actor | SpdxNoAssertion | undefined {
   if (!vendor) {
@@ -72,7 +72,15 @@ function formatVendor(
     validateSpdxNoAssertion(spdxVendor);
     return spdxVendor;
   } else {
-    return Actor.fromSpdxActor(vendor);
+    const spdxVendor = Actor.fromSpdxActor(vendor);
+    validateVendorType(spdxVendor);
+    return spdxVendor;
+  }
+}
+
+export function validateVendorType(vendor: Actor): void {
+  if (vendor.type !== "Organization" && vendor.type !== "Person") {
+    throw new Error(`Invalid vendor type: ${vendor.type}`);
   }
 }
 

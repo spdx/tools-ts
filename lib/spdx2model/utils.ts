@@ -34,7 +34,7 @@ export function toSpdxType<T = string>(
 export function validateSpdxNoAssertion(
   value: string | SpdxNoAssertion | SpdxNone,
 ): void {
-  if (!(value instanceof SpdxNoAssertion || typeof value === "string")) {
+  if (!(value instanceof SpdxNoAssertion)) {
     throw new Error(`Invalid entry: ${value.toString()} is not allowed.`);
   }
 }

@@ -31,7 +31,7 @@ export interface FileOptions {
   attributionTexts: string[];
 }
 
-function formatFileType(fileType: string): FileType {
+export function formatFileType(fileType: string): FileType {
   const fileTypeEnum = FileType[fileType as keyof typeof FileType];
   if (!fileTypeEnum) {
     throw new Error("Invalid file type: " + fileType);
@@ -59,7 +59,7 @@ export class File {
     options?: Partial<FileOptions>,
   ) {
     this.name = name;
-    this.spdxId = "SPDXRef-" + uuidv4();
+    this.spdxId = options?.spdxId ?? "SPDXRef-" + uuidv4();
     this.checksums = checksums;
     this.fileTypes = options?.fileTypes ?? [];
     this.licenseConcluded = options?.licenseConcluded ?? undefined;

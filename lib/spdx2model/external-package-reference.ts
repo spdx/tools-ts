@@ -1,6 +1,6 @@
 import type { SpdxExternalPackageReference } from "../api/spdx-document";
 
-enum ExternalPackageRefCategory {
+export enum ExternalPackageRefCategory {
   "OTHER" = "OTHER",
   "PERSISTENT-ID" = "PERSISTENT-ID",
   "PERSISTENT_ID" = "PERSISTENT_ID",
