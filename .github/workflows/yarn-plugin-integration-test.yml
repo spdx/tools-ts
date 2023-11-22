@@ -1,0 +1,58 @@
+
+name: integration test of yarn-plugin
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Check repository out
+        uses: actions/checkout@v4
+        with:
+            repository: opossum-tool/OpossumUI
+            path: OpossumUI
+
+      - name: install
+        run: |
+            set -e
+            cd OpossumUI
+            yarn install
+            yarn plugin import https://raw.githubusercontent.com/spdx/tools-ts/main/yarn-plugin/bundles/@yarnpkg/plugin-spdx.js
+
+      - name: test yarn-plugin help message
+        run: |
+            set -e
+            cd OpossumUI
+            yarn spdx --help
+
+      - name: test yarn-plugin
+        run: |
+            set -e
+            cd OpossumUI
+            yarn spdx
+            [[ -f opossum-ui.spdx.json ]]
+            set -x
+            wc opossum-ui.spdx.json
+
+      - name: Validate and extract spdxVersion from opossum-ui.spdx.json
+        uses: sergeysova/jq-action@v2
+        id: version
+        with:
+            cmd: 'jq .spdxVersion OpossumUI/opossum-ui.spdx.json -r'
+          
+      - name: Show spdxVersion
+        run: |
+            echo "spdxVersion=${{ steps.version.outputs.value }}"
+            [[ "${{ steps.version.outputs.value }}" == "SPDX-2.3" ]]
+
