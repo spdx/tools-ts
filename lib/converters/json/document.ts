@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { Document } from "../../spdx2model/document";
 import { JsonDocumentCreationInfo } from "./document-creation-info";
 import { JsonPackage } from "./package";

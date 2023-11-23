@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 Marc Hassan
+//
+// SPDX-License-Identifier: MIT
+
 import type { Project, Package } from "@yarnpkg/core";
 import * as nodeModules from "./node-modules";
 import * as pnpm from "./pnpm";

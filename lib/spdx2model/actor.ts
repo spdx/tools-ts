@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { SpdxActor } from "../api/spdx-document";
 
 export enum ActorType {

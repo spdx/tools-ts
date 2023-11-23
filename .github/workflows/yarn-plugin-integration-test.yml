@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 spdx contributors
+#
+# SPDX-License-Identifier: MIT
 
 name: integration test of yarn-plugin
 

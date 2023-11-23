@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 const NOASSERTION = "NOASSERTION";
 const NONE = "NONE";
 

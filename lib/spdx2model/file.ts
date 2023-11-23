@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { Checksum } from "./checksum";
 import { v4 as uuidv4 } from "uuid";
 import type { AddFileOptions, SpdxChecksum } from "../api/spdx-document";

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 spdx contributors
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 Developer Certificate of Origin
 Version 1.1
 

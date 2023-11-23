@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import * as sbom from "../lib/spdx-tools";
 
 const document = sbom.createDocument("first-document", { spdxVersion: "2.3" });

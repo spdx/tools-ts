@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 Marc Hassan
+//
+// SPDX-License-Identifier: MIT
+
 import type { Descriptor, Package } from "@yarnpkg/core";
 import type { IdentHash } from "@yarnpkg/core/lib/types";
 

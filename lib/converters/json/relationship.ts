@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { Relationship } from "../../spdx2model/relationship";
 
 export class JsonRelationship {

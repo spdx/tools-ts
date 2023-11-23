@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 Marc Hassan
+//
+// SPDX-License-Identifier: MIT
+
 import type { Descriptor, Package, Report, Workspace } from "@yarnpkg/core";
 import {
   Cache,

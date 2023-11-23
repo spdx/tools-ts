@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { defineConfig } from "rollup";
 import typescript from "@rollup/plugin-typescript";
 

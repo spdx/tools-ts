@@ -1,6 +1,14 @@
+# SPDX-FileCopyrightText: 2023 spdx contributors
+#
+# SPDX-License-Identifier: MIT
+
 name: REUSE Compliance Check
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
   test:

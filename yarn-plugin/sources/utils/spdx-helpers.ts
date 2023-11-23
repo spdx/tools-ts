@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { Package, Descriptor, Project } from "@yarnpkg/core";
 import type { SPDXDocument as SPDX2Document } from "../../../lib/api/spdx-document";
 import type { Linker } from "../linkers";

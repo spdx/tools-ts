@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 spdx contributors
+//
+// SPDX-License-Identifier: MIT
+
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 
