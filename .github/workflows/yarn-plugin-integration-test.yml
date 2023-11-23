@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Check repository out
         uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
         id: version
         with:
             cmd: 'jq .spdxVersion OpossumUI/opossum-ui.spdx.json -r'
-          
+
       - name: Show spdxVersion
         run: |
             echo "spdxVersion=${{ steps.version.outputs.value }}"

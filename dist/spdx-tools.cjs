@@ -246,6 +246,15 @@ class JsonDocument {
     }
 }
 
+function itemsHaveDuplicateId(spdxIds, items) {
+    return items.some((item) => {
+        if (spdxIds.has(item.spdxId)) {
+            return true;
+        }
+        spdxIds.add(item.spdxId);
+        return false;
+    });
+}
 class Document {
     creationInfo;
     packages;
@@ -261,42 +270,26 @@ class Document {
         const hasOnlyOnePackage = this.packages.length === 1 && this.files.length === 0;
         const describesRelationships = this.relationships.filter((relationship) => relationship.relationshipType === "DESCRIBES");
         const describedByRelationships = this.relationships.filter((relationship) => relationship.relationshipType === "DESCRIBED_BY");
-        return !(hasOnlyOnePackage ||
-            describesRelationships.length > 0 ||
-            describedByRelationships.length > 0);
+        return (!hasOnlyOnePackage &&
+            describesRelationships.length === 0 &&
+            describedByRelationships.length === 0);
     }
     hasDuplicateSpdxIds() {
-        const spdxIds = [];
-        this.packages.forEach((pkg) => {
-            if (spdxIds.includes(pkg.spdxId)) {
-                return true;
-            }
-            spdxIds.push(pkg.spdxId);
-        });
-        this.files.forEach((file) => {
-            if (spdxIds.includes(file.spdxId)) {
-                return true;
-            }
-            spdxIds.push(file.spdxId);
-        });
-        this.relationships.forEach((relationship) => {
-            if (spdxIds.includes(relationship.spdxElementId)) {
-                return true;
-            }
-            spdxIds.push(relationship.spdxElementId);
-        });
-        return false;
+        const spdxIds = new Set([this.creationInfo.spdxId]);
+        return (itemsHaveDuplicateId(spdxIds, this.packages) ||
+            itemsHaveDuplicateId(spdxIds, this.files));
     }
-    gatherValidationIssues() {
+    collectValidationIssues() {
         const validationIssues = [];
         if (this.creationInfo.spdxVersion !== "SPDX-2.3") {
-            validationIssues.concat("Invalid SPDX version. Currently only SPDX-2.3 is supported.");
+            validationIssues.push("Invalid SPDX version. Currently only SPDX-2.3 is supported.");
         }
         if (this.hasMissingDescribesRelationships()) {
-            validationIssues.concat("Missing DESCRIBES or DESCRIBED_BY relationships.", "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.");
+            validationIssues.push("Missing DESCRIBES or DESCRIBED_BY relationships.\n" +
+                "Document must have at least one DESCRIBES and one DESCRIBED_BY relationship, if there is not exactly one package present.");
         }
         if (this.hasDuplicateSpdxIds()) {
-            validationIssues.concat("Duplicate SPDX IDs for packages, files or relationships.");
+            validationIssues.push("Duplicate SPDX IDs for document, packages or files.");
         }
         return validationIssues;
     }
@@ -497,7 +490,7 @@ function toSpdxType(entry, converter) {
     }
 }
 function validateSpdxNoAssertion(value) {
-    if (!(value instanceof SpdxNoAssertion || typeof value === "string")) {
+    if (!(value instanceof SpdxNoAssertion)) {
         throw new Error(`Invalid entry: ${value.toString()} is not allowed.`);
     }
 }
@@ -566,7 +559,14 @@ function formatVendor(vendor) {
         return spdxVendor;
     }
     else {
-        return Actor.fromSpdxActor(vendor);
+        const spdxVendor = Actor.fromSpdxActor(vendor);
+        validateVendorType(spdxVendor);
+        return spdxVendor;
+    }
+}
+function validateVendorType(vendor) {
+    if (vendor.type !== "Organization" && vendor.type !== "Person") {
+        throw new Error(`Invalid vendor type: ${vendor.type}`);
     }
 }
 class Package {
@@ -680,14 +680,14 @@ class ExternalDocumentReference {
 }
 
 function formatSpdxVersion(spdxVersion) {
-    return "SPDX-" + (spdxVersion ?? "2.3");
+    return `SPDX-${spdxVersion ?? "2.3"}`;
 }
 function generateNamespace(documentName) {
     // Remove/replace invalid characters (https://datatracker.ietf.org/doc/html/rfc2141#section-2.1)
     const formattedDocumentName = documentName
         .replace(/^[^A-Za-z0-9]+/, "")
         .replace(/[^A-Za-z0-9-]/g, "-");
-    return "urn:" + (formattedDocumentName ?? "document") + ":" + uuid.v4();
+    return `urn:${formattedDocumentName || "document"}:${uuid.v4()}`;
 }
 class DocumentCreationInfo {
     spdxVersion;
@@ -701,12 +701,12 @@ class DocumentCreationInfo {
     created;
     creatorComment;
     documentComment;
-    constructor(spdxVersion, name, documentNamespace, creators, created, options) {
+    constructor(spdxVersion, name, documentNamespace, creators, options) {
         this.spdxVersion = spdxVersion;
         this.name = name;
         this.documentNamespace = documentNamespace;
         this.creators = creators;
-        this.created = created;
+        this.created = options?.created ?? new Date();
         this.externalDocumentRefs = options?.externalDocumentRefs ?? [];
         this.creatorComment = options?.creatorComment ?? undefined;
         this.licenseListVersion = options?.licenseListVersion ?? undefined;
@@ -716,7 +716,7 @@ class DocumentCreationInfo {
     static fromApi(name, options) {
         return new DocumentCreationInfo(formatSpdxVersion(options?.spdxVersion), name, options?.namespace ?? generateNamespace(name), options?.creators
             ? Actor.fromSpdxActors(options.creators).concat(Actor.tools())
-            : [Actor.tools()], options?.created ?? new Date(), {
+            : [Actor.tools()], {
             ...options,
             externalDocumentRefs: options?.externalDocumentRefs
                 ? options.externalDocumentRefs.map((ref) => ExternalDocumentReference.fromApi(ref))
@@ -761,7 +761,7 @@ class File {
     attributionTexts;
     constructor(name, checksums, options) {
         this.name = name;
-        this.spdxId = "SPDXRef-" + uuid.v4();
+        this.spdxId = options?.spdxId ?? "SPDXRef-" + uuid.v4();
         this.checksums = checksums;
         this.fileTypes = options?.fileTypes ?? [];
         this.licenseConcluded = options?.licenseConcluded ?? undefined;
@@ -798,21 +798,21 @@ class SPDXDocument extends Document {
     }
     addPackage(name, options) {
         const pkg = Package.fromApi(name, options);
-        this.packages = this.packages.concat(pkg);
+        this.packages.push(pkg);
         return pkg;
     }
     addFile(name, checksums, options) {
         const file = File.fromApi(name, checksums, options);
-        this.files = this.files.concat(file);
+        this.files.push(file);
         return file;
     }
     addRelationship(spdxElement, relatedSpdxElement, relationshipType, options) {
         const relationship = Relationship.fromApi(spdxElement, relatedSpdxElement, relationshipType, options);
-        this.relationships = this.relationships.concat(relationship);
+        this.relationships.push(relationship);
         return this;
     }
     validate(allowInvalid = true) {
-        const validationIssues = this.gatherValidationIssues();
+        const validationIssues = this.collectValidationIssues();
         if (validationIssues.length > 0) {
             const validationMessage = "Document is invalid: " + validationIssues.join("\n");
             if (!allowInvalid) {
