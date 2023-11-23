@@ -170,7 +170,7 @@ declare class DocumentCreationInfo {
     created: Date;
     creatorComment?: string;
     documentComment?: string;
-    constructor(spdxVersion: string, name: string, documentNamespace: string, creators: Actor[], created: Date, options?: Partial<DocumentCreationInfoOptions>);
+    constructor(spdxVersion: string, name: string, documentNamespace: string, creators: Actor[], options?: Partial<DocumentCreationInfoOptions>);
     static fromApi(name: string, options?: Partial<CreateDocumentOptions>): DocumentCreationInfo;
 }
 
@@ -229,7 +229,7 @@ declare class Document {
     constructor(creationInfo: DocumentCreationInfo, options?: Partial<DocumentOptions>);
     private hasMissingDescribesRelationships;
     private hasDuplicateSpdxIds;
-    gatherValidationIssues(): string[];
+    collectValidationIssues(): string[];
     writeFile(location: string): Promise<void>;
 }
 
