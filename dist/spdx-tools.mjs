@@ -1,14 +1,14 @@
 import fs from 'fs/promises';
 import { v4 } from 'uuid';
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 function formatDatetime(datetime) {
     return datetime.toISOString().split(".")[0] + "Z";
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonDocumentCreationInfo {
@@ -27,7 +27,7 @@ class JsonDocumentCreationInfo {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonChecksum {
@@ -42,7 +42,7 @@ class JsonChecksum {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonPackageVerificationCode {
@@ -58,7 +58,7 @@ class JsonPackageVerificationCode {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonExternalPackageRef {
@@ -77,7 +77,7 @@ class JsonExternalPackageRef {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonPackage {
@@ -149,7 +149,7 @@ class JsonPackage {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonRelationship {
@@ -168,7 +168,7 @@ class JsonRelationship {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonExternalDocumentRef {
@@ -186,7 +186,7 @@ class JsonExternalDocumentRef {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonFile {
@@ -228,7 +228,7 @@ class JsonFile {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class JsonDocument {
@@ -274,7 +274,7 @@ class JsonDocument {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 function itemsHaveDuplicateId(spdxIds, items) {
@@ -331,7 +331,7 @@ class Document {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 var RelationshipType;
@@ -409,7 +409,7 @@ class Relationship {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 var ActorType;
@@ -456,7 +456,7 @@ class Actor {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 var ChecksumAlgorithm;
@@ -503,7 +503,7 @@ class Checksum {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 const NOASSERTION = "NOASSERTION";
@@ -538,7 +538,7 @@ function validateSpdxNoAssertion(value) {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 var ExternalPackageRefCategory;
@@ -573,7 +573,7 @@ class ExternalPackageRef {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 var PackagePurpose;
@@ -707,7 +707,7 @@ class Package {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class ExternalDocumentReference {
@@ -731,7 +731,7 @@ class ExternalDocumentReference {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 function formatSpdxVersion(spdxVersion) {
@@ -780,7 +780,7 @@ class DocumentCreationInfo {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 var FileType;
@@ -849,7 +849,7 @@ class File {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 class SPDXDocument extends Document {
@@ -901,7 +901,7 @@ class SPDXDocument extends Document {
     }
 }
 
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 function parseMajorVersion(spdxVersion) {

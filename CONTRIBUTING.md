@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 spdx contributors
+SPDX-FileCopyrightText: 2023 SPDX contributors
 
 SPDX-License-Identifier: CC0-1.0
 -->

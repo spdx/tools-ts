@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 spdx contributors
+SPDX-FileCopyrightText: 2023 SPDX contributors
 
 SPDX-License-Identifier: CC0-1.0
 -->
@@ -51,4 +51,4 @@ We welcome contributions to this repository.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 # License
-[MIT](LICENSES/MIT.txt
+[MIT](LICENSE)

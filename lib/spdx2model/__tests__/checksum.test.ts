@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
 

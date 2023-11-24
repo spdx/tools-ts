@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 spdx contributors
+// SPDX-FileCopyrightText: 2023 SPDX contributors
 // SPDX-FileCopyrightText: 2023 Marc Hassan
 //
 // SPDX-License-Identifier: MIT
