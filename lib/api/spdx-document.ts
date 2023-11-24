@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { RelationshipOptions } from "../spdx2model/relationship";
 import { Relationship } from "../spdx2model/relationship";
 import type { PackageVerificationCode } from "../spdx2model/package";

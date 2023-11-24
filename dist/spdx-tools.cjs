@@ -3,10 +3,16 @@
 var fs = require('fs/promises');
 var uuid = require('uuid');
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 function formatDatetime(datetime) {
     return datetime.toISOString().split(".")[0] + "Z";
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonDocumentCreationInfo {
     created;
     creators;
@@ -23,6 +29,9 @@ class JsonDocumentCreationInfo {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonChecksum {
     algorithm;
     checksumValue;
@@ -35,6 +44,9 @@ class JsonChecksum {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonPackageVerificationCode {
     packageVerificationCodeValue;
     packageVerificationCodeExcludedFiles;
@@ -48,6 +60,9 @@ class JsonPackageVerificationCode {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonExternalPackageRef {
     comment;
     referenceCategory;
@@ -64,6 +79,9 @@ class JsonExternalPackageRef {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonPackage {
     name;
     downloadLocation;
@@ -133,6 +151,9 @@ class JsonPackage {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonRelationship {
     spdxElementId;
     relatedSpdxElement;
@@ -149,6 +170,9 @@ class JsonRelationship {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonExternalDocumentRef {
     checksum;
     externalDocumentId;
@@ -164,6 +188,9 @@ class JsonExternalDocumentRef {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonFile {
     SPDXID;
     fileName;
@@ -203,6 +230,9 @@ class JsonFile {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class JsonDocument {
     SPDXID;
     comment;
@@ -246,6 +276,9 @@ class JsonDocument {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 function itemsHaveDuplicateId(spdxIds, items) {
     return items.some((item) => {
         if (spdxIds.has(item.spdxId)) {
@@ -300,6 +333,9 @@ class Document {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 var RelationshipType;
 (function (RelationshipType) {
     RelationshipType["AMENDS"] = "AMENDS";
@@ -375,6 +411,9 @@ class Relationship {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 var ActorType;
 (function (ActorType) {
     ActorType["Person"] = "Person";
@@ -419,6 +458,9 @@ class Actor {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 var ChecksumAlgorithm;
 (function (ChecksumAlgorithm) {
     ChecksumAlgorithm["SHA1"] = "SHA1";
@@ -463,6 +505,9 @@ class Checksum {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 const NOASSERTION = "NOASSERTION";
 const NONE = "NONE";
 class SpdxNoAssertion {
@@ -495,6 +540,9 @@ function validateSpdxNoAssertion(value) {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 var ExternalPackageRefCategory;
 (function (ExternalPackageRefCategory) {
     ExternalPackageRefCategory["OTHER"] = "OTHER";
@@ -527,6 +575,9 @@ class ExternalPackageRef {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 var PackagePurpose;
 (function (PackagePurpose) {
     PackagePurpose["APPLICATION"] = "APPLICATION";
@@ -658,6 +709,9 @@ class Package {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class ExternalDocumentReference {
     documentRefId;
     documentUri;
@@ -679,6 +733,9 @@ class ExternalDocumentReference {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 function formatSpdxVersion(spdxVersion) {
     return `SPDX-${spdxVersion ?? "2.3"}`;
 }
@@ -725,6 +782,9 @@ class DocumentCreationInfo {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 var FileType;
 (function (FileType) {
     FileType["OTHER"] = "OTHER";
@@ -791,6 +851,9 @@ class File {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 class SPDXDocument extends Document {
     static createDocument(name, options) {
         const creationInfo = DocumentCreationInfo.fromApi(name, options);
@@ -840,6 +903,9 @@ class SPDXDocument extends Document {
     }
 }
 
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
 function parseMajorVersion(spdxVersion) {
     return parseInt(spdxVersion.split(".")[0]);
 }

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { ExternalDocumentReference } from "../external-document-reference";
 import { Checksum, ChecksumAlgorithm } from "../checksum";
 

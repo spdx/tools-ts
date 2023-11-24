@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import * as sbom from "../../spdx-tools";
 import * as fs from "fs";
 import mock from "mock-fs";

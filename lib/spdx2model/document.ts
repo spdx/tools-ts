@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { Package } from "./package";
 import type { Relationship } from "./relationship";
 import type { DocumentCreationInfo } from "./document-creation-info";

@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+// SPDX-FileCopyrightText: 2023 Marc Hassan
+//
+// SPDX-License-Identifier: MIT
+
 /* istanbul ignore file */
 // this file is covered by CLI tests
 

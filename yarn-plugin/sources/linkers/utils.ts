@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Marc Hassan
+//
+// SPDX-License-Identifier: MIT
+
 interface ArchitectureSet {
   os: string[] | null;
   cpu: string[] | null;

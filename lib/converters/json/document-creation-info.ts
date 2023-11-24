@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { Document } from "../../spdx2model/document";
 import { formatDatetime } from "./utils";
 

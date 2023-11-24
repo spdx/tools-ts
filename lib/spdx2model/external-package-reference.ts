@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import type { SpdxExternalPackageReference } from "../api/spdx-document";
 
 export enum ExternalPackageRefCategory {

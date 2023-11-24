@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 SPDX contributors
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # Typescript library for creating SPDX documents
 
 **Important:** This repository is in early development state and can not yet be used in production.

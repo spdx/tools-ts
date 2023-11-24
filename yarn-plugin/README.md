@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 SPDX contributors
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # yarn-plugin-spdx
 
 Create an SPDX SBOM file for the current project.

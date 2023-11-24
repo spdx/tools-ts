@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Marc Hassan
+//
+// SPDX-License-Identifier: MIT
+
 import type { Project, Package } from "@yarnpkg/core";
 import { structUtils } from "@yarnpkg/core";
 import { parseSyml } from "@yarnpkg/parsers";

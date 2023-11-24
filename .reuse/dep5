@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: spdx-tools-ts
+Upstream-Contact: SPDX contributors
+Source: https://github.com/spdx/tools-ts
+
+Files: dist/*
+Copyright: 2023 SPDX contributors
+License: MIT

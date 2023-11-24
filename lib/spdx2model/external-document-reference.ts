@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { Checksum } from "./checksum";
 import type { SpdxDocumentReference } from "../api/spdx-document";
 

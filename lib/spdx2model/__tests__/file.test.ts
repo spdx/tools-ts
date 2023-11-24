@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { File, FileType, formatFileType } from "../file";
 import { Checksum, ChecksumAlgorithm } from "../checksum";
 

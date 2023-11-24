@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { Checksum, ChecksumAlgorithm } from "../checksum";
 
 const TEST_HASH = "84a516841ba77a5b4648de2cd0dfcb30ea46dbb4";

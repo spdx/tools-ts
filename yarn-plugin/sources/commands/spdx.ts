@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { BaseCommand } from "@yarnpkg/cli";
 import * as spdx from "../../../lib/spdx-tools";
 import type { Usage } from "clipanion";

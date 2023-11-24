@@ -1,4 +1,9 @@
 #!/usr/bin/env sh
+
+# SPDX-FileCopyrightText: 2023 SPDX contributors
+#
+# SPDX-License-Identifier: MIT
+
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm run pre-commit

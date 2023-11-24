@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import { Document } from "../document";
 import { DocumentCreationInfo } from "../document-creation-info";
 import { Actor, ActorType } from "../actor";

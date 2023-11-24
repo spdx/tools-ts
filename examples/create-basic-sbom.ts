@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 SPDX contributors
+//
+// SPDX-License-Identifier: MIT
+
 import * as spdx from "../lib/spdx-tools";
 
 const document = spdx.createDocument("SPDX Tools ts SBOM", {

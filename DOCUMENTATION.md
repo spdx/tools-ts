@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 SPDX contributors
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # API
 
 We here document the usage of all fully implemented SPDX features.

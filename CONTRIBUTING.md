@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 SPDX contributors
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # Contributing Guidelines
 Thank you for your interest in contributing to our project!
 
