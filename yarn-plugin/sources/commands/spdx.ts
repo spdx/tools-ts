@@ -24,7 +24,7 @@ import {
   getTopLevelPackages,
 } from "../utils/package-helpers";
 
-const spdxJsonFileExtension = ".spdx.json";
+const SPDX_JSON_FILE_EXTENSION = ".spdx.json";
 
 export class SpdxCommand extends BaseCommand {
   static paths = [[`spdx`]];
@@ -108,7 +108,7 @@ export class SpdxCommand extends BaseCommand {
     );
 
     spdxDocument.writeSync(
-      (workspace.manifest.name?.name ?? "") + spdxJsonFileExtension,
+      (workspace.manifest.name?.name ?? "") + SPDX_JSON_FILE_EXTENSION,
     );
   }
 }
