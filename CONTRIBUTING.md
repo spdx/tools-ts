@@ -39,9 +39,10 @@ npm run test
 ## Releasing
 Note: To create a new release, you need to be part of the [SPDX organization] (https://www.npmjs.com/org/spdx) on npm.
 To create a new release, follow these steps:
-1. Implement changes.
-2. Update the version number in `package.json` and `package-lock.json`.
-3. Update the changelog in `CHANGELOG.md`.
-4. Build the project with `npm run build`.
-5. Create and merge a pull request with the changes.
-6. Depending on the changes, run `npm run major-release`, `npm run minor-release`, or `npm run patch-release`.
+1. Implement changes and run the tests with `npm run test`.
+2. Update the changelog in `CHANGELOG.md`.
+3. Build the project with `npm run build`.
+4. Create a pull request with the changes, make sure the CI is green, get it reviewed and merge it.
+5. Depending on the changes, run `npm run major-release`, `npm run minor-release`, or `npm run patch-release`.
+Note: You do not need to manually update the version in `package.json`, this is done automatically by the release script.
+
