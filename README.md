@@ -13,12 +13,11 @@ SPDX-License-Identifier: CC0-1.0
 We provide a number of example workflows in the `examples` directory that demonstrate how this library can be used to create SBOMs.
 
 ## Usage
-`SPDXSBOM` provides an API to compose and write SBOMs in the SPDX format.
+The library provides an API to compose and write SBOMs in the SPDX format.
 The recommended way to use this library is to create a document, add contents to it and then write it to a file:
 
 ```javascript
-import sbom from "../spdx-tools";
-import { Package } from "../spdx2model/package";
+import * as spdx from "../lib/spdx-tools";
 
 const document = sbom.createDocument("my-first-document");
 const pkg = document.addPackage("my-package");
