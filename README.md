@@ -34,7 +34,6 @@ Please refer to [DOCUMENTATION.md](DOCUMENTATION.md) for a detailed API document
 This library is currently in early development state and not all features of SPDX are supported yet.
 The following features are supported by this library:
 
-
 ### SPDX 2.3:
 | Feature | State | Comment |
 | ------- | ----- | ------- |
