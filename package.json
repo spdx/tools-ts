@@ -12,7 +12,7 @@
   "types": "dist/spdx-tools.d.ts",
   "files": [
     "dist",
-    "lib/README.md",
+    "README.md",
     "CHANGELOG.md",
     "LICENSE",
     "package.json"
