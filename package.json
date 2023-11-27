@@ -3,9 +3,16 @@
   "version": "0.0.1",
   "description": "A Typescript library for creating SPDX documents",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spdx/tools-ts.git"
+  },
+  "main": "dist/spdx-tools.cjs",
+  "module": "dist/spdx-tools.mjs",
+  "types": "dist/spdx-tools.d.ts",
   "files": [
     "dist",
-    "README.md",
+    "lib/README.md",
     "CHANGELOG.md",
     "LICENSE",
     "package.json"
@@ -36,6 +43,9 @@
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
     "build-examples": "rollup --config examples/rollup.config.ts --configPlugin typescript",
@@ -64,8 +74,5 @@
       "require": "./dist/spdx-tools.cjs",
       "import": "./dist/spdx-tools.mjs"
     }
-  },
-  "dependencies": {
-    "uuid": "^9.0.1"
   }
 }

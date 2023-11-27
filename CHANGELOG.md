@@ -22,3 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implementation of [SPDX 2.3 model] (https://spdx.github.io/spdx-spec/v2.3/) with documents, packages, files and relationships.
 - API for creating, filling, and writing SPDX documents.
 - JSON serialization according to the [SPDX 2.3 schema] (https://github.com/spdx/spdx-spec/blob/development/v2.3.1/schemas/spdx-schema.json).
+
+## [0.0.2] - 2023-11-27
+### Added
+- Separate readme aimed at users of the library.
