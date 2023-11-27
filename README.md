@@ -4,16 +4,12 @@ SPDX-FileCopyrightText: 2023 SPDX contributors
 SPDX-License-Identifier: CC0-1.0
 -->
 
-# Typescript library for creating SPDX documents
+# @spdx/tools
+Compose and write SBOMs in the SPDX format.
 
 **Important:** This repository is in early development state and can not yet be used in production.
 
-## TL;DR
-
-We provide a number of example workflows in the `examples` directory that demonstrate how this library can be used to create SBOMs.
-
 ## Usage
-The library provides an API to compose and write SBOMs in the SPDX format.
 The recommended way to use this library is to create a document, add contents to it and then write it to a file:
 
 ```javascript
@@ -26,27 +22,27 @@ document.addRelationship(document, pkg, "DESCRIBES");
 document.write("./sample.spdx.json");
 ```
 
-# API
-Please refer to [DOCUMENTATION.md](DOCUMENTATION.md) for a detailed API documentation.
-
 ## Supported features
 This library is currently in early development state and not all features of SPDX are supported yet.
 The following features are supported by this library:
 
 ### SPDX 2.3:
-| Feature | State | Comment |
-| ------- | ----- | ------- |
+| Feature | State |
+| ------- | ----- |
 | Document creation | DONE
 | Packages | DONE
 | Files | DONE
 | Relationships | DONE
-| Snippets |  
-| Annotations | 
-| Other licensing information |
+| Snippets | PLANNED
+| Annotations | PLANNED
+| Other licensing information | PLANNED
 
-# Contributing
+## API
+We provide a number of example workflows in the `examples` directory that demonstrate how this library can be used to create SBOMs.
+
+Please refer to [DOCUMENTATION.md](https://github.com/spdx/tools-ts/blob/main/DOCUMENTATION.md) for a detailed documentation of the API.
+
+## Contributing
 We welcome contributions to this repository.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-# License
-[MIT](LICENSE)
+See [CONTRIBUTING.md](https://github.com/spdx/tools-ts/blob/main/CONTRIBUTING.md) for more information.
