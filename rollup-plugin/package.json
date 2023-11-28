@@ -1,5 +1,5 @@
 {
-  "name": "rollup-plugin",
+  "name": "rollup-plugin-spdx",
   "version": "0.0.1",
   "description": "A Rollup plugin to create SPDX SBOM files",
   "license": "MIT",
@@ -7,16 +7,30 @@
     "type": "git",
     "url": "git+https://github.com/spdx/tools-ts.git"
   },
-  "main": "sources/spdx-plugin.ts",
+  "main": "dist/rollup-plugin-spdx.cjs",
+  "module": "dist/rollup-plugin-spdx.mjs",
+  "types": "dist/rollup-plugin-spdx.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "../LICENSE",
+    "package.json"
+  ],
   "scripts": {
+    "build": "rollup --config rollup.config.ts --configPlugin typescript",
     "test": "cd .. && rollup -c rollup-plugin/examples/rollup.config.ts --configPlugin typescript"
   },
   "dependencies": {
+    "@spdx/tools": "^0.0.6",
     "sha1-file": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.8.4",
     "@rollup/plugin-typescript": "^11.1.5",
+    "@types/node": "^20.8.4",
+    "rollup": "^4.1.4",
+    "rollup-plugin-dts": "^6.1.0",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   }
 }

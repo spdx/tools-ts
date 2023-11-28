@@ -16,12 +16,12 @@ It lists all built files and the source files they were built from, as well as t
 ## Usage
 Install the package from `npm`:
 ```bash
-npm install --save-dev @spdx/rollup-plugin
+npm install --save-dev @spdx/rollup-plugin-spdx
 ```
 
 Add the plugin to your `rollup.config.js`:
 ```javascript
-import spdx from "@spdx/rollup-plugin";
+import spdx from "@spdx/rollup-plugin-spdx";
 
 const config = [
     // ...

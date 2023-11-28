@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { defineConfig } from "rollup";
-import spdx from "../sources/spdx-plugin";
+import spdx from "../sources/rollup-plugin-spdx";
 import typescript from "@rollup/plugin-typescript";
 import { fileURLToPath } from "url";
 

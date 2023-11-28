@@ -3,9 +3,12 @@
     "experimentalDecorators": true,
     "target": "ESNext",
     "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["esnext"]
   },
   "include": [
-    "**/*.ts"
+    "sources/**/*",
+    "examples/**/*.ts",
+    "rollup.config.ts"
   ]
 }

@@ -19,8 +19,9 @@ There are several ways you can contribute to our project. Here are a few:
 1. Fork the repository on GitHub.
 2. Clone the project from your forked repository to your machine.
 3. Create a new branch for your work.
-4. Make your changes, ensuring to write tests that cover the new code and functionality.
-5. Submit your PR with detailed and well-documented explanations of your changes.
+4. Install the dependencies with `npm install`.
+5. Make your changes, ensuring to write tests that cover the new code and functionality.
+6. Submit your PR with detailed and well-documented explanations of your changes.
 
 ## Pull Requests
 1. Ensure all dependencies are properly installed and all tests pass.
@@ -32,8 +33,29 @@ There are several ways you can contribute to our project. Here are a few:
 We use the testing framework [Jest](https://jestjs.io) for testing.
 Run the tests with:
 ```shell
-npm install
 npm run test
+```
+
+Test the Rollup plugin by running:
+```shell
+npm run test-rollup-plugin
+```
+
+## Building
+We use [Rollup] (https://rollupjs.org) for building the library and the Rollup plugin, and [@yarnpkg/builder] (https://www.npmjs.com/package/@yarnpkg/builder) for building the Yarn plugin.
+To build the library, navigate to the library root and run:
+```shell
+npm run build
+```
+
+To build the Rollup plugin, run:
+```shell
+npm run build-rollup-plugin
+```
+
+To build the Yarn plugin, run:
+```shell
+npm run build-yarn-plugin
 ```
 
 ## Releasing

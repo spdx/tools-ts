@@ -41,13 +41,15 @@
     "rollup-plugin-dts": "^6.1.0",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "dependencies": {
     "uuid": "^9.0.1"
   },
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
+    "build-rollup-plugin": "cd rollup-plugin && npm run build",
+    "build-yarn-plugin": "cd yarn-plugin && yarn build",
     "build-examples": "rollup --config examples/rollup.config.ts --configPlugin typescript",
     "write-examples": "node examples/build/create-minimal-sample-sbom.js && node examples/build/create-elaborate-sample-sbom.js && node examples/build/create-basic-sbom.js",
     "lint-check": "eslint -c .eslintrc.js --ext .ts,.js .",
@@ -60,13 +62,11 @@
     "patch-release": "./dev/create_release.sh patch",
     "test": "jest --testPathIgnorePatterns=dist",
     "test-e2e": "jest --testMatch=[ \"**/e2e-tests/**/*.test.ts\" ]",
-    "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist"
+    "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist",
+    "test-rollup-plugin": "cd rollup-plugin && npm run test"
   },
   "lint-staged": {
-    "**/*.ts": [
-      "echo 'Linting...'",
-      "npm run lint-fix"
-    ]
+    "**/*.ts": "npm run lint-fix"
   },
   "exports": {
     ".": {
