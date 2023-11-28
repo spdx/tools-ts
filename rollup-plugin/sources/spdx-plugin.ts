@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: MIT
 
-import * as spdx from "../lib/spdx-tools";
+import * as sbom from "../../lib/spdx-tools";
 import * as path from "path";
 import { sha1File } from "sha1-file";
-import type { SPDXDocument as SPDX2Document } from "../lib/api/spdx-document";
+import type { SPDXDocument as SPDX2Document } from "../../lib/api/spdx-document";
 
 const SPDX_ID_PREPENDIX = "SPDXRef-";
 const SPDX_DESCRIBES = "DESCRIBES";
@@ -19,8 +19,8 @@ interface relationship {
   relationshipType: string;
 }
 
-export default function spdxPlugin(outputName: string): any {
-  const spdxDocument = spdx.createDocument(outputName);
+export default function spdx(outputName: string): any {
+  const spdxDocument = sbom.createDocument(outputName);
   const collectedInputFiles = new Set<string>();
   const collectedRelationships = new Set<relationship>();
 

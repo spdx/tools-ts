@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { defineConfig } from "rollup";
-import spdxPlugin from "../spdx-plugin";
+import spdx from "../sources/spdx-plugin";
 import typescript from "@rollup/plugin-typescript";
 import { fileURLToPath } from "url";
 
@@ -12,6 +12,6 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
   input: `${__dirname}index.ts`,
-  plugins: [spdxPlugin("hello"), typescript({})],
+  plugins: [spdx("hello"), typescript({})],
   output: { dir: `${__dirname}dist`, format: "es" },
 });

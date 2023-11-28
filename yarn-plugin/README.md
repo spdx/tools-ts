@@ -4,18 +4,25 @@ SPDX-FileCopyrightText: 2023 SPDX contributors
 SPDX-License-Identifier: CC0-1.0
 -->
 
-# yarn-plugin-spdx
+# @spdx/yarn-plugin
 
-Create an SPDX SBOM file for the current project.
+A Yarn plugin to create SBOM files in the SPDX format.
 
-## Installation
+When being run, this plugin will create an SBOM file for the current package.
+The SBOM file will be written to the root directory of the package and have the name of the package.
+It lists all contained dependencies and dev dependencies, as well as the relationship between them.
+
+**Important:** This plugin is in early development state and can not yet be used in production.
+
+## Usage
+Install the package from `npm`:
 ```sh
 yarn plugin import https://raw.githubusercontent.com/spdx/tools-ts/main/yarn-plugin/bundles/@yarnpkg/plugin-spdx.js
 ```
 
-## Usage
+Create an SBOM file for the current package:
 ```sh
-yarn spdx --help
+yarn spdx
 ```
 
 Note: Before using the plugin, make sure to run `yarn install` to install all dependencies for the current project.
