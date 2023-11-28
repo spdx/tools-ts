@@ -13,7 +13,7 @@ Compose and write SBOMs in the SPDX format.
 The recommended way to use this library is to create a document, add contents to it and then write it to a file:
 
 ```javascript
-import * as spdx from "../lib/spdx-tools";
+import * as spdx from "@spdx/spdx-tools";
 
 const document = sbom.createDocument("my-first-document");
 const pkg = document.addPackage("my-package");
