@@ -42,6 +42,9 @@ esac
 npm publish
 npm dist-tag
 
+echo "Successfully published the npm release."
+# Note: npm version command creates a commit with the new version number
+
 # Parse the version number from package.json using jq
 # jq must be installed: https://stedolan.github.io/jq/
 version=$(jq -r '.version' package.json)
@@ -54,22 +57,10 @@ fi
 
 # Construct the release tag using the version
 release_tag="v$version"
-commit_message="Release $release_tag"
-
-# Stage the built files
-git add dist
-
-# Commit the staged changes
-git commit -m "$commit_message"
-
-# Check if the commit was successful
-if [ $? -ne 0 ]; then
-    echo "Git commit failed. Exiting."
-    exit 1
-fi
+release_message="Release $release_tag"
 
 # Create a tag for the commit
-git tag -a "$release_tag" -m "$commit_message"
+git tag -a "$release_tag" -m "$release_message"
 
 # Check if the tag was created successfully
 if [ $? -ne 0 ]; then
