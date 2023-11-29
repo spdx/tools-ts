@@ -2,5 +2,5 @@
 #
 # SPDX-License-Identifier: MIT
 
- node_modules
- /dist/
+node_modules/
+/dist/
