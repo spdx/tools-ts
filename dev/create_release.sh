@@ -49,3 +49,5 @@ esac
 # Publish the release and create a tag
 npm publish
 npm dist-tag
+
+echo "Release successful. Please push the created commit and tag to GitHub."
