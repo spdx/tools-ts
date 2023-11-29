@@ -2,4 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-node_modules
+ node_modules
+ /dist/
+ /rollup-plugin/dist/
+ /yarn-plugin/bundles/
