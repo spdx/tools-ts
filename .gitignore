@@ -4,5 +4,3 @@
 
  node_modules
  /dist/
- /rollup-plugin/dist/
- /yarn-plugin/bundles/
