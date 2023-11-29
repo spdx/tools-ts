@@ -11,7 +11,18 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
+
+# Build the release
+npm run build
+
+# check if build was successful
+if [ $? -eq 0 ]; then
+    echo "Build successful, proceeding with release."
+else
+    echo "Build failed, aborting release."
+    exit 1
+fi
 
 # Login to npm if not already logged in
 if ! npm whoami > /dev/null 2>&1; then

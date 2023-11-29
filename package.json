@@ -55,9 +55,9 @@
     "prepare": "husky install && npm run build",
     "pre-commit": "lint-staged",
     "prepublish": "npm run build",
-    "major-release": "./create_release.sh major",
-    "minor-release": "./create_release.sh minor",
-    "patch-release": "./create_release.sh patch",
+    "major-release": "./dev/create_release.sh major",
+    "minor-release": "./dev/create_release.sh minor",
+    "patch-release": "./dev/create_release.sh patch",
     "test": "jest --testPathIgnorePatterns=dist",
     "test-e2e": "jest --testMatch=[ \"**/e2e-tests/**/*.test.ts\" ]",
     "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist"
