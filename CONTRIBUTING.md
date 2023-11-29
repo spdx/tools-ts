@@ -45,4 +45,5 @@ To create a new release, follow these steps:
 4. Create a pull request with the changes, make sure the CI is green, get it reviewed and merge it.
 5. Depending on the changes, run `npm run major-release`, `npm run minor-release`, or `npm run patch-release`.
 Note: You do not need to manually update the version in `package.json`, this is done automatically by the release script.
+6. Step 5 will create a new commit and tag it with the new version. Push the commit and the tag to the remote repository, create a pull request and merge it.
 
