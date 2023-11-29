@@ -414,18 +414,18 @@ class Relationship {
 // SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
-var ActorType;
+exports.ActorType = void 0;
 (function (ActorType) {
     ActorType["Person"] = "Person";
     ActorType["Organization"] = "Organization";
     ActorType["Tool"] = "Tool";
-})(ActorType || (ActorType = {}));
+})(exports.ActorType || (exports.ActorType = {}));
 class Actor {
     type;
     name;
     email;
     constructor(name, type, email) {
-        if (type === ActorType.Tool && email) {
+        if (type === exports.ActorType.Tool && email) {
             throw new Error("Email must be undefined if actorType is Tool.");
         }
         this.name = name;
@@ -433,7 +433,7 @@ class Actor {
         this.type = type;
     }
     static fromSpdxActor(actor) {
-        const actorType = ActorType[actor.type];
+        const actorType = exports.ActorType[actor.type];
         if (!actorType) {
             throw new Error("Invalid actor type: " + actor.type);
         }
@@ -448,7 +448,7 @@ class Actor {
         }
     }
     static tools() {
-        return new Actor("SPDX Tools TS", ActorType.Tool);
+        return new Actor("SPDX Tools TS", exports.ActorType.Tool);
     }
     toString() {
         return (this.type.valueOf() +
@@ -461,7 +461,7 @@ class Actor {
 // SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
-var ChecksumAlgorithm;
+exports.ChecksumAlgorithm = void 0;
 (function (ChecksumAlgorithm) {
     ChecksumAlgorithm["SHA1"] = "SHA1";
     ChecksumAlgorithm["BLAKE3"] = "BLAKE3";
@@ -480,7 +480,7 @@ var ChecksumAlgorithm;
     ChecksumAlgorithm["MD6"] = "MD6";
     ChecksumAlgorithm["MD5"] = "MD5";
     ChecksumAlgorithm["SHA224"] = "SHA224";
-})(ChecksumAlgorithm || (ChecksumAlgorithm = {}));
+})(exports.ChecksumAlgorithm || (exports.ChecksumAlgorithm = {}));
 class Checksum {
     algorithm;
     value;
@@ -489,7 +489,7 @@ class Checksum {
         this.value = value;
     }
     static fromSpdxChecksum(checksum) {
-        const checksumAlgorithm = ChecksumAlgorithm[checksum.checksumAlgorithm];
+        const checksumAlgorithm = exports.ChecksumAlgorithm[checksum.checksumAlgorithm];
         if (!checksumAlgorithm) {
             throw new Error("Invalid checksum algorithm: " + checksum.checksumAlgorithm);
         }
@@ -543,7 +543,7 @@ function validateSpdxNoAssertion(value) {
 // SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
-var ExternalPackageRefCategory;
+exports.ExternalPackageRefCategory = void 0;
 (function (ExternalPackageRefCategory) {
     ExternalPackageRefCategory["OTHER"] = "OTHER";
     ExternalPackageRefCategory["PERSISTENT-ID"] = "PERSISTENT-ID";
@@ -551,7 +551,7 @@ var ExternalPackageRefCategory;
     ExternalPackageRefCategory["SECURITY"] = "SECURITY";
     ExternalPackageRefCategory["PACKAGE-MANAGER"] = "PACKAGE-MANAGER";
     ExternalPackageRefCategory["PACKAGE_MANAGER"] = "PACKAGE_MANAGER";
-})(ExternalPackageRefCategory || (ExternalPackageRefCategory = {}));
+})(exports.ExternalPackageRefCategory || (exports.ExternalPackageRefCategory = {}));
 class ExternalPackageRef {
     category;
     type;
@@ -565,7 +565,7 @@ class ExternalPackageRef {
     }
     static fromSpdxExternalPackageRefs(refs) {
         return refs.map((ref) => {
-            const referenceCategory = ExternalPackageRefCategory[ref.referenceCategory];
+            const referenceCategory = exports.ExternalPackageRefCategory[ref.referenceCategory];
             if (!referenceCategory) {
                 throw new Error("Invalid external package reference category: " +
                     ref.referenceCategory);
@@ -578,7 +578,7 @@ class ExternalPackageRef {
 // SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
-var PackagePurpose;
+exports.PackagePurpose = void 0;
 (function (PackagePurpose) {
     PackagePurpose["APPLICATION"] = "APPLICATION";
     PackagePurpose["FRAMEWORK"] = "FRAMEWORK";
@@ -592,9 +592,9 @@ var PackagePurpose;
     PackagePurpose["FILE"] = "FILE";
     PackagePurpose["INSTALL"] = "INSTALL";
     PackagePurpose["OTHER"] = "OTHER";
-})(PackagePurpose || (PackagePurpose = {}));
+})(exports.PackagePurpose || (exports.PackagePurpose = {}));
 function formatPackagePurpose(purpose) {
-    const packagePurpose = PackagePurpose[purpose];
+    const packagePurpose = exports.PackagePurpose[purpose];
     if (!packagePurpose) {
         throw new Error("Invalid package purpose: " + purpose);
     }
@@ -785,7 +785,7 @@ class DocumentCreationInfo {
 // SPDX-FileCopyrightText: 2023 SPDX contributors
 //
 // SPDX-License-Identifier: MIT
-var FileType;
+exports.FileType = void 0;
 (function (FileType) {
     FileType["OTHER"] = "OTHER";
     FileType["DOCUMENTATION"] = "DOCUMENTATION";
@@ -798,9 +798,9 @@ var FileType;
     FileType["BINARY"] = "BINARY";
     FileType["TEXT"] = "TEXT";
     FileType["AUDIO"] = "AUDIO";
-})(FileType || (FileType = {}));
+})(exports.FileType || (exports.FileType = {}));
 function formatFileType(fileType) {
-    const fileTypeEnum = FileType[fileType];
+    const fileTypeEnum = exports.FileType[fileType];
     if (!fileTypeEnum) {
         throw new Error("Invalid file type: " + fileType);
     }
@@ -919,5 +919,19 @@ function createDocument(name, options) {
     }
 }
 
+exports.Actor = Actor;
+exports.Checksum = Checksum;
+exports.Document = Document;
+exports.DocumentCreationInfo = DocumentCreationInfo;
+exports.ExternalDocumentReference = ExternalDocumentReference;
+exports.ExternalPackageRef = ExternalPackageRef;
+exports.File = File;
+exports.NOASSERTION = NOASSERTION;
+exports.NONE = NONE;
+exports.Package = Package;
+exports.Relationship = Relationship;
+exports.SPDXDocument = SPDXDocument;
+exports.SpdxNoAssertion = SpdxNoAssertion;
+exports.SpdxNone = SpdxNone;
 exports.createDocument = createDocument;
 //# sourceMappingURL=spdx-tools.cjs.map

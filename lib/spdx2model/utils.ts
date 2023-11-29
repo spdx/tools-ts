@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: MIT
 
-const NOASSERTION = "NOASSERTION";
-const NONE = "NONE";
+export const NOASSERTION = "NOASSERTION";
+export const NONE = "NONE";
 
 export class SpdxNoAssertion {
   toString(): string {

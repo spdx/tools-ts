@@ -917,5 +917,5 @@ function createDocument(name, options) {
     }
 }
 
-export { createDocument };
+export { Actor, ActorType, Checksum, ChecksumAlgorithm, Document, DocumentCreationInfo, ExternalDocumentReference, ExternalPackageRef, ExternalPackageRefCategory, File, FileType, NOASSERTION, NONE, Package, PackagePurpose, Relationship, SPDXDocument, SpdxNoAssertion, SpdxNone, createDocument };
 //# sourceMappingURL=spdx-tools.mjs.map
