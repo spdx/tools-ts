@@ -9,7 +9,7 @@ import { JsonDocument } from "../converters/json/document";
 import fs from "fs/promises";
 import type { File } from "./file";
 
-interface DocumentOptions {
+export interface DocumentOptions {
   packages: Package[];
   files: File[];
   relationships: Relationship[];

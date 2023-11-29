@@ -20,3 +20,43 @@ export function createDocument(
     throw new Error("Unsupported SPDX version");
   }
 }
+
+export { SPDXDocument } from "./api/spdx-document";
+export type {
+  SpdxActor,
+  SpdxDocumentReference,
+  SpdxChecksum,
+  SpdxExternalPackageReference,
+  CreateDocumentOptions,
+  AddPackageOptions,
+  AddFileOptions,
+} from "./api/spdx-document";
+export { Actor, ActorType } from "./spdx2model/actor";
+export { Checksum, ChecksumAlgorithm } from "./spdx2model/checksum";
+export { Document } from "./spdx2model/document";
+export type { DocumentOptions } from "./spdx2model/document";
+export { DocumentCreationInfo } from "./spdx2model/document-creation-info";
+export type { DocumentCreationInfoOptions } from "./spdx2model/document-creation-info";
+export { ExternalDocumentReference } from "./spdx2model/external-document-reference";
+export {
+  ExternalPackageRef,
+  ExternalPackageRefCategory,
+} from "./spdx2model/external-package-reference";
+export { File, FileType } from "./spdx2model/file";
+export type { FileOptions } from "./spdx2model/file";
+export { Package, PackagePurpose } from "./spdx2model/package";
+export type {
+  PackageOptions,
+  PackageVerificationCode,
+} from "./spdx2model/package";
+export { Relationship } from "./spdx2model/relationship";
+export type {
+  RelationshipOptions,
+  RelationshipType,
+} from "./spdx2model/relationship";
+export {
+  NOASSERTION,
+  NONE,
+  SpdxNoAssertion,
+  SpdxNone,
+} from "./spdx2model/utils";

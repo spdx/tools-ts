@@ -41,6 +41,8 @@ declare class Checksum {
     static fromSpdxChecksums(checksums: SpdxChecksum[] | SpdxChecksum): Checksum[];
 }
 
+declare const NOASSERTION = "NOASSERTION";
+declare const NONE = "NONE";
 declare class SpdxNoAssertion {
     toString(): string;
 }
@@ -375,5 +377,5 @@ declare class SPDXDocument extends Document {
 
 declare function createDocument(name: string, options?: Partial<CreateDocumentOptions>): SPDXDocument;
 
-export { createDocument };
+export { Actor, ActorType, type AddFileOptions, type AddPackageOptions, Checksum, ChecksumAlgorithm, type CreateDocumentOptions, Document, DocumentCreationInfo, type DocumentCreationInfoOptions, type DocumentOptions, ExternalDocumentReference, ExternalPackageRef, ExternalPackageRefCategory, File, type FileOptions, FileType, NOASSERTION, NONE, Package, type PackageOptions, PackagePurpose, type PackageVerificationCode, Relationship, type RelationshipOptions, RelationshipType, SPDXDocument, type SpdxActor, type SpdxChecksum, type SpdxDocumentReference, type SpdxExternalPackageReference, SpdxNoAssertion, SpdxNone, createDocument };
 //# sourceMappingURL=spdx-tools.d.ts.map

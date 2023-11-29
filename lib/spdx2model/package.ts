@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { AddPackageOptions, SpdxActor } from "../api/spdx-document";
 import { ExternalPackageRef } from "./external-package-reference";
 
-interface PackageOptions {
+export interface PackageOptions {
   spdxId: string;
   version: string;
   fileName: string;
