@@ -2,15 +2,11 @@
 //
 // SPDX-License-Identifier: MIT
 
-import * as sbom from "../../lib/spdx-tools";
+import * as spdxLib from "@spdx/tools";
 import * as path from "path";
 import { sha1File } from "sha1-file";
-import type { SPDXDocument as SPDX2Document } from "../../lib/api/spdx-document";
 
 const SPDX_ID_PREPENDIX = "SPDXRef-";
-const SPDX_DESCRIBES = "DESCRIBES";
-const SPDX_DEPENDS_ON = "DEPENDS_ON";
-const SPDX_GENERATED_FROM = "GENERATED_FROM";
 const SHA1 = "SHA1";
 
 interface relationship {
@@ -20,12 +16,12 @@ interface relationship {
 }
 
 export default function spdx(outputName: string): any {
-  const spdxDocument = sbom.createDocument(outputName);
+  const spdxDocument = spdxLib.createDocument(outputName);
   const collectedInputFiles = new Set<string>();
   const collectedRelationships = new Set<relationship>();
 
   return {
-    name: "spdx-plugin",
+    name: "rollup-plugin-spdx",
 
     moduleParsed(moduleInfo: any): void {
       const fileLocation = getRelativeLocation(moduleInfo.id);
@@ -37,7 +33,7 @@ export default function spdx(outputName: string): any {
         const relationship: relationship = {
           element: spdxIdFromLocation(fileLocation),
           relatedElement: spdxIdFromLocation(dependencyLocation),
-          relationshipType: SPDX_DEPENDS_ON,
+          relationshipType: spdxLib.RelationshipType.DEPENDS_ON,
         };
         if (!collectedRelationships.has(relationship)) {
           collectedRelationships.add(relationship);
@@ -99,25 +95,29 @@ function getRelativeLocation(absoluteLocation: string): string {
 
 async function addFileFromModuleToDocument(
   id: any,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdxLib.SPDXDocument,
 ): Promise<void> {
-  sha1File(path.resolve(id)).then((hash) => {
-    spdxDocument.addFile(
-      id,
-      {
-        checksumAlgorithm: SHA1,
-        checksumValue: hash,
-      },
-      {
-        spdxId: spdxIdFromLocation(id),
-      },
-    );
-  });
+  sha1File(path.resolve(id))
+    .then((hash) => {
+      spdxDocument.addFile(
+        id,
+        {
+          checksumAlgorithm: SHA1,
+          checksumValue: hash,
+        },
+        {
+          spdxId: spdxIdFromLocation(id),
+        },
+      );
+    })
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function collectDescribesRelationships(
   bundle: any,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdxLib.SPDXDocument,
   collectedRelationships: Set<relationship>,
   outputDirectory: string,
 ): void {
@@ -128,7 +128,7 @@ function collectDescribesRelationships(
     const relationship: relationship = {
       element: spdxDocument.creationInfo.spdxId,
       relatedElement: spdxIdFromLocation(fileLocation),
-      relationshipType: SPDX_DESCRIBES,
+      relationshipType: spdxLib.RelationshipType.DESCRIBES,
     };
     if (!collectedRelationships.has(relationship)) {
       collectedRelationships.add(relationship);
@@ -160,7 +160,7 @@ function collectGeneratedFromRelationships(
     const relationship: relationship = {
       element: spdxIdFromLocation(fileLocation),
       relatedElement: spdxIdFromLocation(referenceFileLocation),
-      relationshipType: SPDX_GENERATED_FROM,
+      relationshipType: spdxLib.RelationshipType.GENERATED_FROM,
     };
     if (!collectedRelationships.has(relationship)) {
       collectedRelationships.add(relationship);
@@ -169,7 +169,7 @@ function collectGeneratedFromRelationships(
 }
 
 function addRelationshipsToDocument(
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdxLib.SPDXDocument,
   collectedRelationships: Set<relationship>,
 ): void {
   collectedRelationships.forEach((relationship) => {
@@ -183,7 +183,7 @@ function addRelationshipsToDocument(
 
 async function addFilesFromBundleToDocument(
   bundle: any,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdxLib.SPDXDocument,
   outputDirectory: string,
 ): Promise<void> {
   const promises = [];
