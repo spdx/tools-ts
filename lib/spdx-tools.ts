@@ -49,11 +49,8 @@ export type {
   PackageOptions,
   PackageVerificationCode,
 } from "./spdx2model/package";
-export { Relationship } from "./spdx2model/relationship";
-export type {
-  RelationshipOptions,
-  RelationshipType,
-} from "./spdx2model/relationship";
+export { Relationship, RelationshipType } from "./spdx2model/relationship";
+export type { RelationshipOptions } from "./spdx2model/relationship";
 export {
   NOASSERTION,
   NONE,
