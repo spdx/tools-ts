@@ -71,7 +71,7 @@ export async function addPackagesToSpdxDocument(
   for (const [, pkg] of packages.entries()) {
     if (!pkg) continue;
     const packagePath = await linker.getPackagePath(project, pkg);
-    if (packagePath === null) return;
+    if (packagePath === null) continue;
     const packageManifest: ManifestWithLicenseInfo = JSON.parse(
       await linker.fs.readFilePromise(
         ppath.join(packagePath, Filename.manifest),
@@ -83,7 +83,7 @@ export async function addPackagesToSpdxDocument(
       getDownloadLocation(repository);
 
     const currentPkgSpdxId = getSpdxId(pkg);
-    if (existingSpdxIds.has(currentPkgSpdxId)) return;
+    if (existingSpdxIds.has(currentPkgSpdxId)) continue;
     existingSpdxIds.add(currentPkgSpdxId);
 
     spdxDocument.addPackage(pkg.name, {
