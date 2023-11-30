@@ -3,16 +3,12 @@
 // SPDX-License-Identifier: MIT
 
 import type { Package, Descriptor, Project } from "@yarnpkg/core";
-import type { SPDXDocument as SPDX2Document } from "../../../lib/api/spdx-document";
 import type { Linker } from "../linkers";
 import type { ManifestWithLicenseInfo } from "./project-helpers";
 import { Filename, ppath } from "@yarnpkg/fslib";
+import * as spdx from "@spdx/tools";
 
-const spdxNoAssertion = "NOASSERTION";
 const spdxIdPrependix = "SPDXRef-";
-const spdxDescribes = "DESCRIBES";
-const spdxDependsOn = "DEPENDS_ON";
-const spdxDevDependsOf = "DEV_DEPENDENCY_OF";
 
 const urlExpression =
   "(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/|" +
@@ -48,7 +44,7 @@ export function getDownloadLocation(
   } else if (repository && typeof repository === "object") {
     return undefined;
   } else {
-    return spdxNoAssertion;
+    return spdx.NOASSERTION;
   }
 }
 
@@ -67,7 +63,7 @@ export function getSpdxId(pkg: Package): string {
 
 export async function addPackagesToSpdxDocument(
   packages: Map<Descriptor, Package>,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdx.SPDXDocument,
   project: Project,
   linker: Linker,
   existingSpdxIds: Set<string>,
@@ -101,7 +97,7 @@ export async function addPackagesToSpdxDocument(
 
 export function addDescribesRelationshipsToSpdxDocument(
   packages: Map<Descriptor, Package>,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdx.SPDXDocument,
   existingSpdxIds: Set<string>,
 ): void {
   for (const [, pkg] of packages.entries()) {
@@ -110,7 +106,7 @@ export function addDescribesRelationshipsToSpdxDocument(
       spdxDocument.addRelationship(
         spdxDocument,
         currentPkgSpdxId,
-        spdxDescribes,
+        spdx.RelationshipType.DESCRIBES,
       );
     }
   }
@@ -118,7 +114,7 @@ export function addDescribesRelationshipsToSpdxDocument(
 
 export function addDevRelationshipsToSpdxDocument(
   packages: Map<Descriptor, Package>,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdx.SPDXDocument,
   project: Project,
   existingSpdxIds: Set<string>,
   devDependencyIdentHashes: Set<string>,
@@ -146,7 +142,7 @@ export function addDevRelationshipsToSpdxDocument(
       spdxDocument.addRelationship(
         dependencySpdxId,
         currentPkgSpdxId,
-        spdxDevDependsOf,
+        spdx.RelationshipType.DEV_DEPENDENCY_OF,
       );
     }
   }
@@ -154,7 +150,7 @@ export function addDevRelationshipsToSpdxDocument(
 
 export function addProdRelationshipsToSpdxDocument(
   packages: Map<Descriptor, Package>,
-  spdxDocument: SPDX2Document,
+  spdxDocument: spdx.SPDXDocument,
   project: Project,
   existingSpdxIds: Set<string>,
 ): void {
@@ -176,7 +172,7 @@ export function addProdRelationshipsToSpdxDocument(
       spdxDocument.addRelationship(
         currentPkgSpdxId,
         dependencySpdxId,
-        spdxDependsOn,
+        spdx.RelationshipType.DEPENDS_ON,
       );
     }
   }

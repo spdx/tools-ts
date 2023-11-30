@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "sources/index.ts",
   "dependencies": {
+    "@spdx/tools": "^0.0.6",
     "@yarnpkg/cli": "^4.0.0",
     "@yarnpkg/core": "^4.0.0",
     "@yarnpkg/fslib": "^3.0.0",

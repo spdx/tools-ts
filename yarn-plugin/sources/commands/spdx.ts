@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { BaseCommand } from "@yarnpkg/cli";
-import * as spdx from "../../../lib/spdx-tools";
+import * as spdx from "@spdx/tools";
 import type { Usage } from "clipanion";
 import { Command } from "clipanion";
 import {
