@@ -8,6 +8,7 @@ import { JsonPackage } from "./package";
 import { JsonRelationship } from "./relationship";
 import { JsonExternalDocumentRef } from "./external-document-ref";
 import { JsonFile } from "./file";
+import { JsonHasExtractedLicensingInfos } from "./has-extracted-licensing-infos";
 
 export class JsonDocument {
   SPDXID: string;
@@ -21,6 +22,7 @@ export class JsonDocument {
   packages?: JsonPackage[];
   files?: JsonFile[];
   relationships?: JsonRelationship[];
+  hasExtractedLicensingInfos?: JsonHasExtractedLicensingInfos[];
 
   constructor(
     spdxId: string,
@@ -32,6 +34,7 @@ export class JsonDocument {
     packages?: JsonPackage[],
     files?: JsonFile[],
     relationships?: JsonRelationship[],
+    hasExtractedLicensingInfos?: JsonHasExtractedLicensingInfos[],
     externalDocumentRefs?: JsonExternalDocumentRef[],
     comment?: string,
   ) {
@@ -44,6 +47,7 @@ export class JsonDocument {
     this.packages = packages;
     this.files = files;
     this.relationships = relationships;
+    this.hasExtractedLicensingInfos = hasExtractedLicensingInfos;
     this.externalDocumentRefs = externalDocumentRefs;
     this.comment = comment;
   }
@@ -65,6 +69,16 @@ export class JsonDocument {
             JsonRelationship.fromRelationship(relationship),
           )
         : undefined;
+    const jsonHasExtractedLicensingInfos:
+      | JsonHasExtractedLicensingInfos[]
+      | undefined =
+      document.otherLicensingInfo.length > 0
+        ? document.otherLicensingInfo.map((otherLicenseInfo) =>
+            JsonHasExtractedLicensingInfos.fromOtherLicensingInfo(
+              otherLicenseInfo,
+            ),
+          )
+        : undefined;
     const jsonExternalDocumentRefs: JsonExternalDocumentRef[] | undefined =
       document.creationInfo.externalDocumentRefs?.length > 0
         ? document.creationInfo.externalDocumentRefs.map((ref) =>
@@ -82,6 +96,7 @@ export class JsonDocument {
       jsonPackages,
       jsonFiles,
       jsonRelationships,
+      jsonHasExtractedLicensingInfos,
       jsonExternalDocumentRefs,
       document.creationInfo.documentComment,
     );

@@ -112,7 +112,6 @@ It requires the following arguments:
 | name | String | Name of the file |
 | checksums | {checksumValue: string, checksumAlgorithm: string}[] | Checksums of the file |
 
-
 In addition, it takes an object with the following optional parameters:
 
 | Argument | Format | Default | Description |
@@ -153,6 +152,36 @@ In addition, it takes an object with the following optional parameters:
 | Argument | Format | Default | Description |
 | ----------- | ----------- | ----------- | ----------- |
 | comment | string | - | Comment about the relationship |
+
+Multiple relationships can be added to a document in a single command:
+
+```javascript
+const relationship = document
+  .createRelationship("SPDXRef-Package", "SPDXRef-File-1", "CONTAINS")
+  .createRelationship("SPDXRef-Package", "SPDXRef-File-2", "CONTAINS");
+```
+
+## Other Licensing Information
+Other licensing information is used to provide a locally unique identifier for a licenses that are not in the SPDX License List.
+After creating a document (see [Documents](#Documents)), other licensing information can be added with the command `document.addOtherLicensingInfo`:
+
+```javascript
+document.addOtherLicensingInformation(
+    {
+      licenseId: "LicenseRef-my-license",
+    },
+);
+```
+
+It requires no arguments, but takes an object with the following optional parameters:
+
+| Argument | Format | Default | Description |
+| ----------- | ----------- | ----------- | ----------- |
+| licenseId | string | - | ID of the license |
+| extractedText | string | - | Text of the license |
+| licenseName | string | - | Name of the license |
+| crossReferences | string[] | - | Pointer to official source of license |
+| comment | string | - | Comment about the license |
 
 ## Validating a document
 After creating a document (see [Documents](#Documents)), it can be validated with the command `document.validate`:

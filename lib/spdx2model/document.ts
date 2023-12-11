@@ -8,11 +8,13 @@ import type { DocumentCreationInfo } from "./document-creation-info";
 import { JsonDocument } from "../converters/json/document";
 import fs from "fs/promises";
 import type { File } from "./file";
+import type { OtherLicensingInfo } from "./other-licensing-info";
 
 export interface DocumentOptions {
   packages: Package[];
   files: File[];
   relationships: Relationship[];
+  otherLicensingInfo: OtherLicensingInfo[];
 }
 
 export function itemsHaveDuplicateId(
@@ -33,6 +35,7 @@ export class Document {
   packages: Package[];
   files: File[];
   relationships: Relationship[];
+  otherLicensingInfo: OtherLicensingInfo[];
 
   constructor(
     creationInfo: DocumentCreationInfo,
@@ -42,6 +45,7 @@ export class Document {
     this.packages = options?.packages ?? [];
     this.files = options?.files ?? [];
     this.relationships = options?.relationships ?? [];
+    this.otherLicensingInfo = options?.otherLicensingInfo ?? [];
   }
 
   private hasMissingDescribesRelationships(): boolean {

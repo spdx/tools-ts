@@ -9,6 +9,7 @@ import type { JsonPackage } from "../../converters/json/package";
 import type { JsonFile } from "../../converters/json/file";
 import { Validator } from "jsonschema";
 import * as spdxSchema from "./resources/spdx-schema.json";
+import type { JsonHasExtractedLicensingInfos } from "../../converters/json/has-extracted-licensing-infos";
 
 afterEach(() => {
   mock.restore();
@@ -303,6 +304,14 @@ test("Creates and writes elaborate document", async () => {
 
   document.addRelationship(firstPackage, firstFile, "CONTAINS");
 
+  document.addOtherLicensingInformation({
+    licenseId: "LicenseRef-test-license-id",
+    extractedText: "This is an extracted text",
+    licenseName: "Test license name",
+    crossReferences: ["https://test-cross-reference.com"],
+    comment: "This is a comment",
+  });
+
   await document.write(testfile).then(() => {
     expect(fs.lstatSync(testfile).isFile()).toBe(true);
     const writtenFileContent = fs.readFileSync(testfile, { encoding: "utf-8" });
@@ -333,6 +342,14 @@ test("Creates and writes elaborate document", async () => {
     );
     expect(fileNames.length).toBe(1);
     expect(fileNames).toContain("first file");
+
+    const extractedLicensingInfos =
+      parsedFileContent.hasExtractedLicensingInfos.map(
+        (licensingInfo: JsonHasExtractedLicensingInfos) =>
+          licensingInfo.licenseId,
+      );
+    expect(extractedLicensingInfos.length).toBe(1);
+    expect(extractedLicensingInfos).toContain("LicenseRef-test-license-id");
 
     const relationships = parsedFileContent.relationships;
     expect(relationships).toContainEqual({
