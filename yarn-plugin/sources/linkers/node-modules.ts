@@ -3,11 +3,10 @@
 // SPDX-License-Identifier: MIT
 
 import type { Project, Package } from "@yarnpkg/core";
-import { structUtils } from "@yarnpkg/core";
+import { nodeUtils, structUtils } from "@yarnpkg/core";
 import { parseSyml } from "@yarnpkg/parsers";
 import type { PortablePath } from "@yarnpkg/fslib";
 import { xfs, ppath, Filename } from "@yarnpkg/fslib";
-import { getArchitectureSet } from "./utils";
 
 /**
  * Get package path with `node-modules` linker for a given Yarn project and package
@@ -22,7 +21,8 @@ export const getPackagePath = async (
 ): Promise<PortablePath | null> => {
   await makeYarnState(project);
 
-  if (!structUtils.isPackageCompatible(pkg, getArchitectureSet())) return null;
+  if (!structUtils.isPackageCompatible(pkg, nodeUtils.getArchitectureSet()))
+    return null;
 
   const locator = structUtils.convertPackageToLocator(pkg);
   const stringifiedLocator = structUtils.stringifyLocator(locator);
