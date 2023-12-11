@@ -82,7 +82,7 @@ export class File {
     options?: Partial<AddFileOptions>,
   ): File {
     return new File(name, Checksum.fromSpdxChecksums(checksums), {
-      spdxId: options?.spdxId ?? undefined,
+      spdxId: options?.spdxId,
       fileTypes: options?.fileTypes
         ? options.fileTypes.map((fileType) => formatFileType(fileType))
         : undefined,
@@ -91,13 +91,13 @@ export class File {
       licenseInfoInFiles: options?.licenseInfoInFiles?.map((licenseInfo) =>
         toSpdxType(licenseInfo),
       ),
-      licenseComment: options?.licenseComment ?? undefined,
+      licenseComment: options?.licenseComment,
       copyrightText:
         options?.copyrightText && toSpdxType(options.copyrightText),
-      comment: options?.comment ?? undefined,
-      notice: options?.notice ?? undefined,
-      contributors: options?.contributors ?? [],
-      attributionTexts: options?.attributionTexts ?? [],
+      comment: options?.comment,
+      notice: options?.notice,
+      contributors: options?.contributors,
+      attributionTexts: options?.attributionTexts,
     });
   }
 }

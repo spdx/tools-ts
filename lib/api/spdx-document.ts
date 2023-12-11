@@ -9,6 +9,7 @@ import { Package } from "../spdx2model/package";
 import { Document } from "../spdx2model/document";
 import { DocumentCreationInfo } from "../spdx2model/document-creation-info";
 import { File } from "../spdx2model/file";
+import { OtherLicensingInfo } from "../spdx2model/other-licensing-info";
 
 export interface SpdxActor {
   name: string;
@@ -88,6 +89,14 @@ export interface AddFileOptions {
   attributionTexts: string[];
 }
 
+export interface AddOtherLicensingInfoOptions {
+  licenseId: string;
+  extractedText: string;
+  licenseName: string;
+  crossReferences: string[];
+  comment: string;
+}
+
 export class SPDXDocument extends Document {
   static createDocument(
     name: string,
@@ -126,6 +135,14 @@ export class SPDXDocument extends Document {
       options,
     );
     this.relationships.push(relationship);
+    return this;
+  }
+
+  addOtherLicensingInformation(
+    options?: Partial<AddOtherLicensingInfoOptions>,
+  ): this {
+    const otherLicensingInfo = OtherLicensingInfo.fromApi(options);
+    this.otherLicensingInfo.push(otherLicensingInfo);
     return this;
   }
 

@@ -33,9 +33,9 @@ The following features are supported by this library:
 | Packages | DONE
 | Files | DONE
 | Relationships | DONE
+| Other licensing information | DONE
 | Snippets | PLANNED
 | Annotations | PLANNED
-| Other licensing information | PLANNED
 
 ## API
 We provide a number of example workflows in the `examples` directory that demonstrate how this library can be used to create SBOMs.

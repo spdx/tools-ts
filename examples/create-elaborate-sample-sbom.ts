@@ -96,4 +96,13 @@ const firstFile = document.addFile(
 );
 
 document.addRelationship(firstPackage, firstFile, "CONTAINS");
+
+document.addOtherLicensingInformation({
+  licenseId: "LicenseRef-test-license-id",
+  extractedText: "This is an extracted text",
+  licenseName: "Test license name",
+  crossReferences: ["https://test-cross-reference.com"],
+  comment: "This is a comment",
+});
+
 document.writeSync("./examples/resources/elaborate-sample.spdx.json");
