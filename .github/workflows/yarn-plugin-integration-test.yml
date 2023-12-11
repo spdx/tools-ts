@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-name: integration test of yarn-plugin
+name: Integration test of Yarn-plugin
 
 on:
   push:

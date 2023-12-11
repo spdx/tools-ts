@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2023 SPDX contributors
+#
+# SPDX-License-Identifier: MIT
+
+name: Integration test of Rollup-plugin
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check repository out
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build Rollup example
+        run: |
+            cd rollup-plugin
+            npm ci
+            npm run build-example
+
+      - name: Install spdx-tools-java
+        run: .github/workflows/scripts/spdx-tools-java-wrapper.sh bootstrap
+
+      - name: Verify Rollup SBOM
+        run: .github/workflows/scripts/verify.sh rollup-plugin/examples/dist/hello.spdx.json

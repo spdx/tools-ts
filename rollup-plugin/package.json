@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
-    "test": "cd .. && rollup -c rollup-plugin/examples/rollup.config.ts --configPlugin typescript"
+    "build-example": "rollup --config examples/rollup.config.ts --configPlugin typescript"
   },
   "dependencies": {
     "@spdx/tools": "^0.0.6",
