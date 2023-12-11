@@ -78,7 +78,7 @@ export async function addPackagesToSpdxDocument(
         "utf8",
       ),
     );
-    const { repository } = packageManifest;
+    const { repository, license } = packageManifest;
     const formattedRepository: string | undefined =
       getDownloadLocation(repository);
 
@@ -89,6 +89,9 @@ export async function addPackagesToSpdxDocument(
     spdxDocument.addPackage(pkg.name, {
       ...(formattedRepository !== undefined && {
         downloadLocation: formattedRepository,
+      }),
+      ...(license !== undefined && {
+        licenseDeclared: license,
       }),
       spdxId: currentPkgSpdxId,
     });
