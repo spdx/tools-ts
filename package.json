@@ -48,7 +48,6 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
-    "build-rollup-plugin": "cd rollup-plugin && npm run build",
     "build-yarn-plugin": "cd yarn-plugin && yarn build",
     "build-examples": "rollup --config examples/rollup.config.ts --configPlugin typescript",
     "write-examples": "node examples/build/create-minimal-sample-sbom.js && node examples/build/create-elaborate-sample-sbom.js && node examples/build/create-basic-sbom.js",
