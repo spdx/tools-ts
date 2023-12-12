@@ -10,7 +10,3 @@ License: MIT
 Files: yarn-plugin/bundles/*
 Copyright: 2023 SPDX contributors
 License: MIT
-
-Files: rollup-plugin/examples/dist/*
-Copyright: 2023 SPDX contributors
-License: MIT
