@@ -75,3 +75,9 @@ This will create a new release and a new commit and tag with the new version.
 Note: You do not need to manually update the version in `package.json`, this is done automatically by the release script. 
 3. Push the newly created commit to the remote repository. 
 4. Push the newly created tag to the remote repository with `git push origin <tagname>`.
+
+## References
+- [SPDX 2.3 specification](https://spdx.github.io/spdx-spec/v2.3/)
+- [JSON schema](https://github.com/spdx/spdx-spec/blob/development/v2.3.1/schemas/spdx-schema.json)
+- Yarn plugin that uses this library: [yarn-plugin-spdx](https://github.com/spdx/yarn-plugin-spdx)
+- Rollup plugin that uses this library: [rollup-plugin-spdx](https://github.com/spdx/rollup-plugin-spdx)
