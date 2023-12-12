@@ -120,12 +120,6 @@ export const getSortedPackages = async (
 };
 
 export interface ManifestWithLicenseInfo {
-  name: string;
-  license?: ManifestLicenseValue;
-  licenses?: ManifestLicenseValue | ManifestLicenseValue[];
+  license?: string;
   repository?: { url: string } | string;
-  homepage?: string;
-  author?: { name: string; url: string };
 }
-
-type ManifestLicenseValue = string | { type: string };
