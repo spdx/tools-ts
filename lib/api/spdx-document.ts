@@ -155,8 +155,6 @@ export class SPDXDocument extends Document {
         throw new Error(validationMessage);
       }
       console.error(validationMessage);
-    } else {
-      console.log("Document is valid");
     }
   }
 
