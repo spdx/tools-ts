@@ -48,7 +48,6 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
-    "build-yarn-plugin": "cd yarn-plugin && yarn build",
     "build-examples": "rollup --config examples/rollup.config.ts --configPlugin typescript",
     "write-examples": "node examples/build/create-minimal-sample-sbom.js && node examples/build/create-elaborate-sample-sbom.js && node examples/build/create-basic-sbom.js",
     "lint-check": "eslint -c .eslintrc.js --ext .ts,.js .",
@@ -61,8 +60,7 @@
     "patch-release": "./dev/create_release.sh patch",
     "test": "jest --testPathIgnorePatterns=dist",
     "test-e2e": "jest --testMatch=[ \"**/e2e-tests/**/*.test.ts\" ]",
-    "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist",
-    "test-rollup-plugin": "cd rollup-plugin && npm run build-example"
+    "test-unit": "jest --testPathIgnorePatterns=lib/e2e-tests --testPathIgnorePatterns=dist"
   },
   "lint-staged": {
     "**/*.ts": "npm run lint-fix"

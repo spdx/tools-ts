@@ -6,7 +6,3 @@ Source: https://github.com/spdx/tools-ts
 Files: dist/*
 Copyright: 2023 SPDX contributors
 License: MIT
-
-Files: yarn-plugin/bundles/*
-Copyright: 2023 SPDX contributors
-License: MIT
