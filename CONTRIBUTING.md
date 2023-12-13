@@ -45,7 +45,7 @@ npm run test
 ```
 
 ## Building
-We use [Rollup] (https://rollupjs.org) for building the library and the Rollup plugin, and [@yarnpkg/builder] (https://www.npmjs.com/package/@yarnpkg/builder) for building the Yarn plugin.
+We use [Rollup] (https://rollupjs.org) for building.
 To build the library, navigate to the library root and run:
 ```shell
 npm run build
