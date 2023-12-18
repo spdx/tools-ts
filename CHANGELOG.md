@@ -33,3 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.6] - 2023-11-30
 ### Fixed
 - Export relationshipType correctly. It is an enum and should not be exported as type.
+
+## [0.1.0] - 2023-12-18
+### Added
+- Support for other licensing information.
