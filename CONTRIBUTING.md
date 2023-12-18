@@ -45,14 +45,14 @@ npm run test
 ```
 
 ## Building
-We use [Rollup] (https://rollupjs.org) for building.
+We use [Rollup](https://rollupjs.org) for building.
 To build the library, navigate to the library root and run:
 ```shell
 npm run build
 ```
 
 ## Releasing
-Note: To create a new release, you need to be part of the [SPDX organization] (https://www.npmjs.com/org/spdx) on npm.
+Note: To create a new release, you need to be part of the [SPDX organization](https://www.npmjs.com/org/spdx) on npm.
 To create a new release, follow these steps:
 1. Make sure that the [changelog](CHANGELOG.md) is up to date and that all CI workflows are green. 
 2. Depending on the changes, since the last release, run `npm run major-release`, `npm run minor-release`, or `npm run patch-release`.
